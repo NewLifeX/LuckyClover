@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net5.0</TargetFramework>
+    <AssemblyName>clover</AssemblyName>
+    <AssemblyTitle>幸运草</AssemblyTitle>
+    <Description>无依赖编译为linux-arm/linux-x86/windows，用于自动安装主流.NET运行时。</Description>
+    <Company>新生命开发团队</Company>
+    <Copyright>©2002-2021 NewLife</Copyright>
+    <Version>1.0.2021.0514</Version>
+    <FileVersion>1.0.2021.0514</FileVersion>
+    <AssemblyVersion>1.0.*</AssemblyVersion>
+    <Deterministic>false</Deterministic>
+    <OutputPath>..\Bin</OutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <!--<PublishSingleFile>true</PublishSingleFile>
+    <SelfContained>true</SelfContained>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <PublishTrimmed>true</PublishTrimmed>
+    <PublishReadyToRun>true</PublishReadyToRun>-->
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="NewLife.Core" Version="8.10.2021.505" />
+  </ItemGroup>
+
+</Project>
