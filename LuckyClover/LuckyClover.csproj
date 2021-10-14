@@ -8,8 +8,8 @@
     <Description>无依赖编译为linux-arm/linux-x86/windows，用于自动安装主流.NET运行时。</Description>
     <Company>新生命开发团队</Company>
     <Copyright>©2002-2021 NewLife</Copyright>
-    <Version>1.0.2021.0514</Version>
-    <FileVersion>1.0.2021.0514</FileVersion>
+    <Version>1.0.2021.1014</Version>
+    <FileVersion>1.0.2021.1014</FileVersion>
     <AssemblyVersion>1.0.*</AssemblyVersion>
     <Deterministic>false</Deterministic>
     <OutputPath>..\Bin</OutputPath>
@@ -19,10 +19,15 @@
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
     <PublishTrimmed>true</PublishTrimmed>
     <PublishReadyToRun>true</PublishReadyToRun>-->
+    <IlcOptimizationPreference>Speed</IlcOptimizationPreference>
+    <IlcFoldIdenticalMethodBodies>true</IlcFoldIdenticalMethodBodies>
+    <TrimMode>Link</TrimMode>
+    <InvariantGlobalization>true</InvariantGlobalization>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="NewLife.Core" Version="8.10.2021.505" />
+    <!--<PackageReference Include="NewLife.Core" Version="8.10.2021.505" />-->
+    <!--<PackageReference Include="Microsoft.DotNet.ILCompiler" Version="7.0.0-alpha.1.21510.3" />-->
   </ItemGroup>
 
 </Project>

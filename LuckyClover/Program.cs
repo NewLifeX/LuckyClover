@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using NewLife.Log;
-using NewLife.Reflection;
+using System.Reflection;
 
 namespace LuckClover
 {
@@ -12,10 +10,10 @@ namespace LuckClover
 
         static void Main(string[] args)
         {
-            XTrace.UseConsole();
+            //XTrace.UseConsole();
 
-            var asm = AssemblyX.Entry;
-            Console.WriteLine("幸运草 LuckClover v{0} {1}", asm.Version, asm.Compile.ToFullString());
+            var asm = Assembly.GetEntryAssembly().GetName();
+            Console.WriteLine("幸运草 LuckyClover v{0}", asm.Version);
             Console.WriteLine("无依赖编译为linux-arm/linux-x86/windows，用于自动安装主流.NET运行时");
             Console.WriteLine();
 
@@ -28,7 +26,7 @@ namespace LuckClover
             if (_menus.TryGetValue(cmd, out var func))
                 func(args);
             else
-                XTrace.Log.Error("无法识别命令：{0}", cmd);
+                Console.WriteLine("无法识别命令：{0}", cmd);
         }
 
         private static String ShowMenu()
@@ -43,7 +41,8 @@ namespace LuckClover
 
         private static void InstallNet5(String[] args)
         {
-            XTrace.WriteLine("InstallNet5 {0}", args);
+            //XTrace.WriteLine("InstallNet5 {0}", args);
+            Console.WriteLine("InstallNet5 {0}", args);
         }
     }
 }
