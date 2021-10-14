@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <AssemblyName>clover</AssemblyName>
     <AssemblyTitle>幸运草</AssemblyTitle>
     <Description>无依赖编译为linux-arm/linux-x86/windows，用于自动安装主流.NET运行时。</Description>
@@ -14,14 +14,12 @@
     <Deterministic>false</Deterministic>
     <OutputPath>..\Bin</OutputPath>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <!--<PublishSingleFile>true</PublishSingleFile>
-    <SelfContained>true</SelfContained>
-    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    
     <PublishTrimmed>true</PublishTrimmed>
-    <PublishReadyToRun>true</PublishReadyToRun>-->
-    <IlcOptimizationPreference>Speed</IlcOptimizationPreference>
-    <IlcFoldIdenticalMethodBodies>true</IlcFoldIdenticalMethodBodies>
     <TrimMode>Link</TrimMode>
+    <TrimmerDefaultAction>link</TrimmerDefaultAction>
+    <!--<IlcOptimizationPreference>Speed</IlcOptimizationPreference>
+    <IlcFoldIdenticalMethodBodies>true</IlcFoldIdenticalMethodBodies>-->
     <InvariantGlobalization>true</InvariantGlobalization>
   </PropertyGroup>
 
