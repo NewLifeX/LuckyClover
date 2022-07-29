@@ -14,7 +14,8 @@
     <Deterministic>false</Deterministic>
     <OutputPath>..\Bin</OutputPath>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    
+    <LangVersion>latest</LangVersion>
+
     <!--<PublishTrimmed>true</PublishTrimmed>-->
     <!--<TrimMode>Link</TrimMode>-->
     <!--<TrimmerDefaultAction>link</TrimmerDefaultAction>-->
