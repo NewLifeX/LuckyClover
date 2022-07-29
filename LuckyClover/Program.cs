@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using Microsoft.Win32;
@@ -41,6 +42,7 @@ internal class Program
         var vers = new Dictionary<String, String>();
         Get1To45VersionFromRegistry(vers);
         Get45PlusFromRegistry(vers);
+        GetNetCore(vers);
         Console.WriteLine("已安装版本：");
         foreach (var item in vers)
         {
@@ -176,6 +178,24 @@ internal class Program
             // This code should never execute. A non-null release key should mean
             // that 4.5 or later is installed.
             return "";
+        }
+    }
+
+    private static void GetNetCore(IDictionary<String, String> dic)
+    {
+        var dir = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
+        if (String.IsNullOrEmpty(dir)) return;
+
+        dir += "\\dotnet\\shared";
+        if (!Directory.Exists(dir)) return;
+
+        var di = new DirectoryInfo(dir);
+        foreach (var item in di.GetDirectories())
+        {
+            foreach (var elm in item.GetDirectories())
+            {
+                dic[elm.Name] = elm.Name;
+            }
         }
     }
 }
