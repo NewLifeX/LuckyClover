@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 using Microsoft.Win32;
 
@@ -65,20 +67,56 @@ internal class Program
         //XTrace.WriteLine("InstallNet5 {0}", args);
         Console.WriteLine("InstallNet5 {0}", args?.FirstOrDefault());
 
-    private static void InstallNet6(String[] args) =>
+    private static void InstallNet6(String[] args)
+    {
+        var ver = new Version();
+        var vers = new Dictionary<String, String>();
+        GetNetCore(vers);
+        if (vers.Count > 0)
+        {
+            Console.WriteLine("已安装版本：");
+            foreach (var item in vers)
+            {
+                var v = new Version(item.Key);
+                if (v > ver) ver = v;
+
+                Console.WriteLine(item.Value);
+            }
+            Console.WriteLine("");
+        }
+
+        // 目标版本
+        var target = new Version("6.0.7");
+        if (ver >= target)
+        {
+            Console.WriteLine("已安装最新版 v{0}", ver);
+            return;
+        }
+
         // 检查是否已安装.NET运行时
         Console.WriteLine("InstallNet6 {0}", args?.FirstOrDefault());
 
-    private static void WriteVersion(String version, String spLevel = "")
-    {
-        version = version.Trim();
-        if (String.IsNullOrEmpty(version)) return;
+        var url = "https://x.newlifex.com/dotnet/dotnet-runtime-6.0.7-win-x64.exe";
+        var fileName = Path.GetFileName(url);
+        if (!File.Exists(fileName))
+        {
+            Console.WriteLine("正在下载：{0}", url);
+            var http = new WebClient();
+            http.DownloadFile(url, fileName);
+        }
 
-        var spLevelString = "";
-        if (!String.IsNullOrEmpty(spLevel))
-            spLevelString = " Service Pack " + spLevel;
-
-        Console.WriteLine($"{version}{spLevelString}");
+        Console.WriteLine("正在安装：{0}", fileName);
+        var p = Process.Start(fileName, "/quiet");
+        if (p.WaitForExit(15_000))
+        {
+            Console.WriteLine("安装成功！");
+            Environment.ExitCode = 0;
+        }
+        else
+        {
+            Console.WriteLine("安装超时！");
+            Environment.ExitCode = 1;
+        }
     }
 
     private static void Get1To45VersionFromRegistry(IDictionary<String, String> dic)
