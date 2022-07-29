@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 
 namespace LuckClover
@@ -18,6 +19,7 @@ namespace LuckClover
             Console.WriteLine();
 
             _menus["net5"] = InstallNet5;
+            _menus["net6"] = InstallNet6;
 
             var cmd = "";
             if (args.Length >= 1) cmd = args[0];
@@ -31,7 +33,7 @@ namespace LuckClover
 
         private static String ShowMenu()
         {
-            Console.WriteLine("命令：LuckClover");
+            Console.WriteLine("命令：clover");
             Console.WriteLine("");
 
             var line = Console.ReadLine()?.Trim();
@@ -42,7 +44,12 @@ namespace LuckClover
         private static void InstallNet5(String[] args)
         {
             //XTrace.WriteLine("InstallNet5 {0}", args);
-            Console.WriteLine("InstallNet5 {0}", args);
+            Console.WriteLine("InstallNet5 {0}", args?.FirstOrDefault());
+        }
+
+        private static void InstallNet6(String[] args)
+        {
+            Console.WriteLine("InstallNet6 {0}", args?.FirstOrDefault());
         }
     }
 }
