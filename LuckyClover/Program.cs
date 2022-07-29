@@ -138,11 +138,15 @@ internal class Program
 
         //First check if there's an specific version indicated
         var name = "";
-        if (ndpKey.GetValue("Version") != null)
-            name = ndpKey.GetValue("Version").ToString();
+        var ver = ndpKey.GetValue("Version");
+        if (ver != null)
+            name = ver.ToString();
         else
-            if (ndpKey != null && ndpKey.GetValue("Release") != null)
-            name = CheckFor45PlusVersion((Int32)ndpKey.GetValue("Release"));
+        {
+            var release = ndpKey.GetValue("Release");
+            if (release != null)
+                name = CheckFor45PlusVersion((Int32)ndpKey.GetValue("Release"));
+        }
 
         if (!String.IsNullOrEmpty(name)) dic.Add(name, name);
 
