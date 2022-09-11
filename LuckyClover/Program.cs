@@ -48,7 +48,7 @@ internal class Program
         Console.WriteLine("已安装版本：");
         foreach (var item in vers)
         {
-            Console.WriteLine(item.Value);
+            Console.WriteLine("{0}\t{1}", item.Key, item.Value);
         }
         Console.WriteLine("");
 
@@ -63,9 +63,58 @@ internal class Program
         return line;
     }
 
-    private static void InstallNet48(String[] args) =>
-        //XTrace.WriteLine("InstallNet5 {0}", args);
-        Console.WriteLine("InstallNet5 {0}", args?.FirstOrDefault());
+    private static void InstallNet48(String[] args)
+    {
+        var ver = new Version();
+        var vers = new Dictionary<String, String>();
+        Get1To45VersionFromRegistry(vers);
+        Get45PlusFromRegistry(vers);
+        if (vers.Count > 0)
+        {
+            Console.WriteLine("已安装版本：");
+            foreach (var item in vers)
+            {
+                var v = new Version(item.Key);
+                if (v > ver) ver = v;
+
+                Console.WriteLine(item.Value);
+            }
+            Console.WriteLine("");
+        }
+
+        // 目标版本
+        var target = new Version("4.8");
+        if (ver >= target)
+        {
+            Console.WriteLine("已安装最新版 v{0}", ver);
+            return;
+        }
+
+        // 检查是否已安装.NET
+        Console.WriteLine("InstallNet48 {0}", args?.FirstOrDefault());
+
+        var url = "https://x.newlifex.com/dotnet/ndp481-web.exe";
+        var fileName = Path.GetFileName(url);
+        if (!File.Exists(fileName))
+        {
+            Console.WriteLine("正在下载：{0}", url);
+            var http = new WebClient();
+            http.DownloadFile(url, fileName);
+        }
+
+        Console.WriteLine("正在安装：{0}", fileName);
+        var p = Process.Start(fileName, "/passive");
+        if (p.WaitForExit(15_000))
+        {
+            Console.WriteLine("安装成功！");
+            Environment.ExitCode = 0;
+        }
+        else
+        {
+            Console.WriteLine("安装超时！");
+            Environment.ExitCode = 1;
+        }
+    }
 
     private static void InstallNet6(String[] args)
     {
@@ -86,7 +135,7 @@ internal class Program
         }
 
         // 目标版本
-        var target = new Version("6.0.7");
+        var target = new Version("6.0.8");
         if (ver >= target)
         {
             Console.WriteLine("已安装最新版 v{0}", ver);
@@ -96,7 +145,7 @@ internal class Program
         // 检查是否已安装.NET运行时
         Console.WriteLine("InstallNet6 {0}", args?.FirstOrDefault());
 
-        var url = "https://x.newlifex.com/dotnet/dotnet-runtime-6.0.7-win-x64.exe";
+        var url = "https://x.newlifex.com/dotnet/dotnet-runtime-6.0.8-win-x64.exe";
         var fileName = Path.GetFileName(url);
         if (!File.Exists(fileName))
         {
@@ -106,7 +155,7 @@ internal class Program
         }
 
         Console.WriteLine("正在安装：{0}", fileName);
-        var p = Process.Start(fileName, "/quiet");
+        var p = Process.Start(fileName, "/passive");
         if (p.WaitForExit(15_000))
         {
             Console.WriteLine("安装成功！");
@@ -178,21 +227,23 @@ internal class Program
 
         //First check if there's an specific version indicated
         var name = "";
+        var value = "";
         var ver = ndpKey.GetValue("Version");
         if (ver != null)
             name = ver.ToString();
-        else
-        {
-            var release = ndpKey.GetValue("Release");
-            if (release != null)
-                name = CheckFor45PlusVersion((Int32)ndpKey.GetValue("Release"));
-        }
+        var release = ndpKey.GetValue("Release");
+        if (release != null)
+            value = CheckFor45PlusVersion((Int32)ndpKey.GetValue("Release"));
 
-        if (!String.IsNullOrEmpty(name)) dic.Add(name, name);
+        if (String.IsNullOrEmpty(name)) name = value;
+        if (String.IsNullOrEmpty(value)) value = name;
+        if (!String.IsNullOrEmpty(name)) dic.Add(name, value);
 
         // Checking the version using >= enables forward compatibility.
         String CheckFor45PlusVersion(Int32 releaseKey)
         {
+            if (releaseKey >= 533325)
+                return "4.8.1";
             if (releaseKey >= 528040)
                 return "4.8";
             if (releaseKey >= 461808)
