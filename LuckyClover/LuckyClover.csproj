@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFrameworks>net45;net48</TargetFrameworks>
+    <TargetFrameworks>net20;net40;net45;net7.0</TargetFrameworks>
     <AssemblyName>clover</AssemblyName>
     <AssemblyTitle>幸运草</AssemblyTitle>
     <Description>基于低版本运行时，自动安装主流.NET运行时。</Description>
@@ -23,7 +23,7 @@
     <!--<TrimmerDefaultAction>link</TrimmerDefaultAction>-->
     <!--<IlcOptimizationPreference>Speed</IlcOptimizationPreference>
     <IlcFoldIdenticalMethodBodies>true</IlcFoldIdenticalMethodBodies>-->
-    <InvariantGlobalization>true</InvariantGlobalization>
+    <!--<InvariantGlobalization>true</InvariantGlobalization>-->
   </PropertyGroup>
 
   <ItemGroup>

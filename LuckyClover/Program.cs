@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Reflection;
 using Microsoft.Win32;
@@ -20,7 +19,12 @@ internal class Program
         var asm = Assembly.GetEntryAssembly();
         Console.WriteLine("幸运草 LuckyClover v{0}", asm.GetName().Version);
         //Console.WriteLine("无依赖编译为linux-arm/linux-x86/windows，用于自动安装主流.NET运行时");
+#if NETFRAMEWORK
+        var atts = asm.GetCustomAttributes(typeof(AssemblyDescriptionAttribute), false);
+        Console.WriteLine((atts[0] as AssemblyDescriptionAttribute).Description);
+#else
         Console.WriteLine(asm.GetCustomAttribute<AssemblyDescriptionAttribute>()?.Description);
+#endif
         Console.WriteLine();
 
         _menus["net48"] = InstallNet48;
@@ -56,7 +60,9 @@ internal class Program
         Console.WriteLine("运行时：{0}", Environment.Version);
         Console.WriteLine("");
 
-        Console.WriteLine("可用命令：{0}", String.Join(", ", _menus.Keys));
+        var ms = new String[_menus.Count];
+        _menus.Keys.CopyTo(ms, 0);
+        Console.WriteLine("可用命令：{0}", String.Join(", ", ms));
 
         var line = Console.ReadLine()?.Trim();
 
@@ -91,7 +97,7 @@ internal class Program
         }
 
         // 检查是否已安装.NET
-        Console.WriteLine("InstallNet48 {0}", args?.FirstOrDefault());
+        Console.WriteLine("InstallNet48 {0}", args[0]);
 
         var url = "https://x.newlifex.com/dotnet/ndp481-web.exe";
         var fileName = Path.GetFileName(url);
@@ -143,7 +149,7 @@ internal class Program
         }
 
         // 检查是否已安装.NET运行时
-        Console.WriteLine("InstallNet6 {0}", args?.FirstOrDefault());
+        Console.WriteLine("InstallNet6 {0}", args[0]);
 
         var url = "https://x.newlifex.com/dotnet/dotnet-runtime-6.0.8-win-x64.exe";
         var fileName = Path.GetFileName(url);
