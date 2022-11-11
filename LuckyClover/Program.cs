@@ -31,7 +31,7 @@ internal class Program
         _menus["net"] = InstallNet48;
 
         _menus["net6"] = InstallNet6;
-        _menus["netcore"] = InstallNet6;
+        _menus["net7"] = InstallNet7;
 
         var cmd = "";
         if (args.Length >= 1) cmd = args[0];
@@ -96,10 +96,13 @@ internal class Program
             return;
         }
 
-        // 检查是否已安装.NET
-        Console.WriteLine("InstallNet48 {0}", args[0]);
+        var cmd = "";
+        if (args.Length >= 1) cmd = args[0];
 
-        var url = "https://x.newlifex.com/dotnet/ndp481-web.exe";
+        // 检查是否已安装.NET
+        Console.WriteLine("InstallNet48 {0}", cmd);
+
+        var url = "http://x.newlifex.com/dotnet/ndp481-x86-x64-allos-enu.exe";
         var fileName = Path.GetFileName(url);
         if (!File.Exists(fileName))
         {
@@ -141,17 +144,75 @@ internal class Program
         }
 
         // 目标版本
-        var target = new Version("6.0.8");
+        var target = new Version("6.0.10");
         if (ver >= target)
         {
             Console.WriteLine("已安装最新版 v{0}", ver);
             return;
         }
 
+        var cmd = "";
+        if (args.Length >= 1) cmd = args[0];
+
         // 检查是否已安装.NET运行时
         Console.WriteLine("InstallNet6 {0}", args[0]);
 
-        var url = "https://x.newlifex.com/dotnet/dotnet-runtime-6.0.8-win-x64.exe";
+        var url = "http://x.newlifex.com/dotnet/dotnet-runtime-6.0.10-win-x64.exe";
+        var fileName = Path.GetFileName(url);
+        if (!File.Exists(fileName))
+        {
+            Console.WriteLine("正在下载：{0}", url);
+            var http = new WebClient();
+            http.DownloadFile(url, fileName);
+        }
+
+        Console.WriteLine("正在安装：{0}", fileName);
+        var p = Process.Start(fileName, "/passive");
+        if (p.WaitForExit(15_000))
+        {
+            Console.WriteLine("安装成功！");
+            Environment.ExitCode = 0;
+        }
+        else
+        {
+            Console.WriteLine("安装超时！");
+            Environment.ExitCode = 1;
+        }
+    }
+
+    private static void InstallNet7(String[] args)
+    {
+        var ver = new Version();
+        var vers = new Dictionary<String, String>();
+        GetNetCore(vers);
+        if (vers.Count > 0)
+        {
+            Console.WriteLine("已安装版本：");
+            foreach (var item in vers)
+            {
+                var v = new Version(item.Key);
+                if (v > ver) ver = v;
+
+                Console.WriteLine(item.Value);
+            }
+            Console.WriteLine("");
+        }
+
+        // 目标版本
+        var target = new Version("7.0.0");
+        if (ver >= target)
+        {
+            Console.WriteLine("已安装最新版 v{0}", ver);
+            return;
+        }
+
+        var cmd = "";
+        if (args.Length >= 1) cmd = args[0];
+
+        // 检查是否已安装.NET运行时
+        Console.WriteLine("InstallNet7 {0}", args[0]);
+
+        var url = "http://x.newlifex.com/dotnet/dotnet-runtime-7.0.0-win-x64.exe";
         var fileName = Path.GetFileName(url);
         if (!File.Exists(fileName))
         {
