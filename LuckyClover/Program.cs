@@ -155,7 +155,7 @@ internal class Program
         if (args.Length >= 1) cmd = args[0];
 
         // 检查是否已安装.NET运行时
-        Console.WriteLine("InstallNet6 {0}", args[0]);
+        Console.WriteLine("InstallNet6 {0}", cmd);
 
         var url = "http://x.newlifex.com/dotnet/dotnet-runtime-6.0.10-win-x64.exe";
         var fileName = Path.GetFileName(url);
@@ -210,7 +210,7 @@ internal class Program
         if (args.Length >= 1) cmd = args[0];
 
         // 检查是否已安装.NET运行时
-        Console.WriteLine("InstallNet7 {0}", args[0]);
+        Console.WriteLine("InstallNet7 {0}", cmd);
 
         var url = "http://x.newlifex.com/dotnet/dotnet-runtime-7.0.0-win-x64.exe";
         var fileName = Path.GetFileName(url);
