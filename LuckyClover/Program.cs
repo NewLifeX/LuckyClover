@@ -89,7 +89,7 @@ internal class Program
             http.DownloadFile(url, fileName);
         }
 
-        if (String.IsNullOrEmpty(arg)) arg = "/passive /norestart";
+        if (String.IsNullOrEmpty(arg)) arg = "/passive /promptrestart";
 
         Console.WriteLine("正在安装：{0} {1}", fileName, arg);
         var p = Process.Start(fileName, arg);
@@ -199,15 +199,15 @@ internal class Program
 
         if (osVer.Major >= 10)
         {
-            Install("Windows6.1-KB3063858-x64.msu", _baseUrl + "/win7", "/quiet /norestart");
-            Install("ndp481-x86-x64-allos-enu.exe", _baseUrl, "/passive /norestart /showfinalerror");
-            Install("ndp481-x86-x64-allos-chs.exe", _baseUrl, "/passive /norestart /showfinalerror");
+            Install("Windows6.1-KB3063858-x64.msu", _baseUrl + "/win7", "/quiet /promptrestart");
+            Install("ndp481-x86-x64-allos-enu.exe", _baseUrl, "/passive /promptrestart /showfinalerror");
+            Install("ndp481-x86-x64-allos-chs.exe", _baseUrl, "/passive /promptrestart /showfinalerror");
         }
         else
         {
-            Install("Windows6.1-KB3063858-x64.msu", _baseUrl + "/win7", "/quiet /norestart");
-            Install("ndp48-x86-x64-allos-enu.exe", _baseUrl, "/passive /norestart /showfinalerror");
-            Install("ndp48-x86-x64-allos-chs.exe", _baseUrl, "/passive /norestart /showfinalerror");
+            Install("Windows6.1-KB3063858-x64.msu", _baseUrl + "/win7", "/quiet /promptrestart");
+            Install("ndp48-x86-x64-allos-enu.exe", _baseUrl, "/passive /promptrestart /showfinalerror");
+            Install("ndp48-x86-x64-allos-chs.exe", _baseUrl, "/passive /promptrestart /showfinalerror");
         }
     }
 
