@@ -90,8 +90,8 @@ internal class Program
         }
 
         Console.WriteLine("正在安装：{0}", fileName);
-        var p = Process.Start(fileName, "/passive");
-        if (p.WaitForExit(15_000))
+        var p = Process.Start(fileName, "/passive /norestart");
+        if (p.WaitForExit(600_000))
         {
             Console.WriteLine("安装成功！");
             return true;
@@ -107,6 +107,7 @@ internal class Program
     {
         var vers = new List<VerInfo>();
         vers.AddRange(Get1To45VersionFromRegistry());
+        vers.AddRange(Get45PlusFromRegistry());
 
         var ver = new Version();
         if (vers.Count > 0)
@@ -196,11 +197,13 @@ internal class Program
 
         if (osVer.Major >= 10)
         {
+            Install("Windows6.1-KB3063858-x64.msu", _baseUrl + "/win7");
             Install("ndp481-x86-x64-allos-enu.exe", _baseUrl);
             Install("ndp481-x86-x64-allos-chs.exe", _baseUrl);
         }
         else
         {
+            Install("Windows6.1-KB3063858-x64.msu", _baseUrl + "/win7");
             Install("ndp48-x86-x64-allos-enu.exe", _baseUrl);
             Install("ndp48-x86-x64-allos-chs.exe", _baseUrl);
         }
