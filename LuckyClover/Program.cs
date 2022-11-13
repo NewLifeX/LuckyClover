@@ -29,10 +29,12 @@ internal class Program
         Console.WriteLine("{0}", Environment.OSVersion);
         Console.WriteLine();
 
+        // 根据操作系统，自动选择安装NET版本
+        _menus["net"] = AutoInstallNet;
+
         _menus["net40"] = InstallNet40;
         _menus["net45"] = InstallNet45;
         _menus["net48"] = InstallNet48;
-        //_menus["net"] = InstallNet48;
 
         _menus["net6"] = InstallNet6;
         _menus["net7"] = InstallNet7;
@@ -75,6 +77,34 @@ internal class Program
         var line = Console.ReadLine()?.Trim();
 
         return line;
+    }
+
+    private static void AutoInstallNet(String[] args)
+    {
+        var osVer = Environment.OSVersion.Version;
+
+        // WinXP
+        if (osVer.Major <= 5)
+            InstallNet40(args);
+        // Vista
+        else if (osVer.Major == 6 && osVer.Minor == 0)
+            InstallNet45(args);
+        else if (osVer.Major == 6 && osVer.Minor == 1)
+        {
+            // Win7
+            if (osVer.Revision <= 7600)
+                InstallNet45(args);
+            else
+            // Win7Sp1
+            {
+                InstallNet48(args);
+                InstallNet7(args);
+            }
+        }
+        else if (osVer.Major >= 10)
+        {
+            InstallNet7(args);
+        }
     }
 
     private static Boolean Install(String fileName, String baseUrl, String arg = null)
@@ -197,15 +227,19 @@ internal class Program
             return;
         }
 
+        var isWin7 = osVer.Major == 6 && osVer.Minor == 1;
+
         if (osVer.Major >= 10)
         {
-            Install("Windows6.1-KB3063858-x64.msu", _baseUrl + "/win7", "/quiet /promptrestart");
+            if (isWin7)
+                Install("Windows6.1-KB3063858-x64.msu", _baseUrl + "/win7", "/quiet /promptrestart");
             Install("ndp481-x86-x64-allos-enu.exe", _baseUrl, "/passive /promptrestart /showfinalerror");
             Install("ndp481-x86-x64-allos-chs.exe", _baseUrl, "/passive /promptrestart /showfinalerror");
         }
         else
         {
-            Install("Windows6.1-KB3063858-x64.msu", _baseUrl + "/win7", "/quiet /promptrestart");
+            if (isWin7)
+                Install("Windows6.1-KB3063858-x64.msu", _baseUrl + "/win7", "/quiet /promptrestart");
             Install("ndp48-x86-x64-allos-enu.exe", _baseUrl, "/passive /promptrestart /showfinalerror");
             Install("ndp48-x86-x64-allos-chs.exe", _baseUrl, "/passive /promptrestart /showfinalerror");
         }
