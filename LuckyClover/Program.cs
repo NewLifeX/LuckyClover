@@ -101,8 +101,14 @@ internal class Program
                 InstallNet7(args);
             }
         }
+        // Win10/Win11
         else if (osVer.Major >= 10)
         {
+            InstallNet7(args);
+        }
+        else
+        {
+            InstallNet48(args);
             InstallNet7(args);
         }
     }
