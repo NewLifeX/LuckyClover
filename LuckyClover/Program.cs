@@ -45,14 +45,18 @@ internal class Program
 
     private static String ShowMenu()
     {
-        var vers = new Dictionary<String, String>();
-        Get1To45VersionFromRegistry(vers);
-        Get45PlusFromRegistry(vers);
-        GetNetCore(vers);
+        var vers = new List<VerInfo>();
+        vers.AddRange(Get1To45VersionFromRegistry());
+        vers.AddRange(Get45PlusFromRegistry());
+        vers.AddRange(GetNetCore());
+
         Console.WriteLine("已安装版本：");
         foreach (var item in vers)
         {
-            Console.WriteLine("{0}\t{1}", item.Key, item.Value);
+            if (String.IsNullOrEmpty(item.Sp))
+                Console.WriteLine("{0,-10} {1}", item.Name, item.Version);
+            else
+                Console.WriteLine("{0,-10} {1} Sp{2}", item.Name, item.Version, item.Sp);
         }
         Console.WriteLine("");
 
@@ -71,19 +75,20 @@ internal class Program
 
     private static void InstallNet48(String[] args)
     {
+        var vers = new List<VerInfo>();
+        vers.AddRange(Get1To45VersionFromRegistry());
+        vers.AddRange(Get45PlusFromRegistry());
+
         var ver = new Version();
-        var vers = new Dictionary<String, String>();
-        Get1To45VersionFromRegistry(vers);
-        Get45PlusFromRegistry(vers);
         if (vers.Count > 0)
         {
             Console.WriteLine("已安装版本：");
             foreach (var item in vers)
             {
-                var v = new Version(item.Key);
+                var v = new Version(item.Version);
                 if (v > ver) ver = v;
 
-                Console.WriteLine(item.Value);
+                Console.WriteLine(item.Name);
             }
             Console.WriteLine("");
         }
@@ -127,18 +132,18 @@ internal class Program
 
     private static void InstallNet6(String[] args)
     {
+        var vers = GetNetCore();
+
         var ver = new Version();
-        var vers = new Dictionary<String, String>();
-        GetNetCore(vers);
         if (vers.Count > 0)
         {
             Console.WriteLine("已安装版本：");
             foreach (var item in vers)
             {
-                var v = new Version(item.Key);
+                var v = new Version(item.Version);
                 if (v > ver) ver = v;
 
-                Console.WriteLine(item.Value);
+                Console.WriteLine(item.Name);
             }
             Console.WriteLine("");
         }
@@ -182,18 +187,18 @@ internal class Program
 
     private static void InstallNet7(String[] args)
     {
+        var vers = GetNetCore();
+
         var ver = new Version();
-        var vers = new Dictionary<String, String>();
-        GetNetCore(vers);
         if (vers.Count > 0)
         {
             Console.WriteLine("已安装版本：");
             foreach (var item in vers)
             {
-                var v = new Version(item.Key);
+                var v = new Version(item.Version);
                 if (v > ver) ver = v;
 
-                Console.WriteLine(item.Value);
+                Console.WriteLine(item.Name);
             }
             Console.WriteLine("");
         }
@@ -235,123 +240,133 @@ internal class Program
         }
     }
 
-    private static void Get1To45VersionFromRegistry(IDictionary<String, String> dic)
+    private static IList<VerInfo> Get1To45VersionFromRegistry()
     {
-        // Opens the registry key for the .NET Framework entry.
+        // 注册表查找 .NET Framework
         using var ndpKey = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\NET Framework Setup\NDP\");
 
+        var list = new List<VerInfo>();
         foreach (var versionKeyName in ndpKey.GetSubKeyNames())
         {
-            // Skip .NET Framework 4.5 version information.
+            // 跳过 .NET Framework 4.5
             if (versionKeyName == "v4") continue;
             if (!versionKeyName.StartsWith("v")) continue;
 
             var versionKey = ndpKey.OpenSubKey(versionKeyName);
-            // Get the .NET Framework version value.
-            var name = (String)versionKey.GetValue("Version", "");
-            // Get the service pack (SP) number.
+            // 获取 .NET Framework 版本
+            var ver = (String)versionKey.GetValue("Version", "");
+            // 获取SP数字
             var sp = versionKey.GetValue("SP", "").ToString();
 
-            if (!String.IsNullOrEmpty(name))
+            if (!String.IsNullOrEmpty(ver))
             {
-                // Get the installation flag, or an empty string if there is none.
+                // 获取 installation flag, or an empty string if there is none.
                 var install = versionKey.GetValue("Install", "").ToString();
                 if (String.IsNullOrEmpty(install)) // No install info; it must be in a child subkey.
-                    dic.Add(name, name);
+                    list.Add(new VerInfo { Name = versionKeyName, Version = ver, Sp = sp });
                 else if (!String.IsNullOrEmpty(sp) && install == "1")
-                    dic.Add(name, $"{name} sp{sp}");
+                    list.Add(new VerInfo { Name = versionKeyName, Version = ver, Sp = sp });
             }
             else
             {
                 foreach (var subKeyName in versionKey.GetSubKeyNames())
                 {
                     var subKey = versionKey.OpenSubKey(subKeyName);
-                    name = (String)subKey.GetValue("Version", "");
-                    if (!String.IsNullOrEmpty(name))
+                    ver = (String)subKey.GetValue("Version", "");
+                    if (!String.IsNullOrEmpty(ver))
                     {
+                        var name = ver;
+                        while (name.Length > 3 && name.Substring(name.Length - 2) == ".0")
+                            name = name.Substring(0, name.Length - 2);
+                        if (name[0] != 'v') name = 'v' + name;
                         sp = subKey.GetValue("SP", "").ToString();
 
                         var install = subKey.GetValue("Install", "").ToString();
                         if (String.IsNullOrEmpty(install)) //No install info; it must be later.
-                            dic.Add(name, name);
+                            list.Add(new VerInfo { Name = name, Version = ver, Sp = sp });
                         else if (!String.IsNullOrEmpty(sp) && install == "1")
-                            dic.Add(name, $"{name} sp{sp}");
+                            list.Add(new VerInfo { Name = name, Version = ver, Sp = sp });
                         else if (install == "1")
-                            dic.Add(name, name);
+                            list.Add(new VerInfo { Name = name, Version = ver, Sp = sp });
                     }
                 }
             }
         }
+
+        return list;
     }
 
-    private static void Get45PlusFromRegistry(IDictionary<String, String> dic)
+    private static IList<VerInfo> Get45PlusFromRegistry()
     {
         const String subkey = @"SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full\";
 
         using var ndpKey = Registry.LocalMachine.OpenSubKey(subkey);
 
-        if (ndpKey == null) return;
+        var list = new List<VerInfo>();
+        if (ndpKey == null) return list;
 
         //First check if there's an specific version indicated
         var name = "";
         var value = "";
         var ver = ndpKey.GetValue("Version");
-        if (ver != null)
-            name = ver.ToString();
+        if (ver != null) name = ver.ToString();
         var release = ndpKey.GetValue("Release");
         if (release != null)
             value = CheckFor45PlusVersion((Int32)ndpKey.GetValue("Release"));
 
         if (String.IsNullOrEmpty(name)) name = value;
         if (String.IsNullOrEmpty(value)) value = name;
-        if (!String.IsNullOrEmpty(name)) dic.Add(name, value);
+        if (!String.IsNullOrEmpty(name)) list.Add(new VerInfo { Name = "v" + value, Version = name });
 
         // Checking the version using >= enables forward compatibility.
-        String CheckFor45PlusVersion(Int32 releaseKey)
+        static String CheckFor45PlusVersion(Int32 releaseKey) => releaseKey switch
         {
-            if (releaseKey >= 533325)
-                return "4.8.1";
-            if (releaseKey >= 528040)
-                return "4.8";
-            if (releaseKey >= 461808)
-                return "4.7.2";
-            if (releaseKey >= 461308)
-                return "4.7.1";
-            if (releaseKey >= 460798)
-                return "4.7";
-            if (releaseKey >= 394802)
-                return "4.6.2";
-            if (releaseKey >= 394254)
-                return "4.6.1";
-            if (releaseKey >= 393295)
-                return "4.6";
-            if (releaseKey >= 379893)
-                return "4.5.2";
-            if (releaseKey >= 378675)
-                return "4.5.1";
-            if (releaseKey >= 378389)
-                return "4.5";
-            // This code should never execute. A non-null release key should mean
-            // that 4.5 or later is installed.
-            return "";
-        }
+            >= 533325 => "4.8.1",
+            >= 528040 => "4.8",
+            >= 461808 => "4.7.2",
+            >= 461308 => "4.7.1",
+            >= 460798 => "4.7",
+            >= 394802 => "4.6.2",
+            >= 394254 => "4.6.1",
+            >= 393295 => "4.6",
+            >= 379893 => "4.5.2",
+            >= 378675 => "4.5.1",
+            >= 378389 => "4.5",
+            _ => ""
+        };
+
+        return list;
     }
 
-    private static void GetNetCore(IDictionary<String, String> dic)
+    private static IList<VerInfo> GetNetCore()
     {
+        var list = new List<VerInfo>();
+
         var dir = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
-        if (String.IsNullOrEmpty(dir)) return;
+        if (String.IsNullOrEmpty(dir)) return list;
 
         dir += "\\dotnet\\shared";
-        if (!Directory.Exists(dir)) return;
+        if (!Directory.Exists(dir)) return list;
 
+        var dic = new SortedDictionary<String, VerInfo>();
         var di = new DirectoryInfo(dir);
         foreach (var item in di.GetDirectories())
         {
             foreach (var elm in item.GetDirectories())
             {
-                dic[elm.Name] = elm.Name;
+                var name = "v" + elm.Name;
+                if (!dic.ContainsKey(name))
+                {
+                    dic.Add(name, new VerInfo { Name = name, Version = elm.Name });
+                }
             }
         }
+
+        foreach (var item in dic)
+        {
+            list.Add(item.Value);
+        }
+
+        return list;
     }
 }
