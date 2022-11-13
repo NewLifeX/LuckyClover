@@ -11,6 +11,7 @@ namespace LuckyClover;
 internal class Program
 {
     private static readonly Dictionary<String, Action<String[]>> _menus = new(StringComparer.OrdinalIgnoreCase);
+    private static readonly String _baseUrl = "http://x.newlifex.com/dotnet";
 
     private static void Main(String[] args)
     {
@@ -25,10 +26,13 @@ internal class Program
 #else
         Console.WriteLine(asm.GetCustomAttribute<AssemblyDescriptionAttribute>()?.Description);
 #endif
+        Console.WriteLine("{0}", Environment.OSVersion);
         Console.WriteLine();
 
+        _menus["net40"] = InstallNet40;
+        _menus["net45"] = InstallNet45;
         _menus["net48"] = InstallNet48;
-        _menus["net"] = InstallNet48;
+        //_menus["net"] = InstallNet48;
 
         _menus["net6"] = InstallNet6;
         _menus["net7"] = InstallNet7;
@@ -73,7 +77,63 @@ internal class Program
         return line;
     }
 
-    private static void InstallNet48(String[] args)
+    private static Boolean Install(String fileName, String baseUrl)
+    {
+        Console.WriteLine("下载 {0}", fileName);
+
+        if (!File.Exists(fileName))
+        {
+            var url = $"{baseUrl}/{fileName}";
+            Console.WriteLine("正在下载：{0}", url);
+            var http = new WebClient();
+            http.DownloadFile(url, fileName);
+        }
+
+        Console.WriteLine("正在安装：{0}", fileName);
+        var p = Process.Start(fileName, "/passive");
+        if (p.WaitForExit(15_000))
+        {
+            Console.WriteLine("安装成功！");
+            return true;
+        }
+        else
+        {
+            Console.WriteLine("安装超时！");
+            return true;
+        }
+    }
+
+    private static void InstallNet40(String[] args)
+    {
+        var vers = new List<VerInfo>();
+        vers.AddRange(Get1To45VersionFromRegistry());
+
+        var ver = new Version();
+        if (vers.Count > 0)
+        {
+            Console.WriteLine("已安装版本：");
+            foreach (var item in vers)
+            {
+                var v = new Version(item.Version);
+                if (v > ver) ver = v;
+
+                Console.WriteLine(item.Name);
+            }
+            Console.WriteLine("");
+        }
+
+        // 目标版本
+        var target = new Version("4.0");
+        if (ver >= target)
+        {
+            Console.WriteLine("已安装最新版 v{0}", ver);
+            return;
+        }
+
+        Install("dotNetFx40_Full_x86_x64.exe", _baseUrl);
+    }
+
+    private static void InstallNet45(String[] args)
     {
         var vers = new List<VerInfo>();
         vers.AddRange(Get1To45VersionFromRegistry());
@@ -94,39 +154,55 @@ internal class Program
         }
 
         // 目标版本
-        var target = new Version("4.8");
+        var target = new Version("4.5");
         if (ver >= target)
         {
             Console.WriteLine("已安装最新版 v{0}", ver);
             return;
         }
 
-        var cmd = "";
-        if (args.Length >= 1) cmd = args[0];
+        Install("NDP452-KB2901907-x86-x64-AllOS-ENU.exe", _baseUrl);
+        Install("NDP452-KB2901907-x86-x64-AllOS-CHS.exe", _baseUrl);
+    }
 
-        // 检查是否已安装.NET
-        Console.WriteLine("InstallNet48 {0}", cmd);
+    private static void InstallNet48(String[] args)
+    {
+        var vers = new List<VerInfo>();
+        vers.AddRange(Get1To45VersionFromRegistry());
+        vers.AddRange(Get45PlusFromRegistry());
 
-        var url = "http://x.newlifex.com/dotnet/ndp481-x86-x64-allos-enu.exe";
-        var fileName = Path.GetFileName(url);
-        if (!File.Exists(fileName))
+        var ver = new Version();
+        if (vers.Count > 0)
         {
-            Console.WriteLine("正在下载：{0}", url);
-            var http = new WebClient();
-            http.DownloadFile(url, fileName);
+            Console.WriteLine("已安装版本：");
+            foreach (var item in vers)
+            {
+                var v = new Version(item.Version);
+                if (v > ver) ver = v;
+
+                Console.WriteLine(item.Name);
+            }
+            Console.WriteLine("");
         }
 
-        Console.WriteLine("正在安装：{0}", fileName);
-        var p = Process.Start(fileName, "/passive");
-        if (p.WaitForExit(15_000))
+        // 目标版本。win10起支持4.8.1
+        var osVer = Environment.OSVersion.Version;
+        var target = osVer.Major >= 10 ? new Version("4.8.1") : new Version("4.8");
+        if (ver >= target)
         {
-            Console.WriteLine("安装成功！");
-            Environment.ExitCode = 0;
+            Console.WriteLine("已安装最新版 v{0}", ver);
+            return;
+        }
+
+        if (osVer.Major >= 10)
+        {
+            Install("ndp481-x86-x64-allos-enu.exe", _baseUrl);
+            Install("ndp481-x86-x64-allos-chs.exe", _baseUrl);
         }
         else
         {
-            Console.WriteLine("安装超时！");
-            Environment.ExitCode = 1;
+            Install("ndp48-x86-x64-allos-enu.exe", _baseUrl);
+            Install("ndp48-x86-x64-allos-chs.exe", _baseUrl);
         }
     }
 
@@ -156,33 +232,7 @@ internal class Program
             return;
         }
 
-        var cmd = "";
-        if (args.Length >= 1) cmd = args[0];
-
-        // 检查是否已安装.NET运行时
-        Console.WriteLine("InstallNet6 {0}", cmd);
-
-        var url = "http://x.newlifex.com/dotnet/dotnet-runtime-6.0.10-win-x64.exe";
-        var fileName = Path.GetFileName(url);
-        if (!File.Exists(fileName))
-        {
-            Console.WriteLine("正在下载：{0}", url);
-            var http = new WebClient();
-            http.DownloadFile(url, fileName);
-        }
-
-        Console.WriteLine("正在安装：{0}", fileName);
-        var p = Process.Start(fileName, "/passive");
-        if (p.WaitForExit(15_000))
-        {
-            Console.WriteLine("安装成功！");
-            Environment.ExitCode = 0;
-        }
-        else
-        {
-            Console.WriteLine("安装超时！");
-            Environment.ExitCode = 1;
-        }
+        Install("dotnet-runtime-6.0.10-win-x64.exe", _baseUrl);
     }
 
     private static void InstallNet7(String[] args)
@@ -214,30 +264,7 @@ internal class Program
         var cmd = "";
         if (args.Length >= 1) cmd = args[0];
 
-        // 检查是否已安装.NET运行时
-        Console.WriteLine("InstallNet7 {0}", cmd);
-
-        var url = "http://x.newlifex.com/dotnet/dotnet-runtime-7.0.0-win-x64.exe";
-        var fileName = Path.GetFileName(url);
-        if (!File.Exists(fileName))
-        {
-            Console.WriteLine("正在下载：{0}", url);
-            var http = new WebClient();
-            http.DownloadFile(url, fileName);
-        }
-
-        Console.WriteLine("正在安装：{0}", fileName);
-        var p = Process.Start(fileName, "/passive");
-        if (p.WaitForExit(15_000))
-        {
-            Console.WriteLine("安装成功！");
-            Environment.ExitCode = 0;
-        }
-        else
-        {
-            Console.WriteLine("安装超时！");
-            Environment.ExitCode = 1;
-        }
+        Install("dotnet-runtime-7.0.0-win-x64.exe", _baseUrl);
     }
 
     private static IList<VerInfo> Get1To45VersionFromRegistry()
