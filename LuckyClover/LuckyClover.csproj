@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFrameworks>net20;net40;net45;net7.0</TargetFrameworks>
+    <TargetFrameworks>net20;net40;net45;netcoreapp3.1;net7.0</TargetFrameworks>
     <AssemblyName>clover</AssemblyName>
     <AssemblyTitle>幸运草</AssemblyTitle>
     <Description>基于低版本运行时，自动安装主流.NET运行时。</Description>
@@ -25,6 +25,10 @@
     <IlcFoldIdenticalMethodBodies>true</IlcFoldIdenticalMethodBodies>-->
     <!--<InvariantGlobalization>true</InvariantGlobalization>-->
   </PropertyGroup>
+
+  <ItemGroup>
+    <RuntimeHostConfigurationOption Include="System.Globalization.Invariant" Value="true" />
+  </ItemGroup>
 
   <ItemGroup>
     <!--<PackageReference Include="NewLife.Core" Version="8.10.2021.505" />-->

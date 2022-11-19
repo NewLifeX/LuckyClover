@@ -52,8 +52,11 @@ internal class Program
     private static String ShowMenu()
     {
         var vers = new List<VerInfo>();
-        vers.AddRange(Get1To45VersionFromRegistry());
-        vers.AddRange(Get45PlusFromRegistry());
+        if (Environment.OSVersion.Platform <= PlatformID.WinCE)
+        {
+            vers.AddRange(Get1To45VersionFromRegistry());
+            vers.AddRange(Get45PlusFromRegistry());
+        }
         vers.AddRange(GetNetCore());
 
         Console.WriteLine("已安装版本：");
@@ -314,10 +317,11 @@ internal class Program
 
     private static IList<VerInfo> Get1To45VersionFromRegistry()
     {
+        var list = new List<VerInfo>();
+#if !NETCOREAPP3_1
         // 注册表查找 .NET Framework
         using var ndpKey = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\NET Framework Setup\NDP\");
 
-        var list = new List<VerInfo>();
         foreach (var versionKeyName in ndpKey.GetSubKeyNames())
         {
             // 跳过 .NET Framework 4.5
@@ -364,17 +368,19 @@ internal class Program
                 }
             }
         }
+#endif
 
         return list;
     }
 
     private static IList<VerInfo> Get45PlusFromRegistry()
     {
+        var list = new List<VerInfo>();
+#if !NETCOREAPP3_1
         const String subkey = @"SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full\";
 
         using var ndpKey = Registry.LocalMachine.OpenSubKey(subkey);
 
-        var list = new List<VerInfo>();
         if (ndpKey == null) return list;
 
         //First check if there's an specific version indicated
@@ -406,6 +412,7 @@ internal class Program
             >= 378389 => "4.5",
             _ => ""
         };
+#endif
 
         return list;
     }
@@ -414,31 +421,93 @@ internal class Program
     {
         var list = new List<VerInfo>();
 
-        var dir = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
-        if (String.IsNullOrEmpty(dir)) return list;
-
-        dir += "\\dotnet\\shared";
-        if (!Directory.Exists(dir)) return list;
-
-        var dic = new SortedDictionary<String, VerInfo>();
-        var di = new DirectoryInfo(dir);
-        foreach (var item in di.GetDirectories())
+        if (Environment.OSVersion.Platform <= PlatformID.WinCE)
         {
-            foreach (var elm in item.GetDirectories())
+            var dir = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
+            if (String.IsNullOrEmpty(dir)) return list;
+
+            dir += "\\dotnet\\shared";
+            if (!Directory.Exists(dir)) return list;
+
+            var dic = new SortedDictionary<String, VerInfo>();
+            var di = new DirectoryInfo(dir);
+            foreach (var item in di.GetDirectories())
             {
-                var name = "v" + elm.Name;
-                if (!dic.ContainsKey(name))
+                foreach (var elm in item.GetDirectories())
                 {
-                    dic.Add(name, new VerInfo { Name = name, Version = elm.Name });
+                    var name = "v" + elm.Name;
+                    if (!dic.ContainsKey(name))
+                    {
+                        dic.Add(name, new VerInfo { Name = name, Version = elm.Name });
+                    }
+                }
+            }
+
+            foreach (var item in dic)
+            {
+                list.Add(item.Value);
+            }
+        }
+
+        // 通用处理
+        {
+            var infs = Execute("dotnet", "--list-runtimes")?.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+            if (infs != null)
+            {
+                foreach (var line in infs)
+                {
+                    var ss = line.Split(' ');
+                    if (ss.Length >= 2)
+                    {
+                        var name = "v" + ss[1];
+                        var ver = $"{ss[0]} {ss[1]}";
+
+                        VerInfo vi = null;
+                        foreach (var item in list)
+                        {
+                            if (item.Name == name)
+                            {
+                                vi = item;
+                                break;
+                            }
+                        }
+                        if (vi == null)
+                        {
+                            vi = new VerInfo { Name = name, Version = ver };
+                            list.Add(vi);
+                        }
+
+                        if (vi.Version.Length < ver.Length) vi.Version = ver;
+                    }
                 }
             }
         }
 
-        foreach (var item in dic)
-        {
-            list.Add(item.Value);
-        }
-
         return list;
+    }
+
+    private static String Execute(String cmd, String arguments = null)
+    {
+        try
+        {
+            var psi = new ProcessStartInfo(cmd, arguments)
+            {
+                // UseShellExecute 必须 false，以便于后续重定向输出流
+                UseShellExecute = false,
+                CreateNoWindow = true,
+                WindowStyle = ProcessWindowStyle.Hidden,
+                RedirectStandardOutput = true,
+                //RedirectStandardError = true,
+            };
+            var process = Process.Start(psi);
+            if (!process.WaitForExit(3_000))
+            {
+                process.Kill();
+                return null;
+            }
+
+            return process.StandardOutput.ReadToEnd();
+        }
+        catch { return null; }
     }
 }
