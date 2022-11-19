@@ -17,13 +17,7 @@
     <OutputPath>..\Bin</OutputPath>
     <!--<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>-->
     <LangVersion>latest</LangVersion>
-
-    <!--<PublishTrimmed>true</PublishTrimmed>-->
-    <!--<TrimMode>Link</TrimMode>-->
-    <!--<TrimmerDefaultAction>link</TrimmerDefaultAction>-->
-    <!--<IlcOptimizationPreference>Speed</IlcOptimizationPreference>
-    <IlcFoldIdenticalMethodBodies>true</IlcFoldIdenticalMethodBodies>-->
-    <!--<InvariantGlobalization>true</InvariantGlobalization>-->
+    <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
 
   <ItemGroup>
