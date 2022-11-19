@@ -11,7 +11,7 @@ namespace LuckyClover;
 internal class Program
 {
     private static readonly Dictionary<String, Action<String[]>> _menus = new(StringComparer.OrdinalIgnoreCase);
-    private static readonly String _baseUrl = "http://x.newlifex.com/dotnet";
+    private static String _baseUrl = "http://x.newlifex.com/dotnet";
 
     private static void Main(String[] args)
     {
@@ -28,6 +28,18 @@ internal class Program
 #endif
         Console.WriteLine("{0}", Environment.OSVersion);
         Console.WriteLine();
+
+        // 读取命令行
+        for (var i = 0; i < args.Length; i++)
+        {
+            if (args[i].StartsWith("http"))
+            {
+                _baseUrl = args[i];
+                if (_baseUrl[_baseUrl.Length - 1] == '/') _baseUrl = _baseUrl.Substring(0, _baseUrl.Length - 1);
+
+                break;
+            }
+        }
 
         // 根据操作系统，自动选择安装NET版本
         _menus["net"] = AutoInstallNet;
