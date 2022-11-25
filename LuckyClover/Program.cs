@@ -292,7 +292,7 @@ internal class Program
             return;
         }
 
-        Install("dotnet-runtime-6.0.10-win-x64.exe", _baseUrl);
+        Install("dotnet-runtime-6.0.11-win-x64.exe", _baseUrl);
     }
 
     private static void InstallNet7(String[] args)
