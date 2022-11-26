@@ -433,32 +433,33 @@ internal class Program
     {
         var list = new List<VerInfo>();
 
+        var dir = "";
         if (Environment.OSVersion.Platform <= PlatformID.WinCE)
         {
-            var dir = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
-            if (String.IsNullOrEmpty(dir)) return list;
-
+            dir = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
+            if (String.IsNullOrEmpty(dir)) return null;
             dir += "\\dotnet\\shared";
-            if (!Directory.Exists(dir)) return list;
+        }
+        else if (Environment.OSVersion.Platform == PlatformID.Unix)
+            dir = "/usr/share/dotnet/shared";
 
-            var dic = new SortedDictionary<String, VerInfo>();
-            var di = new DirectoryInfo(dir);
-            foreach (var item in di.GetDirectories())
+        var dic = new SortedDictionary<String, VerInfo>();
+        var di = new DirectoryInfo(dir);
+        foreach (var item in di.GetDirectories())
+        {
+            foreach (var elm in item.GetDirectories())
             {
-                foreach (var elm in item.GetDirectories())
+                var name = "v" + elm.Name;
+                if (!dic.ContainsKey(name))
                 {
-                    var name = "v" + elm.Name;
-                    if (!dic.ContainsKey(name))
-                    {
-                        dic.Add(name, new VerInfo { Name = name, Version = elm.Name });
-                    }
+                    dic.Add(name, new VerInfo { Name = name, Version = elm.Name });
                 }
             }
+        }
 
-            foreach (var item in dic)
-            {
-                list.Add(item.Value);
-            }
+        foreach (var item in dic)
+        {
+            list.Add(item.Value);
         }
 
         // 通用处理
