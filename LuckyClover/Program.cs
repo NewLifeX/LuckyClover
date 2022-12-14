@@ -48,8 +48,12 @@ internal class Program
         _menus["net45"] = InstallNet45;
         _menus["net48"] = InstallNet48;
 
-        _menus["net6"] = InstallNet6;
-        _menus["net7"] = InstallNet7;
+        _menus["net6"] = e => InstallNet6(e, null);
+        _menus["net7"] = e => InstallNet7(e, null);
+        _menus["net6-desktop"] = e => InstallNet6(e, "desktop");
+        _menus["net7-desktop"] = e => InstallNet7(e, "desktop");
+        _menus["net6-aspnet"] = e => InstallNet6(e, "aspnet");
+        _menus["net7-aspnet"] = e => InstallNet7(e, "aspnet");
 
         var cmd = "";
         if (args.Length >= 1) cmd = args[0];
@@ -250,6 +254,7 @@ internal class Program
 
         var isWin7 = osVer.Major == 6 && osVer.Minor == 1;
 
+        // win10/win11 中安装 .NET4.8.1
         if (osVer.Major >= 10)
         {
             if (isWin7)
@@ -266,7 +271,7 @@ internal class Program
         }
     }
 
-    private static void InstallNet6(String[] args)
+    private static void InstallNet6(String[] args, String kind)
     {
         var vers = GetNetCore();
 
@@ -285,17 +290,28 @@ internal class Program
         }
 
         // 目标版本
-        var target = new Version("6.0.10");
+        var target = new Version("6.0.12");
         if (ver >= target)
         {
             Console.WriteLine("已安装最新版 v{0}", ver);
             return;
         }
 
-        Install("dotnet-runtime-6.0.11-win-x64.exe", _baseUrl);
+        switch (kind)
+        {
+            case "aspnet":
+                Install("aspnetcore-runtime-6.0.12-win-x64.exe", _baseUrl);
+                break;
+            case "desktop":
+                Install("windowsdesktop-runtime-6.0.12-win-x64.exe", _baseUrl);
+                break;
+            default:
+                Install("dotnet-runtime-6.0.12-win-x64.exe", _baseUrl);
+                break;
+        }
     }
 
-    private static void InstallNet7(String[] args)
+    private static void InstallNet7(String[] args, String kind = null)
     {
         var vers = GetNetCore();
 
@@ -314,17 +330,25 @@ internal class Program
         }
 
         // 目标版本
-        var target = new Version("7.0.0");
+        var target = new Version("7.0.1");
         if (ver >= target)
         {
             Console.WriteLine("已安装最新版 v{0}", ver);
             return;
         }
 
-        var cmd = "";
-        if (args.Length >= 1) cmd = args[0];
-
-        Install("dotnet-runtime-7.0.0-win-x64.exe", _baseUrl);
+        switch (kind)
+        {
+            case "aspnet":
+                Install("aspnetcore-runtime-7.0.1-win-x64.exe", _baseUrl);
+                break;
+            case "desktop":
+                Install("windowsdesktop-runtime-7.0.1-win-x64.exe", _baseUrl);
+                break;
+            default:
+                Install("dotnet-runtime-7.0.1-win-x64.exe", _baseUrl);
+                break;
+        }
     }
 
     private static IList<VerInfo> Get1To45VersionFromRegistry()
