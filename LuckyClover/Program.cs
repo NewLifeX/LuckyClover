@@ -160,25 +160,35 @@ internal class Program
         }
     }
 
-    private static void InstallNet40(String[] args)
+    static Version GetLast(IList<VerInfo> vers)
     {
-        var vers = new List<VerInfo>();
-        vers.AddRange(Get1To45VersionFromRegistry());
-        vers.AddRange(Get45PlusFromRegistry());
-
         var ver = new Version();
         if (vers.Count > 0)
         {
             Console.WriteLine("已安装版本：");
             foreach (var item in vers)
             {
-                var v = new Version(item.Version);
+                var str = item.Name.Trim('v');
+                var p = str.IndexOf('-');
+                if (p > 0) str = str.Substring(0, p);
+                var v = new Version(str);
                 if (v > ver) ver = v;
 
                 Console.WriteLine(item.Name);
             }
             Console.WriteLine("");
         }
+
+        return ver;
+    }
+
+    private static void InstallNet40(String[] args)
+    {
+        var vers = new List<VerInfo>();
+        vers.AddRange(Get1To45VersionFromRegistry());
+        vers.AddRange(Get45PlusFromRegistry());
+
+        var ver = GetLast(vers);
 
         // 目标版本
         var target = new Version("4.0");
@@ -197,19 +207,7 @@ internal class Program
         vers.AddRange(Get1To45VersionFromRegistry());
         vers.AddRange(Get45PlusFromRegistry());
 
-        var ver = new Version();
-        if (vers.Count > 0)
-        {
-            Console.WriteLine("已安装版本：");
-            foreach (var item in vers)
-            {
-                var v = new Version(item.Version);
-                if (v > ver) ver = v;
-
-                Console.WriteLine(item.Name);
-            }
-            Console.WriteLine("");
-        }
+        var ver = GetLast(vers);
 
         // 目标版本
         var target = new Version("4.5");
@@ -229,19 +227,7 @@ internal class Program
         vers.AddRange(Get1To45VersionFromRegistry());
         vers.AddRange(Get45PlusFromRegistry());
 
-        var ver = new Version();
-        if (vers.Count > 0)
-        {
-            Console.WriteLine("已安装版本：");
-            foreach (var item in vers)
-            {
-                var v = new Version(item.Version);
-                if (v > ver) ver = v;
-
-                Console.WriteLine(item.Name);
-            }
-            Console.WriteLine("");
-        }
+        var ver = GetLast(vers);
 
         // 目标版本。win10起支持4.8.1
         var osVer = Environment.OSVersion.Version;
@@ -275,19 +261,7 @@ internal class Program
     {
         var vers = GetNetCore();
 
-        var ver = new Version();
-        if (vers.Count > 0)
-        {
-            Console.WriteLine("已安装版本：");
-            foreach (var item in vers)
-            {
-                var v = new Version(item.Version);
-                if (v > ver) ver = v;
-
-                Console.WriteLine(item.Name);
-            }
-            Console.WriteLine("");
-        }
+        var ver = GetLast(vers);
 
         // 目标版本
         var target = new Version("6.0.12");
@@ -315,19 +289,7 @@ internal class Program
     {
         var vers = GetNetCore();
 
-        var ver = new Version();
-        if (vers.Count > 0)
-        {
-            Console.WriteLine("已安装版本：");
-            foreach (var item in vers)
-            {
-                var v = new Version(item.Version);
-                if (v > ver) ver = v;
-
-                Console.WriteLine(item.Name);
-            }
-            Console.WriteLine("");
-        }
+        var ver = GetLast(vers);
 
         // 目标版本
         var target = new Version("7.0.1");
