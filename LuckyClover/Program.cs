@@ -53,6 +53,7 @@ internal class Program
                 if (!String.IsNullOrEmpty(url))
                 {
                     if (url[url.Length - 1] == '/') url = url.Substring(0, url.Length - 1);
+                    if (!url.EndsWith("/dotnet", false, null)) url += "/dotnet";
                     _baseUrl = url;
                     flag = true;
                 }
