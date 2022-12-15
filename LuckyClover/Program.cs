@@ -258,19 +258,17 @@ internal class Program
         }
 
         var isWin7 = osVer.Major == 6 && osVer.Minor == 1;
+        if (isWin7)
+            Install("Windows6.1-KB3063858-x64.msu", _baseUrl + "/win7", "/quiet /promptrestart");
 
         // win10/win11 中安装 .NET4.8.1
         if (osVer.Major >= 10)
         {
-            if (isWin7)
-                Install("Windows6.1-KB3063858-x64.msu", _baseUrl + "/win7", "/quiet /promptrestart");
             Install("ndp481-x86-x64-allos-enu.exe", _baseUrl, "/passive /promptrestart /showfinalerror");
             Install("ndp481-x86-x64-allos-chs.exe", _baseUrl, "/passive /promptrestart /showfinalerror");
         }
         else
         {
-            if (isWin7)
-                Install("Windows6.1-KB3063858-x64.msu", _baseUrl + "/win7", "/quiet /promptrestart");
             Install("ndp48-x86-x64-allos-enu.exe", _baseUrl, "/passive /promptrestart /showfinalerror");
             Install("ndp48-x86-x64-allos-chs.exe", _baseUrl, "/passive /promptrestart /showfinalerror");
         }
@@ -288,6 +286,15 @@ internal class Program
         {
             Console.WriteLine("已安装最新版 v{0}", ver);
             return;
+        }
+
+        // win7需要vc2019运行时
+        var osVer = Environment.OSVersion.Version;
+        var isWin7 = osVer.Major == 6 && osVer.Minor == 1;
+        if (isWin7)
+        {
+            Install("Windows6.1-KB3063858-x64.msu", _baseUrl + "/win7", "/quiet /promptrestart");
+            Install("VC_redist.x64.exe", _baseUrl + "/vc2019", "/quiet /promptrestart");
         }
 
         switch (kind)
@@ -316,6 +323,15 @@ internal class Program
         {
             Console.WriteLine("已安装最新版 v{0}", ver);
             return;
+        }
+
+        // win7需要vc2019运行时
+        var osVer = Environment.OSVersion.Version;
+        var isWin7 = osVer.Major == 6 && osVer.Minor == 1;
+        if (isWin7)
+        {
+            Install("Windows6.1-KB3063858-x64.msu", _baseUrl + "/win7", "/quiet /promptrestart");
+            Install("VC_redist.x64.exe", _baseUrl + "/vc2019", "/quiet /promptrestart");
         }
 
         switch (kind)
@@ -450,14 +466,17 @@ internal class Program
 
         var dic = new SortedDictionary<String, VerInfo>();
         var di = new DirectoryInfo(dir);
-        foreach (var item in di.GetDirectories())
+        if (di.Exists)
         {
-            foreach (var elm in item.GetDirectories())
+            foreach (var item in di.GetDirectories())
             {
-                var name = "v" + elm.Name;
-                if (!dic.ContainsKey(name))
+                foreach (var elm in item.GetDirectories())
                 {
-                    dic.Add(name, new VerInfo { Name = name, Version = elm.Name });
+                    var name = "v" + elm.Name;
+                    if (!dic.ContainsKey(name))
+                    {
+                        dic.Add(name, new VerInfo { Name = name, Version = elm.Name });
+                    }
                 }
             }
         }
