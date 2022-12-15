@@ -36,7 +36,7 @@ internal class Program
             if (args[i].StartsWith("http"))
             {
                 var url = args[i];
-                if (flag[flag.Length - 1] == '/') flag = flag.Substring(0, flag.Length - 1);
+                if (url[url.Length - 1] == '/') url = url.Substring(0, url.Length - 1);
                 _baseUrl = url;
                 flag = true;
 
@@ -52,7 +52,7 @@ internal class Program
                 var url = File.ReadAllText(f).Trim();
                 if (!String.IsNullOrEmpty(url))
                 {
-                    if (flag[flag.Length - 1] == '/') flag = flag.Substring(0, flag.Length - 1);
+                    if (url[url.Length - 1] == '/') url = url.Substring(0, url.Length - 1);
                     _baseUrl = url;
                     flag = true;
                 }
