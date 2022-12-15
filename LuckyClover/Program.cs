@@ -30,14 +30,32 @@ internal class Program
         Console.WriteLine();
 
         // 读取命令行
+        var flag = false;
         for (var i = 0; i < args.Length; i++)
         {
             if (args[i].StartsWith("http"))
             {
-                _baseUrl = args[i];
-                if (_baseUrl[_baseUrl.Length - 1] == '/') _baseUrl = _baseUrl.Substring(0, _baseUrl.Length - 1);
+                var url = args[i];
+                if (flag[flag.Length - 1] == '/') flag = flag.Substring(0, flag.Length - 1);
+                _baseUrl = url;
+                flag = true;
 
                 break;
+            }
+        }
+        // 读取本目录 server.txt
+        if (!flag)
+        {
+            var f = Path.GetFullPath("server.txt");
+            if (File.Exists(f))
+            {
+                var url = File.ReadAllText(f).Trim();
+                if (!String.IsNullOrEmpty(url))
+                {
+                    if (flag[flag.Length - 1] == '/') flag = flag.Substring(0, flag.Length - 1);
+                    _baseUrl = url;
+                    flag = true;
+                }
             }
         }
 
