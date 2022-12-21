@@ -293,8 +293,8 @@ internal class Program
         var isWin7 = osVer.Major == 6 && osVer.Minor == 1;
         if (isWin7)
         {
-            Install("Windows6.1-KB3063858-x64.msu", _baseUrl + "/win7", "/quiet /promptrestart");
-            Install("VC_redist.x64.exe", _baseUrl + "/vc2019", "/quiet /promptrestart");
+            Install("Windows6.1-KB3063858-x64.msu", _baseUrl + "/win7", "/passive /norestart");
+            Install("VC_redist.x64.exe", _baseUrl + "/vc2019", "/passive");
         }
 
         switch (kind)
@@ -330,8 +330,8 @@ internal class Program
         var isWin7 = osVer.Major == 6 && osVer.Minor == 1;
         if (isWin7)
         {
-            Install("Windows6.1-KB3063858-x64.msu", _baseUrl + "/win7", "/quiet /promptrestart");
-            Install("VC_redist.x64.exe", _baseUrl + "/vc2019", "/quiet /promptrestart");
+            Install("Windows6.1-KB3063858-x64.msu", _baseUrl + "/win7", "/passive /norestart");
+            Install("VC_redist.x64.exe", _baseUrl + "/vc2019", "/passive");
         }
 
         switch (kind)
