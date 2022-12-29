@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Reflection;
+using System.Security.Cryptography;
 using Microsoft.Win32;
 
 namespace LuckyClover;
@@ -151,16 +152,24 @@ internal class Program
         }
     }
 
-    private static Boolean Install(String fileName, String baseUrl, String arg = null)
+    private static Boolean Install(String fileName, String baseUrl, String arg = null, String hash = null)
     {
         Console.WriteLine("下载 {0}", fileName);
 
-        if (!File.Exists(fileName))
+        // 检查已存在文件的MD5哈希，不正确则重新下载
+        var fi = new FileInfo(fileName);
+        if (fi.Exists && !String.IsNullOrEmpty(hash) && GetMD5(fileName) != hash)
+        {
+            fi.Delete();
+            fi = null;
+        }
+        if (fi == null || !fi.Exists)
         {
             var url = $"{baseUrl}/{fileName}";
             Console.WriteLine("正在下载：{0}", url);
             var http = new WebClient();
             http.DownloadFile(url, fileName);
+            Console.WriteLine("MD5: {0}", GetMD5(fileName));
         }
 
         if (String.IsNullOrEmpty(arg)) arg = "/passive /promptrestart";
@@ -175,7 +184,7 @@ internal class Program
         else
         {
             Console.WriteLine("安装超时！");
-            return true;
+            return false;
         }
     }
 
@@ -259,7 +268,7 @@ internal class Program
 
         var isWin7 = osVer.Major == 6 && osVer.Minor == 1;
         if (isWin7)
-            Install("Windows6.1-KB3063858-x64.msu", _baseUrl + "/win7", "/quiet /promptrestart");
+            Install("Windows6.1-KB3063858-x64.msu", _baseUrl + "/win7", "/passive /norestart", "6235547A9AC3D931843FE931C15F8E51");
 
         // win10/win11 中安装 .NET4.8.1
         if (osVer.Major >= 10)
@@ -293,8 +302,8 @@ internal class Program
         var isWin7 = osVer.Major == 6 && osVer.Minor == 1;
         if (isWin7)
         {
-            Install("Windows6.1-KB3063858-x64.msu", _baseUrl + "/win7", "/passive /norestart");
-            Install("VC_redist.x64.exe", _baseUrl + "/vc2019", "/passive");
+            Install("Windows6.1-KB3063858-x64.msu", _baseUrl + "/win7", "/passive /norestart", "6235547A9AC3D931843FE931C15F8E51");
+            Install("VC_redist.x64.exe", _baseUrl + "/vc2019", "/passive", "35431D059197B67227CD12F841733539");
         }
 
         switch (kind)
@@ -330,20 +339,20 @@ internal class Program
         var isWin7 = osVer.Major == 6 && osVer.Minor == 1;
         if (isWin7)
         {
-            Install("Windows6.1-KB3063858-x64.msu", _baseUrl + "/win7", "/passive /norestart");
-            Install("VC_redist.x64.exe", _baseUrl + "/vc2019", "/passive");
+            Install("Windows6.1-KB3063858-x64.msu", _baseUrl + "/win7", "/passive /norestart", "6235547A9AC3D931843FE931C15F8E51");
+            Install("VC_redist.x64.exe", _baseUrl + "/vc2019", "/passive", "35431D059197B67227CD12F841733539");
         }
 
         switch (kind)
         {
             case "aspnet":
-                Install("aspnetcore-runtime-7.0.1-win-x64.exe", _baseUrl);
+                Install("aspnetcore-runtime-7.0.1-win-x64.exe", _baseUrl, null, "C6F6A84EA2F306C9DA8BBA9B85522BAD");
                 break;
             case "desktop":
-                Install("windowsdesktop-runtime-7.0.1-win-x64.exe", _baseUrl);
+                Install("windowsdesktop-runtime-7.0.1-win-x64.exe", _baseUrl, null, "28CB0F04EE3DE71E5ED1E6B2A3DB89B8");
                 break;
             default:
-                Install("dotnet-runtime-7.0.1-win-x64.exe", _baseUrl);
+                Install("dotnet-runtime-7.0.1-win-x64.exe", _baseUrl, null, "A2C4819E0D689B84A3291C3D391402F8");
                 break;
         }
     }
@@ -546,5 +555,16 @@ internal class Program
             return process.StandardOutput.ReadToEnd();
         }
         catch { return null; }
+    }
+
+    private static String GetMD5(String fileName)
+    {
+        var fi = new FileInfo(fileName);
+        var md5 = MD5.Create();
+        using var fs = fi.OpenRead();
+        var buf = md5.ComputeHash(fs);
+        var hex = BitConverter.ToString(buf).Replace("-", null);
+
+        return hex;
     }
 }
