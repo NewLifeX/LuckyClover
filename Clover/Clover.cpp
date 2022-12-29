@@ -1,4 +1,5 @@
 ﻿#include <stdio.h>
+#include <stdlib.h>
 
 //#define CPPHTTPLIB_OPENSSL_SUPPORT
 #include "httplib.h"
@@ -11,7 +12,6 @@ using namespace std;
 void main()
 {
     OSVERSIONINFO osvi;
-    BOOL bIsWindowsXPorLater;
 
     ZeroMemory(&osvi, sizeof(OSVERSIONINFO));
     osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
@@ -35,45 +35,53 @@ void main()
     }
     else {
         printf("ReleaseId: %s\n", keyValue);
+
+        return;
     }
 
-    //// HTTP
-    //httplib::Client cli("http://star.newlifex.com:6600");
+    if (_access("dotNetFx40_Full_x86_x64.exe", 0) == -1) {
+        //// HTTP
+        //httplib::Client cli("http://star.newlifex.com:6600");
 
-    //if (auto res = cli.Get("/api")) {
-    //    if (res->status == 200) {
-    //        printf("%s", res->body);
-    //    }
-    //}
+        //if (auto res = cli.Get("/api")) {
+        //    if (res->status == 200) {
+        //        printf("%s", res->body);
+        //    }
+        //}
 
-    // HTTP
-    httplib::Client cli("http://x.newlifex.com");
+        printf("downloading dotNetFx40_Full_x86_x64.exe\r\n");
 
-    if (auto res = cli.Get("/dotnet/dotNetFx40_Full_x86_x64.exe")) {
-        printf("status:%d\n", res->status);
-        if (res->status == 200)
-        {
-            std::ofstream out;
-            out.open("dotNetFx40_Full_x86_x64.exe", std::ios_base::binary | std::ios::out);
-            printf("savefile!\n");
-            if (out.is_open())
+        // HTTP
+        httplib::Client cli("http://x.newlifex.com");
+
+        if (auto res = cli.Get("/dotnet/dotNetFx40_Full_x86_x64.exe")) {
+            printf("status:%d\n", res->status);
+            if (res->status == 200)
             {
-                out << res->body;
-                out.flush();
-                out.close();
-                printf("down load file finished!\n");
-            }
-            else
-            {
-                printf("open file error!\n");
+                std::ofstream out;
+                out.open("dotNetFx40_Full_x86_x64.exe", std::ios_base::binary | std::ios::out);
+                printf("savefile!\n");
+                if (out.is_open())
+                {
+                    out << res->body;
+                    out.flush();
+                    out.close();
+                    printf("down load file finished!\n");
+                }
+                else
+                {
+                    printf("open file error!\n");
+                }
             }
         }
+
+        //// HTTP
+        //httplib::Client cli("http://x.newlifex.com");
+
+        //auto res = cli.Get("/dotnet/dotNetFx40_Full_x86_x64.exe");
+        //res->status;
+        //res->body;
     }
 
-    //// HTTP
-    //httplib::Client cli("http://x.newlifex.com");
-
-    //auto res = cli.Get("/dotnet/dotNetFx40_Full_x86_x64.exe");
-    //res->status;
-    //res->body;
+    system("dotNetFx40_Full_x86_x64.exe /passive /promptrestart");
 }

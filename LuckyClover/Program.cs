@@ -179,11 +179,13 @@ internal class Program
         if (p.WaitForExit(600_000))
         {
             Console.WriteLine("安装完成！");
+            Environment.ExitCode = 0;
             return true;
         }
         else
         {
             Console.WriteLine("安装超时！");
+            Environment.ExitCode = 123;
             return false;
         }
     }
