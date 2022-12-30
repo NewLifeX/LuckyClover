@@ -270,7 +270,7 @@ internal class Program
 
         var isWin7 = osVer.Major == 6 && osVer.Minor == 1;
         if (isWin7)
-            Install("Windows6.1-KB3063858-x64.msu", _baseUrl + "/win7", "/passive /norestart", "6235547A9AC3D931843FE931C15F8E51");
+            Install("Windows6.1-KB3063858-x64.msu", _baseUrl + "/win7", "/quiet /norestart", "6235547A9AC3D931843FE931C15F8E51");
 
         // win10/win11 中安装 .NET4.8.1
         if (osVer.Major >= 10)
@@ -304,7 +304,7 @@ internal class Program
         var isWin7 = osVer.Major == 6 && osVer.Minor == 1;
         if (isWin7)
         {
-            Install("Windows6.1-KB3063858-x64.msu", _baseUrl + "/win7", "/passive /norestart", "6235547A9AC3D931843FE931C15F8E51");
+            Install("Windows6.1-KB3063858-x64.msu", _baseUrl + "/win7", "/quiet /norestart", "6235547A9AC3D931843FE931C15F8E51");
             Install("VC_redist.x64.exe", _baseUrl + "/vc2019", "/passive", "35431D059197B67227CD12F841733539");
         }
 
@@ -341,7 +341,7 @@ internal class Program
         var isWin7 = osVer.Major == 6 && osVer.Minor == 1;
         if (isWin7)
         {
-            Install("Windows6.1-KB3063858-x64.msu", _baseUrl + "/win7", "/passive /norestart", "6235547A9AC3D931843FE931C15F8E51");
+            Install("Windows6.1-KB3063858-x64.msu", _baseUrl + "/win7", "/quiet /norestart", "6235547A9AC3D931843FE931C15F8E51");
             Install("VC_redist.x64.exe", _baseUrl + "/vc2019", "/passive", "35431D059197B67227CD12F841733539");
         }
 
