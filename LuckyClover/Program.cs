@@ -336,26 +336,58 @@ internal class Program
             return;
         }
 
+#if NET20
+        var is64 = IntPtr.Size == 8;
+#else
+        var is64 = Environment.Is64BitOperatingSystem;
+#endif
+
         // win7需要vc2019运行时
         var osVer = Environment.OSVersion.Version;
         var isWin7 = osVer.Major == 6 && osVer.Minor == 1;
         if (isWin7)
         {
-            Install("Windows6.1-KB3063858-x64.msu", _baseUrl + "/win7", "/quiet /norestart", "6235547A9AC3D931843FE931C15F8E51");
-            Install("VC_redist.x64.exe", _baseUrl + "/vc2019", "/passive", "35431D059197B67227CD12F841733539");
+            if (is64)
+            {
+                Install("Windows6.1-KB3063858-x64.msu", _baseUrl + "/win7", "/quiet /norestart", "6235547A9AC3D931843FE931C15F8E51");
+                Install("VC_redist.x64.exe", _baseUrl + "/vc2019", "/passive", "35431D059197B67227CD12F841733539");
+            }
+            else
+            {
+                Install("Windows6.1-KB3063858-x86.msu", _baseUrl + "/win7", "/quiet /norestart", null);
+                Install("VC_redist.x86.exe", _baseUrl + "/vc2019", "/passive", null);
+            }
         }
 
-        switch (kind)
+        if (is64)
         {
-            case "aspnet":
-                Install("aspnetcore-runtime-7.0.1-win-x64.exe", _baseUrl, null, "C6F6A84EA2F306C9DA8BBA9B85522BAD");
-                break;
-            case "desktop":
-                Install("windowsdesktop-runtime-7.0.1-win-x64.exe", _baseUrl, null, "28CB0F04EE3DE71E5ED1E6B2A3DB89B8");
-                break;
-            default:
-                Install("dotnet-runtime-7.0.1-win-x64.exe", _baseUrl, null, "A2C4819E0D689B84A3291C3D391402F8");
-                break;
+            switch (kind)
+            {
+                case "aspnet":
+                    Install("aspnetcore-runtime-7.0.1-win-x64.exe", _baseUrl, null, "C6F6A84EA2F306C9DA8BBA9B85522BAD");
+                    break;
+                case "desktop":
+                    Install("windowsdesktop-runtime-7.0.1-win-x64.exe", _baseUrl, null, "28CB0F04EE3DE71E5ED1E6B2A3DB89B8");
+                    break;
+                default:
+                    Install("dotnet-runtime-7.0.1-win-x64.exe", _baseUrl, null, "A2C4819E0D689B84A3291C3D391402F8");
+                    break;
+            }
+        }
+        else
+        {
+            switch (kind)
+            {
+                case "aspnet":
+                    Install("aspnetcore-runtime-7.0.1-win-x86.exe", _baseUrl, null, null);
+                    break;
+                case "desktop":
+                    Install("windowsdesktop-runtime-7.0.1-win-x86.exe", _baseUrl, null, null);
+                    break;
+                default:
+                    Install("dotnet-runtime-7.0.1-win-x86.exe", _baseUrl, null, null);
+                    break;
+            }
         }
     }
 
