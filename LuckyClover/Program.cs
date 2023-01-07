@@ -75,6 +75,8 @@ internal class Program
         _menus["net6-aspnet"] = e => InstallNet6(e, "aspnet");
         _menus["net7-aspnet"] = e => InstallNet7(e, "aspnet");
 
+        _menus["md5"] = ShowMd5;
+
         var cmd = "";
         if (args.Length >= 1) cmd = args[0];
         if (String.IsNullOrEmpty(cmd)) cmd = ShowMenu();
@@ -228,7 +230,7 @@ internal class Program
             return;
         }
 
-        Install("dotNetFx40_Full_x86_x64.exe", _baseUrl);
+        Install("dotNetFx40_Full_x86_x64.exe", _baseUrl, null, "251743DFD3FDA414570524BAC9E55381");
     }
 
     private static void InstallNet45(String[] args)
@@ -247,8 +249,8 @@ internal class Program
             return;
         }
 
-        Install("NDP452-KB2901907-x86-x64-AllOS-ENU.exe", _baseUrl);
-        Install("NDP452-KB2901907-x86-x64-AllOS-CHS.exe", _baseUrl);
+        Install("NDP452-KB2901907-x86-x64-AllOS-ENU.exe", _baseUrl, null, "EE01FC4110C73A8E5EFC7CABDA0F5FF7");
+        Install("NDP452-KB2901907-x86-x64-AllOS-CHS.exe", _baseUrl, null, "F0DE04B58842C30B8BE2D52F1DACF353");
     }
 
     private static void InstallNet48(String[] args)
@@ -275,13 +277,13 @@ internal class Program
         // win10/win11 中安装 .NET4.8.1
         if (osVer.Major >= 10)
         {
-            Install("ndp481-x86-x64-allos-enu.exe", _baseUrl, "/passive /promptrestart /showfinalerror");
-            Install("ndp481-x86-x64-allos-chs.exe", _baseUrl, "/passive /promptrestart /showfinalerror");
+            Install("ndp481-x86-x64-allos-enu.exe", _baseUrl, "/passive /promptrestart /showfinalerror", "175C14084CEF7AE4DAC70BDDE804212F");
+            Install("ndp481-x86-x64-allos-chs.exe", _baseUrl, "/passive /promptrestart /showfinalerror", "56EE95B0E0520A792099F7F3810FCCF4");
         }
         else
         {
-            Install("ndp48-x86-x64-allos-enu.exe", _baseUrl, "/passive /promptrestart /showfinalerror");
-            Install("ndp48-x86-x64-allos-chs.exe", _baseUrl, "/passive /promptrestart /showfinalerror");
+            Install("ndp48-x86-x64-allos-enu.exe", _baseUrl, "/passive /promptrestart /showfinalerror", "AEBCB9FCAFA2BECF8BB30458A7E1F0A2");
+            Install("ndp48-x86-x64-allos-chs.exe", _baseUrl, "/passive /promptrestart /showfinalerror", "048308B019CBB9C741354DC7FEA928B9");
         }
     }
 
@@ -311,13 +313,15 @@ internal class Program
         switch (kind)
         {
             case "aspnet":
-                Install("aspnetcore-runtime-6.0.12-win-x64.exe", _baseUrl);
+                //Install("dotnet-runtime-6.0.12-win-x64.exe", _baseUrl, null, "B904AEE532297D7BAB64DCDC6DC56988");
+                //Install("aspnetcore-runtime-6.0.12-win-x64.exe", _baseUrl, null, "E4582D7F7FA2AF2F8AFD9C76B0A285D1");
+                Install("dotnet-hosting-6.0.12-win.exe", _baseUrl, null, "2EEF2FE2A8BCA30396B0FAD0625A8FAC");
                 break;
             case "desktop":
-                Install("windowsdesktop-runtime-6.0.12-win-x64.exe", _baseUrl);
+                Install("windowsdesktop-runtime-6.0.12-win-x64.exe", _baseUrl, null, "2F6601588695B2DC2D2F6DCD1C1C55F5");
                 break;
             default:
-                Install("dotnet-runtime-6.0.12-win-x64.exe", _baseUrl);
+                Install("dotnet-runtime-6.0.12-win-x64.exe", _baseUrl, null, "B904AEE532297D7BAB64DCDC6DC56988");
                 break;
         }
     }
@@ -354,8 +358,8 @@ internal class Program
             }
             else
             {
-                Install("Windows6.1-KB3063858-x86.msu", _baseUrl + "/win7", "/quiet /norestart", null);
-                Install("VC_redist.x86.exe", _baseUrl + "/vc2019", "/passive", null);
+                Install("Windows6.1-KB3063858-x86.msu", _baseUrl + "/win7", "/quiet /norestart", "6D2B63B73E20DA5128490632995C4E65");
+                Install("VC_redist.x86.exe", _baseUrl + "/vc2019", "/passive", "DD0232EE751164EAAD2FE0DE7158D77D");
             }
         }
 
@@ -364,7 +368,9 @@ internal class Program
             switch (kind)
             {
                 case "aspnet":
-                    Install("aspnetcore-runtime-7.0.1-win-x64.exe", _baseUrl, null, "C6F6A84EA2F306C9DA8BBA9B85522BAD");
+                    //Install("dotnet-runtime-7.0.1-win-x64.exe", _baseUrl, null, "A2C4819E0D689B84A3291C3D391402F8");
+                    //Install("aspnetcore-runtime-7.0.1-win-x64.exe", _baseUrl, null, "C6F6A84EA2F306C9DA8BBA9B85522BAD");
+                    Install("dotnet-hosting-7.0.1-win.exe", _baseUrl, null, "3809855004F80E0AD58335E9122B29FF");
                     break;
                 case "desktop":
                     Install("windowsdesktop-runtime-7.0.1-win-x64.exe", _baseUrl, null, "28CB0F04EE3DE71E5ED1E6B2A3DB89B8");
@@ -379,13 +385,15 @@ internal class Program
             switch (kind)
             {
                 case "aspnet":
-                    Install("aspnetcore-runtime-7.0.1-win-x86.exe", _baseUrl, null, null);
+                    //Install("dotnet-runtime-7.0.1-win-x86.exe", _baseUrl, null, "CF2F21C5374A1B87532474F3900EFFF5");
+                    //Install("aspnetcore-runtime-7.0.1-win-x86.exe", _baseUrl, null, "0DB188A73A6D9BA6116C0D80791A7E4A");
+                    Install("dotnet-hosting-7.0.1-win.exe", _baseUrl, null, "3809855004F80E0AD58335E9122B29FF");
                     break;
                 case "desktop":
-                    Install("windowsdesktop-runtime-7.0.1-win-x86.exe", _baseUrl, null, null);
+                    Install("windowsdesktop-runtime-7.0.1-win-x86.exe", _baseUrl, null, "3D111CD0C48A72953788E06E3084D937");
                     break;
                 default:
-                    Install("dotnet-runtime-7.0.1-win-x86.exe", _baseUrl, null, null);
+                    Install("dotnet-runtime-7.0.1-win-x86.exe", _baseUrl, null, "CF2F21C5374A1B87532474F3900EFFF5");
                     break;
             }
         }
@@ -600,5 +608,18 @@ internal class Program
         var hex = BitConverter.ToString(buf).Replace("-", null);
 
         return hex;
+    }
+
+    private static void ShowMd5(String[] args)
+    {
+        var pt = "*.*";
+        if (args != null && args.Length >= 2) pt = args[1];
+        //Console.WriteLine("pt={0}", pt);
+
+        var di = new DirectoryInfo("./");
+        foreach (var fi in di.GetFiles(pt))
+        {
+            Console.WriteLine("{0}\t{1}", fi.Name, GetMD5(fi.FullName));
+        }
     }
 }
