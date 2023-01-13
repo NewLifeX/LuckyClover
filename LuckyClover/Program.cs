@@ -366,7 +366,7 @@ internal class Program
         var ver = GetLast(vers, null);
 
         // 目标版本
-        var target = new Version("7.0.1");
+        var target = new Version("7.0.2");
         if (ver >= target)
         {
             Console.WriteLine("已安装最新版 v{0}", ver);
@@ -401,15 +401,13 @@ internal class Program
             switch (kind)
             {
                 case "aspnet":
-                    //Install("dotnet-runtime-7.0.1-win-x64.exe", _baseUrl, null, "A2C4819E0D689B84A3291C3D391402F8");
-                    //Install("aspnetcore-runtime-7.0.1-win-x64.exe", _baseUrl, null, "C6F6A84EA2F306C9DA8BBA9B85522BAD");
-                    Install("dotnet-hosting-7.0.1-win.exe", _baseUrl, null, "3809855004F80E0AD58335E9122B29FF");
+                    Install("dotnet-hosting-7.0.2-win.exe", _baseUrl, null, "1A6FC6799534BF323B35FC1D6A14DD2D");
                     break;
                 case "desktop":
-                    Install("windowsdesktop-runtime-7.0.1-win-x64.exe", _baseUrl, null, "28CB0F04EE3DE71E5ED1E6B2A3DB89B8");
+                    Install("windowsdesktop-runtime-7.0.2-win-x64.exe", _baseUrl, null, "010901D39E3B471CC872359DEDFB3C45");
                     break;
                 default:
-                    Install("dotnet-runtime-7.0.1-win-x64.exe", _baseUrl, null, "A2C4819E0D689B84A3291C3D391402F8");
+                    Install("dotnet-runtime-7.0.2-win-x64.exe", _baseUrl, null, "1476E6B9AEE931CBE2F04050A4ACE2E3");
                     break;
             }
         }
@@ -418,15 +416,13 @@ internal class Program
             switch (kind)
             {
                 case "aspnet":
-                    //Install("dotnet-runtime-7.0.1-win-x86.exe", _baseUrl, null, "CF2F21C5374A1B87532474F3900EFFF5");
-                    //Install("aspnetcore-runtime-7.0.1-win-x86.exe", _baseUrl, null, "0DB188A73A6D9BA6116C0D80791A7E4A");
-                    Install("dotnet-hosting-7.0.1-win.exe", _baseUrl, null, "3809855004F80E0AD58335E9122B29FF");
+                    Install("dotnet-hosting-7.0.2-win.exe", _baseUrl, null, "1A6FC6799534BF323B35FC1D6A14DD2D");
                     break;
                 case "desktop":
-                    Install("windowsdesktop-runtime-7.0.1-win-x86.exe", _baseUrl, null, "3D111CD0C48A72953788E06E3084D937");
+                    Install("windowsdesktop-runtime-7.0.2-win-x86.exe", _baseUrl, null, "64D86BACAB1394882D9D941FE4470BB8");
                     break;
                 default:
-                    Install("dotnet-runtime-7.0.1-win-x86.exe", _baseUrl, null, "CF2F21C5374A1B87532474F3900EFFF5");
+                    Install("dotnet-runtime-7.0.2-win-x86.exe", _baseUrl, null, "C40BA092C7C32B466B1F66EC4254CA26");
                     break;
             }
         }
