@@ -192,7 +192,7 @@ internal class Program
         }
     }
 
-    static Version GetLast(IList<VerInfo> vers)
+    static Version GetLast(IList<VerInfo> vers, String prefix)
     {
         var ver = new Version();
         if (vers.Count > 0)
@@ -200,11 +200,14 @@ internal class Program
             Console.WriteLine("已安装版本：");
             foreach (var item in vers)
             {
-                var str = item.Name.Trim('v');
-                var p = str.IndexOf('-');
-                if (p > 0) str = str.Substring(0, p);
-                var v = new Version(str);
-                if (v > ver) ver = v;
+                if (String.IsNullOrEmpty(prefix) || item.Name.StartsWith(prefix))
+                {
+                    var str = item.Name.Trim('v');
+                    var p = str.IndexOf('-');
+                    if (p > 0) str = str.Substring(0, p);
+                    var v = new Version(str);
+                    if (v > ver) ver = v;
+                }
 
                 Console.WriteLine(item.Name);
             }
@@ -220,7 +223,7 @@ internal class Program
         vers.AddRange(Get1To45VersionFromRegistry());
         vers.AddRange(Get45PlusFromRegistry());
 
-        var ver = GetLast(vers);
+        var ver = GetLast(vers, null);
 
         // 目标版本
         var target = new Version("4.0");
@@ -239,7 +242,7 @@ internal class Program
         vers.AddRange(Get1To45VersionFromRegistry());
         vers.AddRange(Get45PlusFromRegistry());
 
-        var ver = GetLast(vers);
+        var ver = GetLast(vers, null);
 
         // 目标版本
         var target = new Version("4.5");
@@ -259,7 +262,7 @@ internal class Program
         vers.AddRange(Get1To45VersionFromRegistry());
         vers.AddRange(Get45PlusFromRegistry());
 
-        var ver = GetLast(vers);
+        var ver = GetLast(vers, null);
 
         // 目标版本。win10起支持4.8.1
         var osVer = Environment.OSVersion.Version;
@@ -291,7 +294,7 @@ internal class Program
     {
         var vers = GetNetCore();
 
-        var ver = GetLast(vers);
+        var ver = GetLast(vers, "v6.0");
 
         // 目标版本
         var target = new Version("6.0.12");
@@ -330,7 +333,7 @@ internal class Program
     {
         var vers = GetNetCore();
 
-        var ver = GetLast(vers);
+        var ver = GetLast(vers, null);
 
         // 目标版本
         var target = new Version("7.0.1");
