@@ -297,35 +297,65 @@ internal class Program
         var ver = GetLast(vers, "v6.0");
 
         // 目标版本
-        var target = new Version("6.0.12");
+        var target = new Version("6.0.13");
         if (ver >= target)
         {
             Console.WriteLine("已安装最新版 v{0}", ver);
             return;
         }
 
+#if NET20
+        var is64 = IntPtr.Size == 8;
+#else
+        var is64 = Environment.Is64BitOperatingSystem;
+#endif
+
         // win7需要vc2019运行时
         var osVer = Environment.OSVersion.Version;
         var isWin7 = osVer.Major == 6 && osVer.Minor == 1;
         if (isWin7)
         {
-            Install("Windows6.1-KB3063858-x64.msu", _baseUrl + "/win7", "/quiet /norestart", "6235547A9AC3D931843FE931C15F8E51");
-            Install("VC_redist.x64.exe", _baseUrl + "/vc2019", "/passive", "35431D059197B67227CD12F841733539");
+            if (is64)
+            {
+                Install("Windows6.1-KB3063858-x64.msu", _baseUrl + "/win7", "/quiet /norestart", "6235547A9AC3D931843FE931C15F8E51");
+                Install("VC_redist.x64.exe", _baseUrl + "/vc2019", "/passive", "35431D059197B67227CD12F841733539");
+            }
+            else
+            {
+                Install("Windows6.1-KB3063858-x86.msu", _baseUrl + "/win7", "/quiet /norestart", "6D2B63B73E20DA5128490632995C4E65");
+                Install("VC_redist.x86.exe", _baseUrl + "/vc2019", "/passive", "DD0232EE751164EAAD2FE0DE7158D77D");
+            }
         }
 
-        switch (kind)
+        if (is64)
         {
-            case "aspnet":
-                //Install("dotnet-runtime-6.0.12-win-x64.exe", _baseUrl, null, "B904AEE532297D7BAB64DCDC6DC56988");
-                //Install("aspnetcore-runtime-6.0.12-win-x64.exe", _baseUrl, null, "E4582D7F7FA2AF2F8AFD9C76B0A285D1");
-                Install("dotnet-hosting-6.0.12-win.exe", _baseUrl, null, "2EEF2FE2A8BCA30396B0FAD0625A8FAC");
-                break;
-            case "desktop":
-                Install("windowsdesktop-runtime-6.0.12-win-x64.exe", _baseUrl, null, "2F6601588695B2DC2D2F6DCD1C1C55F5");
-                break;
-            default:
-                Install("dotnet-runtime-6.0.12-win-x64.exe", _baseUrl, null, "B904AEE532297D7BAB64DCDC6DC56988");
-                break;
+            switch (kind)
+            {
+                case "aspnet":
+                    Install("dotnet-hosting-6.0.13-win.exe", _baseUrl, null, "F583DE1A3597F4B6AAE8FCEF60801531");
+                    break;
+                case "desktop":
+                    Install("windowsdesktop-runtime-6.0.13-win-x64.exe", _baseUrl, null, "7C37E8A464A8248889DADC710CC7585D");
+                    break;
+                default:
+                    Install("dotnet-runtime-6.0.13-win-x64.exe", _baseUrl, null, "7CBDCB7E0AD6C186B7129497CF32D70B");
+                    break;
+            }
+        }
+        else
+        {
+            switch (kind)
+            {
+                case "aspnet":
+                    Install("dotnet-hosting-6.0.13-win.exe", _baseUrl, null, "F583DE1A3597F4B6AAE8FCEF60801531");
+                    break;
+                case "desktop":
+                    Install("windowsdesktop-runtime-6.0.13-win-x86.exe", _baseUrl, null, "27E8E8FD587E5C3A3789105DD78D554E");
+                    break;
+                default:
+                    Install("dotnet-runtime-6.0.13-win-x86.exe", _baseUrl, null, "6817C54EAB15B9ECD02A79FEC46FB09C");
+                    break;
+            }
         }
     }
 
