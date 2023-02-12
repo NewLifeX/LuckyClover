@@ -8,14 +8,13 @@
 
 int main()
 {
-    std::cout << "Hello World!\n";
     //检测OS版本状态
     CGetOSVersion cOSVer;
     int iOSMainVerNum = 0;
     int iOSSubVerNum = 0;
     bool bIsServer = false;
 
-    std::cout << "操作系统版本:%s" << cOSVer.GetOSVersionDesc(iOSMainVerNum, iOSSubVerNum, bIsServer) << "\n";
+    std::cout << "操作系统版本: " << cOSVer.GetOSVersionDesc(iOSMainVerNum, iOSSubVerNum, bIsServer) << "\n";
 
     //检测OS是否安装 .net Framework客户端版本
     CRegistryVisit cRegVisit;
