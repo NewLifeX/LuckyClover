@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include <string>
 
+#pragma comment(lib,"atls.lib")
 
 template<class... T>
 std::string format(const char* fmt, const T&...t)

@@ -71,6 +71,8 @@ int main()
             ShellExecute(NULL, _T("open"), strFilePath, _T("/passive /promptrestart"), NULL, SW_HIDE);
         }
     }
+
     //如果已安装.net Framework,流程结束
+
     return 0;
 }
