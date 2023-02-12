@@ -15,13 +15,34 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Clover.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
+    <ClInclude Include="BaseInclude.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CDownloadFile.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CGetOSVersion.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CRegistryVisit.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
     <ClInclude Include="httplib.h">
       <Filter>头文件</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="CDownloadFile.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="CGetOSVersion.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Clover.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="CRegistryVisit.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
