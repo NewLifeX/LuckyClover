@@ -168,7 +168,7 @@ bool CGetOSVersion::CheckOSVer()
         //释放句柄
         FreeLibrary(hinst);
 
-        printf("Windows版本 : %d.%d\n", dwMajor, dwMinor);
+        //printf("Windows版本 : %d.%d\n", dwMajor, dwMinor);
 
         //判断各个系统版本
         if (5 == dwMajor)

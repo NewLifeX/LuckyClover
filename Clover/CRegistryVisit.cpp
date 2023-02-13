@@ -44,8 +44,18 @@ bool CRegistryVisit::CheckIsInstallNet(CString strCheckVer)
 			ReadKeyValue(HKEY_LOCAL_MACHINE, _T("Software\\Microsoft\\NET Framework Setup\\NDP\\v4\\Full"), _T("Install"), dwValue);
 		}
 	}
+    else if (0 == strCheckVer.CompareNoCase(_T("4.5")))
+    {
+        ReadKeyValue(HKEY_LOCAL_MACHINE, _T("Software\\Microsoft\\NET Framework Setup\\NDP\\v4\\Full"), _T("Release"), dwValue);
+        dwValue = dwValue >= 378389 && dwValue < 393295 ? dwValue : 0;
+    }
+    else if (0 == strCheckVer.CompareNoCase(_T("4.8")))
+    {
+        ReadKeyValue(HKEY_LOCAL_MACHINE, _T("Software\\Microsoft\\NET Framework Setup\\NDP\\v4\\Full"), _T("Release"), dwValue);
+        dwValue = dwValue >= 528040 ? dwValue : 0;
+    }
 
-	return bReturn = (1 == dwValue) ? true : false;
+	return dwValue > 0;
 }
 
 //在指定的计算机注册表内读取一个DWORD值

@@ -1,4 +1,4 @@
-﻿// Clover_re.cpp : 此文件包含 "main" 函数。程序执行将在此处开始并结束。
+﻿// Clover.cpp : 此文件包含 "main" 函数。程序执行将在此处开始并结束。
 //
 
 #include "BaseInclude.h"
@@ -14,14 +14,47 @@ int main()
     int iOSSubVerNum = 0;
     bool bIsServer = false;
 
-    std::cout << "操作系统版本: " << cOSVer.GetOSVersionDesc(iOSMainVerNum, iOSSubVerNum, bIsServer) << "\n";
+    std::cout << "幸运草 v1.0.2023.213" << std::endl;
+    std::cout << "检测并安装主流.NET运行时。" << std::endl;
+    std::cout << "操作系统: " << cOSVer.GetOSVersionDesc(iOSMainVerNum, iOSSubVerNum, bIsServer) << "\n";
 
     //检测OS是否安装 .net Framework客户端版本
     CRegistryVisit cRegVisit;
-    bool bInstall = cRegVisit.CheckIsInstallNet(_T("4.0"));
-    
+
+    std::cout << std::endl;
+    std::cout << "已安装版本：" << std::endl;
+    bool bNet20 = cRegVisit.CheckIsInstallNet(_T("2.0"));
+    if (bNet20) {
+        std::cout << "v2.0" << std::endl;
+    }
+
+    bool bNet30 = cRegVisit.CheckIsInstallNet(_T("3.0"));
+    if (bNet30) {
+        std::cout << "v3.0" << std::endl;
+    }
+
+    bool bNet35 = cRegVisit.CheckIsInstallNet(_T("3.5"));
+    if (bNet35) {
+        std::cout << "v3.5" << std::endl;
+    }
+
+    bool bNet40 = cRegVisit.CheckIsInstallNet(_T("4.0"));
+    if (bNet40) {
+        std::cout << "v4.0" << std::endl;
+    }
+
+    bool bNet45 = cRegVisit.CheckIsInstallNet(_T("4.5"));
+    if (bNet45) {
+        std::cout << "v4.5" << std::endl;
+    }
+
+    bool bNet48 = cRegVisit.CheckIsInstallNet(_T("4.8"));
+    if (bNet48) {
+        std::cout << "v4.8" << std::endl;
+    }
+
     //如果未安装.net Framework,则判断本地指定目录是否存在.net Framework安装文件
-    if (!bInstall)
+    if (!bNet40)
     {
         bool bExitsFile = false;
         //构造本地文件目录绝对路径 -- 获取当前工作目录

@@ -5,7 +5,7 @@
     <TargetFrameworks>net20;net40;net45;netcoreapp3.1;net7.0</TargetFrameworks>
     <AssemblyName>clover</AssemblyName>
     <AssemblyTitle>幸运草</AssemblyTitle>
-    <Description>基于低版本运行时，自动安装主流.NET运行时。</Description>
+    <Description>检测并安装主流.NET运行时。</Description>
     <Company>新生命开发团队</Company>
     <Copyright>©2002-2022 NewLife</Copyright>
     <VersionPrefix>1.0</VersionPrefix>
