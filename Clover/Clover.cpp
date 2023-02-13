@@ -109,7 +109,7 @@ int main()
 
     //如果已安装.net Framework,流程结束
 
-    std::cin.get();
+    //std::cin.get();
 
     return 0;
 }

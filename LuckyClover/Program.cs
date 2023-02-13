@@ -14,6 +14,7 @@ internal class Program
 {
     private static readonly Dictionary<String, Action<String[]>> _menus = new(StringComparer.OrdinalIgnoreCase);
     private static String _baseUrl = "http://x.newlifex.com/dotnet";
+    private static Boolean _silent;
 
     private static void Main(String[] args)
     {
@@ -31,7 +32,7 @@ internal class Program
         Console.WriteLine("{0}", Environment.OSVersion);
         Console.WriteLine();
 
-        // 读取命令行
+        // 读取命令行，一般放在最后
         var flag = false;
         for (var i = 0; i < args.Length; i++)
         {
@@ -59,6 +60,16 @@ internal class Program
                     _baseUrl = url;
                     flag = true;
                 }
+            }
+        }
+        // 读取静默安装标记
+        for (var i = 0; i < args.Length; i++)
+        {
+            if (args[i].Equals("-silent", StringComparison.InvariantCultureIgnoreCase))
+            {
+                _silent = true;
+
+                break;
             }
         }
 
@@ -180,6 +191,7 @@ internal class Program
         }
 
         if (String.IsNullOrEmpty(arg)) arg = "/passive /promptrestart";
+        if (!_silent) arg = null;
 
         Console.WriteLine("正在安装：{0} {1}", fileName, arg);
         var p = Process.Start(fileName, arg);
