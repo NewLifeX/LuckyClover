@@ -81,9 +81,10 @@ int main()
             CString strGetDataPath(_T("/dotnet/dotNetFx40_Full_x86_x64.exe"));
             CString strNetIP(_T("http://x.newlifex.com"));
             UINT nPort = 80;
+
             //执行下载操作
             int iTryCount = 0;
-            while (++iTryCount<4)
+            while (++iTryCount < 4)
             {
                 if (false == (bExitsFile = cDownFile.Download(strLocalFilePath, strNetIP, nPort, strGetDataPath)))
                 {
@@ -99,12 +100,16 @@ int main()
         //存在则尝试安装
         if (bExitsFile)
         {
+            std::cout << "开始安装 .NET4.0 ……" << std::endl;
+
             //执行.net Framework安装文件(exe),带参数
             ShellExecute(NULL, _T("open"), strFilePath, _T("/passive /promptrestart"), NULL, SW_HIDE);
         }
     }
 
     //如果已安装.net Framework,流程结束
+
+    std::cin.get();
 
     return 0;
 }

@@ -28,14 +28,16 @@ bool CDownloadFile::Download(CString strLocalFilePath, CString strNetIP, UINT nP
 
     httplib::Client cli1(szNetIP);
     if (auto res = cli1.Get(szGetRemoteFilePath)) {
-        szError = format("服务端已返回结果，执行代码:%d", res->status);
-        printf("%s",szError.c_str());
+        //szError = format("服务端已返回结果，执行代码:%d", res->status);
+        //printf("%s", szError.c_str());
+        std::cout << "服务端已返回结果，执行代码:" << res->status << std::endl;
         if (200 == res->status)
         {
             std::ofstream out;
             out.open(szLocalFilePath, std::ios_base::binary | std::ios::out);
-            szError = format("准备下载文件，存储本地路径:%s", szLocalFilePath);
-            printf("%s",szError.c_str());
+            //szError = format("准备下载文件，存储本地路径:%s", szLocalFilePath);
+            //printf("%s", szError.c_str());
+            std::cout << "准备下载文件，存储本地路径:" << szLocalFilePath << std::endl;
             if (out.is_open())
             {
                 out << res->body;
@@ -44,13 +46,15 @@ bool CDownloadFile::Download(CString strLocalFilePath, CString strNetIP, UINT nP
 
                 bSuccess = true;
 
-                szError = format("文件下载完成");
-                printf("%s",szError.c_str());
+                //szError = format("文件下载完成");
+                //printf("%s",szError.c_str());
+                std::cout << "文件下载完成" << std::endl;
             }
             else
             {
-                szError = format("本地文件[%s]打开失败.", szLocalFilePath);
-                printf("%s",szError.c_str());
+                //szError = format("本地文件[%s]打开失败.", szLocalFilePath);
+                //printf("%s",szError.c_str());
+                std::cout << "本地文件[" << szLocalFilePath << "]打开失败" << std::endl;
             }
         }
     }
