@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.IO.Compression;
 using System.Net;
 using System.Reflection;
 using System.Security.Cryptography;
@@ -76,6 +77,10 @@ internal class Program
         _menus["net7-aspnet"] = e => InstallNet7(e, "aspnet");
 
         _menus["md5"] = ShowMd5;
+#if NET45_OR_GREATER || NETCOREAPP
+        _menus["zip"] = Zip;
+        _menus["unzip"] = Unzip;
+#endif
 
         var cmd = "";
         if (args.Length >= 1) cmd = args[0];
@@ -651,4 +656,38 @@ internal class Program
             Console.WriteLine("{0}\t{1}", fi.Name, GetMD5(fi.FullName));
         }
     }
+
+#if NET45_OR_GREATER || NETCOREAPP
+    private static void Zip(String[] args)
+    {
+        if (args == null || args.Length < 3) return;
+
+        var src = args[1];
+        var dst = args[2];
+
+        Console.WriteLine("Zip压缩 {0} 到 {1}", src, dst);
+
+#if NET7_0_OR_GREATER
+        ZipFile.CreateFromDirectory(src, dst, CompressionLevel.SmallestSize, false);
+#else
+        ZipFile.CreateFromDirectory(src, dst, CompressionLevel.Optimal, false);
+#endif
+    }
+
+    private static void Unzip(String[] args)
+    {
+        if (args == null || args.Length < 3) return;
+
+        var src = args[1];
+        var dst = args[2];
+
+        Console.WriteLine("UnZip解压缩 {0} 到 {1}", src, dst);
+
+#if NET45_OR_GREATER
+        ZipFile.ExtractToDirectory(src, dst);
+#else
+        ZipFile.ExtractToDirectory(src, dst, true);
+#endif
+    }
+#endif
 }
