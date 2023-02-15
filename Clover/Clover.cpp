@@ -206,12 +206,14 @@ BOOL Install(const string& fileName, const string& baseUrl, const string& arg)
     cout << "开始安装 " << fileName << " ......" << endl;
 
     // 执行.net Framework安装文件(exe),带参数
-    if(!_silent)
-        ShellExecute(NULL, _T("open"), file.c_str(), NULL, NULL, SW_HIDE);
+    // system 执行命令并等待完成，ShellExecute 不等返回
+    //ShellExecute(NULL, _T("open"), file.c_str(), _T("/passive /promptrestart"), NULL, SW_HIDE);
+    if (!_silent)
+        system(file.c_str());
     else if (arg.empty())
-        ShellExecute(NULL, _T("open"), file.c_str(), _T("/passive /promptrestart"), NULL, SW_HIDE);
+        system((file + " /passive /promptrestart").c_str());
     else
-        ShellExecute(NULL, _T("open"), file.c_str(), arg.c_str(), NULL, SW_HIDE);
+        system((file + " " + arg).c_str());
 }
 
 BOOL Install(const string& fileName)
