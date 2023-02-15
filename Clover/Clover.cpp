@@ -19,7 +19,7 @@ int main(int argc, char* argv[])
     int iOSSubVerNum = 0;
     bool bIsServer = false;
 
-    cout << "幸运草 v1.0.2023.213 NewLife" << endl;
+    cout << "幸运草 v1.0.2023.215 NewLife" << endl;
     cout << "检测并安装主流.NET运行时。" << endl;
     cout << "操作系统: " << cOSVer.GetOSVersionDesc(iOSMainVerNum, iOSSubVerNum, bIsServer) << "\n";
 
