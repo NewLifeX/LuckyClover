@@ -23,7 +23,8 @@ bool CDownloadFile::Download(CString strLocalFilePath, CString strNetIP, UINT nP
     std::string szGetRemoteFilePath = T2A(strGetDataPath.GetBuffer(0)); strGetDataPath.ReleaseBuffer();
     if (szLocalFilePath.empty())
     {
-        szLocalFilePath = "dotNetFx40_Full_x86_x64.exe";
+        //szLocalFilePath = "dotNetFx40_Full_x86_x64.exe";
+        return false;
     }
 
     httplib::Client cli1(szNetIP);
