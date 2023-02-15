@@ -11,6 +11,8 @@ void InstallNet40();
 void InstallNet45();
 void InstallNet48();
 
+BOOL _silent = false;
+
 int main(int argc, char* argv[])
 {
     //检测OS版本状态
@@ -22,8 +24,17 @@ int main(int argc, char* argv[])
     cout << "幸运草 v1.0.2023.215 NewLife" << endl;
     cout << "检测并安装主流.NET运行时。" << endl;
     cout << "操作系统: " << cOSVer.GetOSVersionDesc(iOSMainVerNum, iOSSubVerNum, bIsServer) << "\n";
+    cout << "用法：clover.exe [net2|net4|net45|net48] -silent" << endl;
+    cout << "本地server.txt文件设置下载文件的服务器地址。" << endl;
 
     CheckRuntime();
+
+    // 读取静默安装标记
+    for (int i = 0; i < argc; ++i)
+    {
+        string strArg = argv[i];
+        if (strArg == "-silent")_silent = true;
+    }
 
     string ver = "";
     if (argc >= 2)
@@ -195,7 +206,9 @@ BOOL Install(const string& fileName, const string& baseUrl, const string& arg)
     cout << "开始安装 " << fileName << " ......" << endl;
 
     // 执行.net Framework安装文件(exe),带参数
-    if (arg.empty())
+    if(!_silent)
+        ShellExecute(NULL, _T("open"), file.c_str(), NULL, NULL, SW_HIDE);
+    else if (arg.empty())
         ShellExecute(NULL, _T("open"), file.c_str(), _T("/passive /promptrestart"), NULL, SW_HIDE);
     else
         ShellExecute(NULL, _T("open"), file.c_str(), arg.c_str(), NULL, SW_HIDE);
