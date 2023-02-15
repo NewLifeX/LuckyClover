@@ -149,7 +149,8 @@ BOOL Download(const string& localFile, const string& remoteFile)
     CDownloadFile cDownFile;
     string remote = "/dotnet/" + remoteFile;
 
-    cout << "下载：" << server << remoteFile << endl;
+    cout << "下载：" << server << remote << endl;
+    cout << "保存：" << localFile << endl;
 
     //执行下载操作
     int iTryCount = 0;
@@ -173,13 +174,12 @@ BOOL Install(const string& fileName, const string& baseUrl, const string& arg)
     if (!GetModuleFileName(NULL, szPath, MAX_PATH))return false;
 
     CString strTemp(szPath);
-    CString strPathTemp;
-    strPathTemp = strTemp.Left(strTemp.ReverseFind('\\'));
+    CString strPathTemp = strTemp.Left(strTemp.ReverseFind('\\'));
 
     string file(strPathTemp);
-    file += fileName;
+    file += "\\" + fileName;
     string remoteFile = fileName;
-    if (baseUrl.empty()) remoteFile = baseUrl + remoteFile;
+    if (baseUrl.empty()) remoteFile = baseUrl + fileName;
 
     // 不存在则下载
     if (!::PathFileExists(file.c_str())) {
@@ -201,6 +201,11 @@ BOOL Install(const string& fileName, const string& baseUrl, const string& arg)
         ShellExecute(NULL, _T("open"), file.c_str(), arg.c_str(), NULL, SW_HIDE);
 }
 
+BOOL Install(const string& fileName)
+{
+    return Install(fileName, "", "");
+}
+
 void InstallNet20()
 {
     CRegistryVisit cRegVisit;
@@ -211,7 +216,7 @@ void InstallNet20()
         return;
     }
 
-    Install("NetFx20SP2_x86.exe", NULL, NULL);
+    Install("NetFx20SP2_x86.exe");
 }
 
 void InstallNet40()
@@ -224,7 +229,7 @@ void InstallNet40()
         return;
     }
 
-    Install("dotNetFx40_Full_x86_x64.exe", NULL, NULL);
+    Install("dotNetFx40_Full_x86_x64.exe");
 }
 
 void InstallNet45()
@@ -237,8 +242,8 @@ void InstallNet45()
         return;
     }
 
-    Install("NDP452-KB2901907-x86-x64-AllOS-ENU.exe", NULL, NULL);
-    Install("NDP452-KB2901907-x86-x64-AllOS-CHS.exe", NULL, NULL);
+    Install("NDP452-KB2901907-x86-x64-AllOS-ENU.exe");
+    Install("NDP452-KB2901907-x86-x64-AllOS-CHS.exe");
 }
 
 void InstallNet48()
@@ -265,12 +270,12 @@ void InstallNet48()
     // win10/win11 中安装 .NET4.8.1
     if (iOSMainVerNum >= 10)
     {
-        Install("ndp481-x86-x64-allos-enu.exe", NULL, NULL);
-        Install("ndp481-x86-x64-allos-chs.exe", NULL, NULL);
+        Install("ndp481-x86-x64-allos-enu.exe");
+        Install("ndp481-x86-x64-allos-chs.exe");
     }
     else
     {
-        Install("ndp48-x86-x64-allos-enu.exe", NULL, NULL);
-        Install("ndp48-x86-x64-allos-chs.exe", NULL, NULL);
+        Install("ndp48-x86-x64-allos-enu.exe");
+        Install("ndp48-x86-x64-allos-chs.exe");
     }
 }
