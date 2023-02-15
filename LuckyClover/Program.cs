@@ -290,9 +290,24 @@ internal class Program
             return;
         }
 
+#if NET20
+        var is64 = IntPtr.Size == 8;
+#else
+        var is64 = Environment.Is64BitOperatingSystem;
+#endif
+
         var isWin7 = osVer.Major == 6 && osVer.Minor == 1;
         if (isWin7)
-            Install("Windows6.1-KB3063858-x64.msu", _baseUrl + "/win7", "/quiet /norestart", "6235547A9AC3D931843FE931C15F8E51");
+        {
+            if (is64)
+            {
+                Install("Windows6.1-KB3063858-x64.msu", _baseUrl + "/win7", "/quiet /norestart", "6235547A9AC3D931843FE931C15F8E51");
+            }
+            else
+            {
+                Install("Windows6.1-KB3063858-x86.msu", _baseUrl + "/win7", "/quiet /norestart", "6D2B63B73E20DA5128490632995C4E65");
+            }
+        }
 
         // win10/win11 中安装 .NET4.8.1
         if (osVer.Major >= 10)

@@ -270,12 +270,12 @@ void InstallNet48()
     // win10/win11 中安装 .NET4.8.1
     if (iOSMainVerNum >= 10)
     {
-        Install("ndp481-x86-x64-allos-enu.exe");
-        Install("ndp481-x86-x64-allos-chs.exe");
+        Install("ndp481-x86-x64-allos-enu.exe", "", "/passive /promptrestart /showfinalerror");
+        Install("ndp481-x86-x64-allos-chs.exe", "", "/passive /promptrestart /showfinalerror");
     }
     else
     {
-        Install("ndp48-x86-x64-allos-enu.exe");
-        Install("ndp48-x86-x64-allos-chs.exe");
+        Install("ndp48-x86-x64-allos-enu.exe", "", "/passive /promptrestart /showfinalerror");
+        Install("ndp48-x86-x64-allos-chs.exe", "", "/passive /promptrestart /showfinalerror");
     }
 }
