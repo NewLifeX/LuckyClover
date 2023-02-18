@@ -4,8 +4,11 @@ using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Security.Cryptography;
-using System.Text;
 using Microsoft.Win32;
+
+#if NET6_0_OR_GREATER
+using System.Net.Http;
+#endif
 
 namespace LuckyClover;
 
@@ -88,10 +91,18 @@ public class NetRuntime
             Console.WriteLine("正在下载：{0}", url);
 
             var dir = Path.GetDirectoryName(fullFile);
-            if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
+            if (!String.IsNullOrEmpty(dir) && !Directory.Exists(dir)) Directory.CreateDirectory(dir);
 
+#if NET6_0_OR_GREATER
+            var http = new HttpClient();
+            var hs = http.GetStreamAsync(url).Result;
+
+            using var fs = new FileStream(fullFile, FileMode.CreateNew, FileAccess.Write);
+            hs.CopyTo(fs);
+#else
             var http = new WebClient();
             http.DownloadFile(url, fullFile);
+#endif
             Console.WriteLine("MD5: {0}", GetMD5(fullFile));
         }
 
@@ -117,7 +128,7 @@ public class NetRuntime
         }
     }
 
-    static Version GetLast(IList<VerInfo> vers, String prefix)
+    static Version GetLast(IList<VerInfo> vers, String prefix = null, String suffix = null)
     {
         var ver = new Version();
         if (vers.Count > 0)
@@ -125,11 +136,13 @@ public class NetRuntime
             //Console.WriteLine("已安装版本：");
             foreach (var item in vers)
             {
-                if (String.IsNullOrEmpty(prefix) || item.Name.StartsWith(prefix))
+                if ((String.IsNullOrEmpty(prefix) || item.Name.StartsWith(prefix)) &&
+                    (String.IsNullOrEmpty(suffix) || item.Name.EndsWith(suffix)))
                 {
                     var str = item.Name.Trim('v');
                     var p = str.IndexOf('-');
                     if (p > 0) str = str.Substring(0, p);
+
                     var v = new Version(str);
                     if (v > ver) ver = v;
                 }
@@ -234,10 +247,12 @@ public class NetRuntime
     {
         var vers = GetNetCore();
 
-        var ver = GetLast(vers, "v6.0");
+        var suffix = "";
+        if (!String.IsNullOrEmpty(kind)) suffix = "-" + kind;
+        var ver = GetLast(vers, "v6.0", suffix);
 
         // 目标版本
-        var target = new Version("6.0.14");
+        var target = new Version("6.0");
         if (ver >= target)
         {
             Console.WriteLine("已安装最新版 v{0}", ver);
@@ -303,10 +318,12 @@ public class NetRuntime
     {
         var vers = GetNetCore();
 
-        var ver = GetLast(vers, null);
+        var suffix = "";
+        if (!String.IsNullOrEmpty(kind)) suffix = "-" + kind;
+        var ver = GetLast(vers, "v7.0", suffix);
 
         // 目标版本
-        var target = new Version("7.0.3");
+        var target = new Version("7.0");
         if (ver >= target)
         {
             Console.WriteLine("已安装最新版 v{0}", ver);
@@ -493,9 +510,13 @@ public class NetRuntime
                 foreach (var elm in item.GetDirectories())
                 {
                     var name = "v" + elm.Name;
+                    if (item.Name.Contains("AspNet"))
+                        name += "-aspnet";
+                    else if (item.Name.Contains("Desktop"))
+                        name += "-desktop";
                     if (!dic.ContainsKey(name))
                     {
-                        dic.Add(name, new VerInfo { Name = name, Version = elm.Name });
+                        dic.Add(name, new VerInfo { Name = name, Version = item.Name + " " + elm.Name });
                     }
                 }
             }
@@ -518,6 +539,10 @@ public class NetRuntime
                     {
                         var name = "v" + ss[1];
                         var ver = $"{ss[0]} {ss[1]}";
+                        if (ver.Contains("AspNet"))
+                            name += "-aspnet";
+                        else if (ver.Contains("Desktop"))
+                            name += "-desktop";
 
                         VerInfo vi = null;
                         foreach (var item in list)
