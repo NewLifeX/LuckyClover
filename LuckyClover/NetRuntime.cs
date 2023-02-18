@@ -287,10 +287,14 @@ public class NetRuntime
             switch (kind)
             {
                 case "aspnet":
-                    Install("dotnet-hosting-6.0.14-win.exe");
+                    Install("dotnet-runtime-6.0.14-win-x64.exe");
+                    Install("aspnetcore-runtime-6.0.14-win-x64.exe");
                     break;
                 case "desktop":
                     Install("windowsdesktop-runtime-6.0.14-win-x64.exe");
+                    break;
+                case "host":
+                    Install("dotnet-hosting-6.0.14-win.exe");
                     break;
                 default:
                     Install("dotnet-runtime-6.0.14-win-x64.exe");
@@ -302,10 +306,14 @@ public class NetRuntime
             switch (kind)
             {
                 case "aspnet":
-                    Install("dotnet-hosting-6.0.14-win.exe");
+                    Install("dotnet-runtime-6.0.14-win-x86.exe");
+                    Install("aspnetcore-runtime-6.0.14-win-x86.exe");
                     break;
                 case "desktop":
                     Install("windowsdesktop-runtime-6.0.14-win-x86.exe");
+                    break;
+                case "host":
+                    Install("dotnet-hosting-6.0.14-win.exe");
                     break;
                 default:
                     Install("dotnet-runtime-6.0.14-win-x86.exe");
@@ -358,10 +366,14 @@ public class NetRuntime
             switch (kind)
             {
                 case "aspnet":
-                    Install("dotnet-hosting-7.0.3-win.exe");
+                    Install("dotnet-runtime-7.0.3-win-x64.exe");
+                    Install("aspnetcore-runtime-7.0.3-win-x64.exe");
                     break;
                 case "desktop":
                     Install("windowsdesktop-runtime-7.0.3-win-x64.exe");
+                    break;
+                case "host":
+                    Install("dotnet-hosting-7.0.3-win.exe");
                     break;
                 default:
                     Install("dotnet-runtime-7.0.3-win-x64.exe");
@@ -373,10 +385,14 @@ public class NetRuntime
             switch (kind)
             {
                 case "aspnet":
-                    Install("dotnet-hosting-7.0.3-win.exe");
+                    Install("dotnet-runtime-7.0.3-win-x86.exe");
+                    Install("aspnetcore-runtime-7.0.3-win-x86.exe");
                     break;
                 case "desktop":
                     Install("windowsdesktop-runtime-7.0.3-win-x86.exe");
+                    break;
+                case "host":
+                    Install("dotnet-hosting-7.0.3-win.exe");
                     break;
                 default:
                     Install("dotnet-runtime-7.0.3-win-x86.exe");

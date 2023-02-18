@@ -88,9 +88,11 @@ internal class Program
         _menus["net6"] = () => net.InstallNet6(null);
         _menus["net6-desktop"] = () => net.InstallNet6("desktop");
         _menus["net6-aspnet"] = () => net.InstallNet6("aspnet");
+        _menus["net6-host"] = () => net.InstallNet6("host");
         _menus["net7"] = () => net.InstallNet7(null);
         _menus["net7-desktop"] = () => net.InstallNet7("desktop");
         _menus["net7-aspnet"] = () => net.InstallNet7("aspnet");
+        _menus["net7-host"] = () => net.InstallNet7("host");
 
         _menus["md5"] = () => ShowMd5(args);
 #if NET45_OR_GREATER || NETCOREAPP
