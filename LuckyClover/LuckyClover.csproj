@@ -8,7 +8,7 @@
     <Description>检测并安装主流.NET运行时。</Description>
     <Company>新生命开发团队</Company>
     <Copyright>©2002-2023 NewLife</Copyright>
-    <VersionPrefix>1.1</VersionPrefix>
+    <VersionPrefix>1.2</VersionPrefix>
     <VersionSuffix>$([System.DateTime]::Now.ToString(`yyyy.MMdd`))</VersionSuffix>
     <Version>$(VersionPrefix).$(VersionSuffix)</Version>
     <FileVersion>$(Version)</FileVersion>
