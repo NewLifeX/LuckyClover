@@ -203,7 +203,7 @@ internal class Program
 
             Console.WriteLine("Zip压缩多个文件到 {0}", dst);
 
-            if (File.Exists(dst)) File.Delete(dst);
+            //if (File.Exists(dst)) File.Delete(dst);
 
             var compressionLevel = CompressionLevel.SmallestSize;
             using var zip = ZipFile.Open(dst, ZipArchiveMode.Create);
