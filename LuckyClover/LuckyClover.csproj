@@ -21,12 +21,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <RuntimeHostConfigurationOption Include="System.Globalization.Invariant" Value="true" />
+    <None Remove="md5.txt" />
   </ItemGroup>
 
   <ItemGroup>
-    <!--<PackageReference Include="NewLife.Core" Version="8.10.2021.505" />-->
-    <!--<PackageReference Include="Microsoft.DotNet.ILCompiler" Version="7.0.0-alpha.1.21510.3" />-->
+    <EmbeddedResource Include="md5.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <RuntimeHostConfigurationOption Include="System.Globalization.Invariant" Value="true" />
   </ItemGroup>
 
 </Project>

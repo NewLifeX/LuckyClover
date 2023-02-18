@@ -15,6 +15,7 @@ internal class Program
     private static readonly Dictionary<String, Action<String[]>> _menus = new(StringComparer.OrdinalIgnoreCase);
     private static String _baseUrl = "http://x.newlifex.com/dotnet";
     private static Boolean _silent;
+    private static IDictionary<String, String> _md5s;
 
     private static void Main(String[] args)
     {
@@ -97,6 +98,8 @@ internal class Program
         if (args.Length >= 1) cmd = args[0];
         if (String.IsNullOrEmpty(cmd)) cmd = ShowMenu();
 
+        _md5s = LoadMD5s();
+
         if (_menus.TryGetValue(cmd, out var func))
             func(args);
         else
@@ -155,7 +158,7 @@ internal class Program
             // Win7Sp1
             {
                 InstallNet48(args);
-                InstallNet7(args);
+                InstallNet6(args, null);
             }
         }
         // Win10/Win11
@@ -170,9 +173,11 @@ internal class Program
         }
     }
 
-    private static Boolean Install(String fileName, String baseUrl, String arg = null, String hash = null)
+    private static Boolean Install(String fileName, String baseUrl, String arg = null)
     {
         Console.WriteLine("下载 {0}", fileName);
+
+        if (!_md5s.TryGetValue(fileName, out var hash)) hash = null;
 
         // 检查已存在文件的MD5哈希，不正确则重新下载
         var fi = new FileInfo(fileName);
@@ -250,7 +255,7 @@ internal class Program
             return;
         }
 
-        Install("dotNetFx40_Full_x86_x64.exe", _baseUrl, null, "251743DFD3FDA414570524BAC9E55381");
+        Install("dotNetFx40_Full_x86_x64.exe", _baseUrl);
     }
 
     private static void InstallNet45(String[] args)
@@ -269,8 +274,8 @@ internal class Program
             return;
         }
 
-        Install("NDP452-KB2901907-x86-x64-AllOS-ENU.exe", _baseUrl, null, "EE01FC4110C73A8E5EFC7CABDA0F5FF7");
-        Install("NDP452-KB2901907-x86-x64-AllOS-CHS.exe", _baseUrl, null, "F0DE04B58842C30B8BE2D52F1DACF353");
+        Install("NDP452-KB2901907-x86-x64-AllOS-ENU.exe", _baseUrl);
+        Install("NDP452-KB2901907-x86-x64-AllOS-CHS.exe", _baseUrl);
     }
 
     private static void InstallNet48(String[] args)
@@ -301,24 +306,24 @@ internal class Program
         {
             if (is64)
             {
-                Install("Windows6.1-KB3063858-x64.msu", _baseUrl + "/win7", "/quiet /norestart", "6235547A9AC3D931843FE931C15F8E51");
+                Install("Windows6.1-KB3063858-x64.msu", _baseUrl + "/win7", "/quiet /norestart");
             }
             else
             {
-                Install("Windows6.1-KB3063858-x86.msu", _baseUrl + "/win7", "/quiet /norestart", "6D2B63B73E20DA5128490632995C4E65");
+                Install("Windows6.1-KB3063858-x86.msu", _baseUrl + "/win7", "/quiet /norestart");
             }
         }
 
         // win10/win11 中安装 .NET4.8.1
         if (osVer.Major >= 10)
         {
-            Install("ndp481-x86-x64-allos-enu.exe", _baseUrl, "/passive /promptrestart /showfinalerror", "175C14084CEF7AE4DAC70BDDE804212F");
-            Install("ndp481-x86-x64-allos-chs.exe", _baseUrl, "/passive /promptrestart /showfinalerror", "56EE95B0E0520A792099F7F3810FCCF4");
+            Install("ndp481-x86-x64-allos-enu.exe", _baseUrl, "/passive /promptrestart /showfinalerror");
+            Install("ndp481-x86-x64-allos-chs.exe", _baseUrl, "/passive /promptrestart /showfinalerror");
         }
         else
         {
-            Install("ndp48-x86-x64-allos-enu.exe", _baseUrl, "/passive /promptrestart /showfinalerror", "AEBCB9FCAFA2BECF8BB30458A7E1F0A2");
-            Install("ndp48-x86-x64-allos-chs.exe", _baseUrl, "/passive /promptrestart /showfinalerror", "048308B019CBB9C741354DC7FEA928B9");
+            Install("ndp48-x86-x64-allos-enu.exe", _baseUrl, "/passive /promptrestart /showfinalerror");
+            Install("ndp48-x86-x64-allos-chs.exe", _baseUrl, "/passive /promptrestart /showfinalerror");
         }
     }
 
@@ -329,7 +334,7 @@ internal class Program
         var ver = GetLast(vers, "v6.0");
 
         // 目标版本
-        var target = new Version("6.0.13");
+        var target = new Version("6.0.14");
         if (ver >= target)
         {
             Console.WriteLine("已安装最新版 v{0}", ver);
@@ -349,13 +354,13 @@ internal class Program
         {
             if (is64)
             {
-                Install("Windows6.1-KB3063858-x64.msu", _baseUrl + "/win7", "/quiet /norestart", "6235547A9AC3D931843FE931C15F8E51");
-                Install("VC_redist.x64.exe", _baseUrl + "/vc2019", "/passive", "35431D059197B67227CD12F841733539");
+                Install("Windows6.1-KB3063858-x64.msu", _baseUrl + "/win7", "/quiet /norestart");
+                Install("VC_redist.x64.exe", _baseUrl + "/vc2019", "/passive");
             }
             else
             {
-                Install("Windows6.1-KB3063858-x86.msu", _baseUrl + "/win7", "/quiet /norestart", "6D2B63B73E20DA5128490632995C4E65");
-                Install("VC_redist.x86.exe", _baseUrl + "/vc2019", "/passive", "DD0232EE751164EAAD2FE0DE7158D77D");
+                Install("Windows6.1-KB3063858-x86.msu", _baseUrl + "/win7", "/quiet /norestart");
+                Install("VC_redist.x86.exe", _baseUrl + "/vc2019", "/passive");
             }
         }
 
@@ -364,13 +369,13 @@ internal class Program
             switch (kind)
             {
                 case "aspnet":
-                    Install("dotnet-hosting-6.0.13-win.exe", _baseUrl, null, "F583DE1A3597F4B6AAE8FCEF60801531");
+                    Install("dotnet-hosting-6.0.14-win.exe", _baseUrl, null);
                     break;
                 case "desktop":
-                    Install("windowsdesktop-runtime-6.0.13-win-x64.exe", _baseUrl, null, "7C37E8A464A8248889DADC710CC7585D");
+                    Install("windowsdesktop-runtime-6.0.14-win-x64.exe", _baseUrl, null);
                     break;
                 default:
-                    Install("dotnet-runtime-6.0.13-win-x64.exe", _baseUrl, null, "7CBDCB7E0AD6C186B7129497CF32D70B");
+                    Install("dotnet-runtime-6.0.14-win-x64.exe", _baseUrl, null);
                     break;
             }
         }
@@ -379,13 +384,13 @@ internal class Program
             switch (kind)
             {
                 case "aspnet":
-                    Install("dotnet-hosting-6.0.13-win.exe", _baseUrl, null, "F583DE1A3597F4B6AAE8FCEF60801531");
+                    Install("dotnet-hosting-6.0.14-win.exe", _baseUrl, null);
                     break;
                 case "desktop":
-                    Install("windowsdesktop-runtime-6.0.13-win-x86.exe", _baseUrl, null, "27E8E8FD587E5C3A3789105DD78D554E");
+                    Install("windowsdesktop-runtime-6.0.14-win-x86.exe", _baseUrl, null);
                     break;
                 default:
-                    Install("dotnet-runtime-6.0.13-win-x86.exe", _baseUrl, null, "6817C54EAB15B9ECD02A79FEC46FB09C");
+                    Install("dotnet-runtime-6.0.14-win-x86.exe", _baseUrl, null);
                     break;
             }
         }
@@ -398,7 +403,7 @@ internal class Program
         var ver = GetLast(vers, null);
 
         // 目标版本
-        var target = new Version("7.0.2");
+        var target = new Version("7.0.3");
         if (ver >= target)
         {
             Console.WriteLine("已安装最新版 v{0}", ver);
@@ -418,13 +423,13 @@ internal class Program
         {
             if (is64)
             {
-                Install("Windows6.1-KB3063858-x64.msu", _baseUrl + "/win7", "/quiet /norestart", "6235547A9AC3D931843FE931C15F8E51");
-                Install("VC_redist.x64.exe", _baseUrl + "/vc2019", "/passive", "35431D059197B67227CD12F841733539");
+                Install("Windows6.1-KB3063858-x64.msu", _baseUrl + "/win7", "/quiet /norestart");
+                Install("VC_redist.x64.exe", _baseUrl + "/vc2019", "/passive");
             }
             else
             {
-                Install("Windows6.1-KB3063858-x86.msu", _baseUrl + "/win7", "/quiet /norestart", "6D2B63B73E20DA5128490632995C4E65");
-                Install("VC_redist.x86.exe", _baseUrl + "/vc2019", "/passive", "DD0232EE751164EAAD2FE0DE7158D77D");
+                Install("Windows6.1-KB3063858-x86.msu", _baseUrl + "/win7", "/quiet /norestart");
+                Install("VC_redist.x86.exe", _baseUrl + "/vc2019", "/passive");
             }
         }
 
@@ -433,13 +438,13 @@ internal class Program
             switch (kind)
             {
                 case "aspnet":
-                    Install("dotnet-hosting-7.0.2-win.exe", _baseUrl, null, "1A6FC6799534BF323B35FC1D6A14DD2D");
+                    Install("dotnet-hosting-7.0.3-win.exe", _baseUrl, null);
                     break;
                 case "desktop":
-                    Install("windowsdesktop-runtime-7.0.2-win-x64.exe", _baseUrl, null, "010901D39E3B471CC872359DEDFB3C45");
+                    Install("windowsdesktop-runtime-7.0.3-win-x64.exe", _baseUrl, null);
                     break;
                 default:
-                    Install("dotnet-runtime-7.0.2-win-x64.exe", _baseUrl, null, "1476E6B9AEE931CBE2F04050A4ACE2E3");
+                    Install("dotnet-runtime-7.0.3-win-x64.exe", _baseUrl, null);
                     break;
             }
         }
@@ -448,13 +453,13 @@ internal class Program
             switch (kind)
             {
                 case "aspnet":
-                    Install("dotnet-hosting-7.0.2-win.exe", _baseUrl, null, "1A6FC6799534BF323B35FC1D6A14DD2D");
+                    Install("dotnet-hosting-7.0.3-win.exe", _baseUrl, null);
                     break;
                 case "desktop":
-                    Install("windowsdesktop-runtime-7.0.2-win-x86.exe", _baseUrl, null, "64D86BACAB1394882D9D941FE4470BB8");
+                    Install("windowsdesktop-runtime-7.0.3-win-x86.exe", _baseUrl, null);
                     break;
                 default:
-                    Install("dotnet-runtime-7.0.2-win-x86.exe", _baseUrl, null, "C40BA092C7C32B466B1F66EC4254CA26");
+                    Install("dotnet-runtime-7.0.3-win-x86.exe", _baseUrl, null);
                     break;
             }
         }
@@ -682,6 +687,30 @@ internal class Program
         {
             Console.WriteLine("{0}\t{1}", fi.Name, GetMD5(fi.FullName));
         }
+    }
+
+    /// <summary>加载内嵌的文件MD5信息</summary>
+    /// <returns></returns>
+    private static IDictionary<String, String> LoadMD5s()
+    {
+        var asm = Assembly.GetExecutingAssembly();
+        var ms = asm.GetManifestResourceStream("LuckyClover.md5.txt");
+
+        var dic = new Dictionary<String, String>();
+        using var reader = new StreamReader(ms);
+        while (!reader.EndOfStream)
+        {
+            var line = reader.ReadLine()?.Trim();
+            if (String.IsNullOrEmpty(line)) continue;
+
+            var ss = line.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+            if (ss.Length >= 2)
+            {
+                dic[ss[0]] = ss[1];
+            }
+        }
+
+        return dic;
     }
 
 #if NET45_OR_GREATER || NETCOREAPP

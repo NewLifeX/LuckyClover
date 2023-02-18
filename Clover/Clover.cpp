@@ -5,13 +5,13 @@
 
 using namespace std;
 
-BOOL CheckRuntime();
+bool CheckRuntime();
 void InstallNet20();
 void InstallNet40();
 void InstallNet45();
 void InstallNet48();
 
-BOOL _silent = false;
+bool _silent = false;
 
 int main(int argc, char* argv[])
 {
@@ -33,7 +33,7 @@ int main(int argc, char* argv[])
     for (int i = 0; i < argc; ++i)
     {
         string strArg = argv[i];
-        if (strArg == "-silent")_silent = true;
+        if (strArg == "-silent") _silent = true;
     }
 
     string ver = "";
@@ -60,7 +60,7 @@ int main(int argc, char* argv[])
     return 0;
 }
 
-BOOL CheckRuntime()
+bool CheckRuntime()
 {
     //检测OS是否安装 .net Framework客户端版本
     CRegistryVisit cRegVisit;
@@ -129,7 +129,7 @@ const string GetFile(const string& ver)
     return "";
 }
 
-BOOL Download(const string& localFile, const string& remoteFile)
+bool Download(const string& localFile, const string& remoteFile)
 {
     string server = "http://x.newlifex.com";
 
@@ -176,13 +176,13 @@ BOOL Download(const string& localFile, const string& remoteFile)
     return false;
 }
 
-BOOL Install(const string& fileName, const string& baseUrl, const string& arg)
+bool Install(const string& fileName, const string& baseUrl, const string& arg)
 {
     cout << "安装：" << fileName << endl;
 
     //构造本地文件目录绝对路径 -- 获取当前工作目录
     TCHAR szPath[MAX_PATH] = { 0 };
-    if (!GetModuleFileName(NULL, szPath, MAX_PATH))return false;
+    if (!GetModuleFileName(NULL, szPath, MAX_PATH)) return false;
 
     CString strTemp(szPath);
     CString strPathTemp = strTemp.Left(strTemp.ReverseFind('\\'));
@@ -216,7 +216,7 @@ BOOL Install(const string& fileName, const string& baseUrl, const string& arg)
         system((file + " " + arg).c_str());
 }
 
-BOOL Install(const string& fileName)
+bool Install(const string& fileName)
 {
     return Install(fileName, "", "");
 }
@@ -278,7 +278,7 @@ void InstallNet48()
 
     cOSVer.GetOSVersionDesc(iOSMainVerNum, iOSSubVerNum, bIsServer);
 
-    BOOL isWin7 = iOSMainVerNum == 6 && iOSSubVerNum == 1;
+    bool isWin7 = iOSMainVerNum == 6 && iOSSubVerNum == 1;
     if (isWin7)
         Install("Windows6.1-KB3063858-x64.msu", "win7/", "/quiet /norestart");
 
