@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
+using System.Reflection;
 using System.Security.Cryptography;
 using Microsoft.Win32;
 
@@ -109,8 +110,8 @@ public class NetRuntime
         if (String.IsNullOrEmpty(arg)) arg = "/passive /promptrestart";
         if (!Silent) arg = null;
 
-        Console.WriteLine("正在安装：{0} {1}", fileName, arg);
-        var p = Process.Start(fileName, arg);
+        Console.WriteLine("正在安装：{0} {1}", fullFile, arg);
+        var p = Process.Start(fullFile, arg);
         if (p.WaitForExit(600_000))
         {
             if (p.ExitCode == 0)
@@ -170,7 +171,6 @@ public class NetRuntime
             Console.WriteLine("已安装最新版 v{0}", ver);
             return;
         }
-
 
         var rs = Install("dotNetFx40_Full_x86_x64.exe", null);
         if (!rs)
@@ -421,6 +421,18 @@ public class NetRuntime
         }
     }
 
+    /// <summary>获取所有已安装版本</summary>
+    /// <returns></returns>
+    public IList<VerInfo> GetVers()
+    {
+        var vers = new List<VerInfo>();
+        vers.AddRange(Get1To45VersionFromRegistry());
+        vers.AddRange(Get45PlusFromRegistry());
+        vers.AddRange(GetNetCore());
+
+        return vers;
+    }
+
     public static IList<VerInfo> Get1To45VersionFromRegistry()
     {
         var list = new List<VerInfo>();
@@ -641,6 +653,30 @@ public class NetRuntime
         var hex = BitConverter.ToString(buf).Replace("-", null);
 
         return hex;
+    }
+
+    /// <summary>加载内嵌的文件MD5信息</summary>
+    /// <returns></returns>
+    public static IDictionary<String, String> LoadMD5s()
+    {
+        var asm = Assembly.GetExecutingAssembly();
+        var ms = asm.GetManifestResourceStream(typeof(NetRuntime).Namespace + ".md5.txt");
+
+        var dic = new Dictionary<String, String>(StringComparer.OrdinalIgnoreCase);
+        using var reader = new StreamReader(ms);
+        while (!reader.EndOfStream)
+        {
+            var line = reader.ReadLine()?.Trim();
+            if (String.IsNullOrEmpty(line)) continue;
+
+            var ss = line.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+            if (ss.Length >= 2)
+            {
+                dic[ss[0]] = ss[1];
+            }
+        }
+
+        return dic;
     }
     #endregion
 }

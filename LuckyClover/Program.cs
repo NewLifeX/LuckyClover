@@ -34,7 +34,7 @@ internal class Program
         var net = new NetRuntime
         {
             BaseUrl = _baseUrl,
-            Hashs = LoadMD5s(),
+            Hashs = NetRuntime.LoadMD5s(),
         };
 
         // 读取命令行，一般放在最后
@@ -154,30 +154,6 @@ internal class Program
         {
             Console.WriteLine("{0}\t{1}", fi.Name, NetRuntime.GetMD5(fi.FullName));
         }
-    }
-
-    /// <summary>加载内嵌的文件MD5信息</summary>
-    /// <returns></returns>
-    private static IDictionary<String, String> LoadMD5s()
-    {
-        var asm = Assembly.GetExecutingAssembly();
-        var ms = asm.GetManifestResourceStream("LuckyClover.md5.txt");
-
-        var dic = new Dictionary<String, String>(StringComparer.OrdinalIgnoreCase);
-        using var reader = new StreamReader(ms);
-        while (!reader.EndOfStream)
-        {
-            var line = reader.ReadLine()?.Trim();
-            if (String.IsNullOrEmpty(line)) continue;
-
-            var ss = line.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-            if (ss.Length >= 2)
-            {
-                dic[ss[0]] = ss[1];
-            }
-        }
-
-        return dic;
     }
 
 #if NET45_OR_GREATER || NETCOREAPP
