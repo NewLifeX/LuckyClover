@@ -171,7 +171,27 @@ public class NetRuntime
             return;
         }
 
-        Install("dotNetFx40_Full_x86_x64.exe", null);
+
+        var rs = Install("dotNetFx40_Full_x86_x64.exe", null);
+        if (!rs)
+        {
+            // 解决“一般信任关系失败”问题
+
+            Process.Start("regsvr32", "/s Softpub.dll");
+            Process.Start("regsvr32", "/s Wintrust.dll");
+            Process.Start("regsvr32", "/s Initpki.dll");
+            Process.Start("regsvr32", "/s Mssip32.dll");
+
+#if !NETCOREAPP3_1
+            using var reg = Registry.CurrentUser.OpenSubKey(@"\Software\Microsoft\Windows\CurrentVersion\WinTrust\Trust Providers\Software Publishing", true);
+            if (reg != null)
+            {
+                var v = (Int32)reg.GetValue("State");
+                if (v != 0x23c00) reg.SetValue("State", 0x23c00);
+            }
+#endif
+
+        }
     }
 
     public void InstallNet45()
