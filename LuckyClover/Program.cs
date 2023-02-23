@@ -161,7 +161,7 @@ internal class Program
     {
         if (args == null || args.Length < 3) return;
 
-        if (args.Length == 3)
+        if (args.Length == 3 && !args[2].Contains("*"))
         {
             var dst = args[1];
             var src = args[2];
@@ -201,6 +201,19 @@ internal class Program
 
                 var di = new DirectoryInfo(src);
                 var fullName = di.FullName;
+                Console.WriteLine("压缩目录：{0} 匹配：{1}", fullName, pt);
+
+                // 没有匹配项时，该路径作为一个子目录
+                if (String.IsNullOrEmpty(pt))
+                {
+                    fullName = di.Parent.FullName;
+
+                    var length = di.FullName.Length - fullName.Length;
+                    var entryName2 = EntryFromPath(di.FullName, fullName.Length, length, true);
+                    zip.CreateEntry(entryName2);
+                    Console.WriteLine("\t添加目录：{0}", entryName2);
+                }
+
                 // 遍历所有文件
                 foreach (var fi in di.EnumerateFileSystemInfos(pt, SearchOption.AllDirectories))
                 {
@@ -209,12 +222,14 @@ internal class Program
                     {
                         var entryName = EntryFromPath(fi.FullName, fullName.Length, length, false);
                         zip.CreateEntryFromFile(fi.FullName, entryName, compressionLevel);
+                        Console.WriteLine("\t添加文件：{0}", entryName);
                         continue;
                     }
                     if (fi is DirectoryInfo di2 && IsDirEmpty(di2))
                     {
                         var entryName2 = EntryFromPath(fi.FullName, fullName.Length, length, true);
                         zip.CreateEntry(entryName2);
+                        Console.WriteLine("\t添加目录：{0}", entryName2);
                     }
                 }
             }
