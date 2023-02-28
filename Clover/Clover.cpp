@@ -209,7 +209,7 @@ bool Install(const string& fileName, const string& baseUrl, const string& arg)
     // system 执行命令并等待完成，ShellExecute 不等返回
     //ShellExecute(NULL, _T("open"), file.c_str(), _T("/passive /promptrestart"), NULL, SW_HIDE);
     if (!_silent)
-        system(file.c_str());
+        system(("\"" + file + "\"").c_str());
     else if (arg.empty())
         system(("\"" + file + "\" /passive /promptrestart").c_str());
     else
