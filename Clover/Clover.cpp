@@ -211,9 +211,9 @@ bool Install(const string& fileName, const string& baseUrl, const string& arg)
     if (!_silent)
         system(file.c_str());
     else if (arg.empty())
-        system((file + " /passive /promptrestart").c_str());
+        system(("\"" + file + "\" /passive /promptrestart").c_str());
     else
-        system((file + " " + arg).c_str());
+        system(("\"" + file + "\" " + arg).c_str());
 }
 
 bool Install(const string& fileName)
