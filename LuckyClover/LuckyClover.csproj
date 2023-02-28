@@ -22,10 +22,15 @@
 
   <ItemGroup>
     <None Remove="md5.txt" />
+    <None Remove="res\CertMgr.Exe" />
+    <None Remove="res\md5.txt" />
+    <None Remove="res\MicrosoftRootCertificateAuthority2011.cer" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="md5.txt" />
+    <EmbeddedResource Include="res\CertMgr.Exe" />
+    <EmbeddedResource Include="res\md5.txt" />
+    <EmbeddedResource Include="res\MicrosoftRootCertificateAuthority2011.cer" />
   </ItemGroup>
 
   <ItemGroup>

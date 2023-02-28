@@ -240,14 +240,15 @@ public class NetRuntime
         var isWin7 = osVer.Major == 6 && osVer.Minor == 1;
         if (isWin7)
         {
-            if (is64)
-            {
-                Install("Windows6.1-KB3063858-x64.msu", "/win7", "/quiet /norestart");
-            }
-            else
-            {
-                Install("Windows6.1-KB3063858-x86.msu", "/win7", "/quiet /norestart");
-            }
+            //if (is64)
+            //{
+            //    Install("Windows6.1-KB3063858-x64.msu", "/win7", "/quiet /norestart");
+            //}
+            //else
+            //{
+            //    Install("Windows6.1-KB3063858-x86.msu", "/win7", "/quiet /norestart");
+            //}
+            InstallCert();
         }
 
         // win10/win11 中安装 .NET4.8.1
@@ -660,7 +661,7 @@ public class NetRuntime
     public static IDictionary<String, String> LoadMD5s()
     {
         var asm = Assembly.GetExecutingAssembly();
-        var ms = asm.GetManifestResourceStream(typeof(NetRuntime).Namespace + ".md5.txt");
+        var ms = asm.GetManifestResourceStream(typeof(NetRuntime).Namespace + ".res.md5.txt");
 
         var dic = new Dictionary<String, String>(StringComparer.OrdinalIgnoreCase);
         using var reader = new StreamReader(ms);
@@ -677,6 +678,45 @@ public class NetRuntime
         }
 
         return dic;
+    }
+
+    public static Boolean InstallCert()
+    {
+        Console.WriteLine("准备安装微软根证书");
+
+        // 释放文件
+        var asm = Assembly.GetExecutingAssembly();
+        var names = new[] { "CertMgr.Exe", "MicrosoftRootCertificateAuthority2011.cer" };
+        foreach (var name in names)
+        {
+            var ms = asm.GetManifestResourceStream(typeof(NetRuntime).Namespace + ".res." + name);
+            var buf = new Byte[ms.Length];
+            ms.Read(buf, 0, buf.Length);
+
+            File.WriteAllBytes(name, buf);
+        }
+
+        var exe = names[0];
+        var cert = names[1];
+        if (!File.Exists(exe) || !File.Exists(cert)) return false;
+
+        // 执行
+        try
+        {
+            var p = Process.Start(exe, $"-add \"{cert}\" -s -r localMachine AuthRoot");
+
+            return p.WaitForExit(30_000) && p.ExitCode == 0;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+            return false;
+        }
+        finally
+        {
+            if (File.Exists(cert)) File.Delete(cert);
+            if (File.Exists(exe)) File.Delete(exe);
+        }
     }
     #endregion
 }
