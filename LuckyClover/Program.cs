@@ -85,14 +85,16 @@ internal class Program
         _menus["net48"] = net.InstallNet48;
         _menus["net40"] = net.InstallNet40;
 
-        _menus["net6"] = () => net.InstallNet6(null);
-        _menus["net6-desktop"] = () => net.InstallNet6("desktop");
-        _menus["net6-aspnet"] = () => net.InstallNet6("aspnet");
-        _menus["net6-host"] = () => net.InstallNet6("host");
-        _menus["net7"] = () => net.InstallNet7(null);
-        _menus["net7-desktop"] = () => net.InstallNet7("desktop");
-        _menus["net7-aspnet"] = () => net.InstallNet7("aspnet");
-        _menus["net7-host"] = () => net.InstallNet7("host");
+        var v6 = "6.0.16";
+        var v7 = "7.0.5";
+        _menus["net6"] = () => net.InstallNet6(v6, null);
+        _menus["net6-desktop"] = () => net.InstallNet6(v6, "desktop");
+        _menus["net6-aspnet"] = () => net.InstallNet6(v6, "aspnet");
+        _menus["net6-host"] = () => net.InstallNet6(v6, "host");
+        _menus["net7"] = () => net.InstallNet7(v7, null);
+        _menus["net7-desktop"] = () => net.InstallNet7(v7, "desktop");
+        _menus["net7-aspnet"] = () => net.InstallNet7(v7, "aspnet");
+        _menus["net7-host"] = () => net.InstallNet7(v7, "host");
 
         _menus["md5"] = () => ShowMd5(args);
 #if NET45_OR_GREATER || NETCOREAPP

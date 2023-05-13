@@ -51,18 +51,18 @@ public class NetRuntime
             // Win7Sp1
             {
                 InstallNet48();
-                InstallNet6();
+                InstallNet6("6.0.16");
             }
         }
         // Win10/Win11
         else if (osVer.Major >= 10)
         {
-            InstallNet7();
+            InstallNet7("7.0.5");
         }
         else
         {
             InstallNet48();
-            InstallNet7();
+            InstallNet7("7.0.5");
         }
     }
 
@@ -275,8 +275,9 @@ public class NetRuntime
     }
 
     /// <summary>安装.NET6.0</summary>
-    /// <param name="kind"></param>
-    public void InstallNet6(String kind = null)
+    /// <param name="target">目标版本。包括子版本，如{target}</param>
+    /// <param name="kind">安装类型。如aspnet/desktop/host</param>
+    public void InstallNet6(String target, String kind = null)
     {
         var vers = GetNetCore();
 
@@ -285,8 +286,8 @@ public class NetRuntime
         var ver = GetLast(vers, "v6.0", suffix);
 
         // 目标版本
-        var target = new Version("6.0");
-        if (ver >= target)
+        var targetVer = new Version(target);
+        if (ver >= targetVer)
         {
             Console.WriteLine("已安装最新版 v{0}", ver);
             return;
@@ -301,7 +302,7 @@ public class NetRuntime
         // win7需要vc2019运行时
         var osVer = Environment.OSVersion.Version;
         var isWin7 = osVer.Major == 6 && osVer.Minor == 1;
-        if (isWin7)
+        if (isWin7 && ver.Major < 6)
         {
             if (is64)
             {
@@ -320,17 +321,17 @@ public class NetRuntime
             switch (kind)
             {
                 case "aspnet":
-                    Install("dotnet-runtime-6.0.16-win-x64.exe");
-                    Install("aspnetcore-runtime-6.0.16-win-x64.exe");
+                    Install($"dotnet-runtime-{target}-win-x64.exe");
+                    Install($"aspnetcore-runtime-{target}-win-x64.exe");
                     break;
                 case "desktop":
-                    Install("windowsdesktop-runtime-6.0.16-win-x64.exe");
+                    Install($"windowsdesktop-runtime-{target}-win-x64.exe");
                     break;
                 case "host":
-                    Install("dotnet-hosting-6.0.16-win.exe");
+                    Install($"dotnet-hosting-{target}-win.exe");
                     break;
                 default:
-                    Install("dotnet-runtime-6.0.16-win-x64.exe");
+                    Install($"dotnet-runtime-{target}-win-x64.exe");
                     break;
             }
         }
@@ -339,25 +340,26 @@ public class NetRuntime
             switch (kind)
             {
                 case "aspnet":
-                    Install("dotnet-runtime-6.0.16-win-x86.exe");
-                    Install("aspnetcore-runtime-6.0.16-win-x86.exe");
+                    Install($"dotnet-runtime-{target}-win-x86.exe");
+                    Install($"aspnetcore-runtime-{target}-win-x86.exe");
                     break;
                 case "desktop":
-                    Install("windowsdesktop-runtime-6.0.16-win-x86.exe");
+                    Install($"windowsdesktop-runtime-{target}-win-x86.exe");
                     break;
                 case "host":
-                    Install("dotnet-hosting-6.0.16-win.exe");
+                    Install($"dotnet-hosting-{target}-win.exe");
                     break;
                 default:
-                    Install("dotnet-runtime-6.0.16-win-x86.exe");
+                    Install($"dotnet-runtime-{target}-win-x86.exe");
                     break;
             }
         }
     }
 
     /// <summary>安装.NET7.0</summary>
-    /// <param name="kind"></param>
-    public void InstallNet7(String kind = null)
+    /// <param name="target">目标版本。包括子版本，如{target}</param>
+    /// <param name="kind">安装类型。如aspnet/desktop/host</param>
+    public void InstallNet7(String target, String kind = null)
     {
         var vers = GetNetCore();
 
@@ -366,8 +368,8 @@ public class NetRuntime
         var ver = GetLast(vers, "v7.0", suffix);
 
         // 目标版本
-        var target = new Version("7.0");
-        if (ver >= target)
+        var targetVer = new Version(target);
+        if (ver >= targetVer)
         {
             Console.WriteLine("已安装最新版 v{0}", ver);
             return;
@@ -382,7 +384,7 @@ public class NetRuntime
         // win7需要vc2019运行时
         var osVer = Environment.OSVersion.Version;
         var isWin7 = osVer.Major == 6 && osVer.Minor == 1;
-        if (isWin7)
+        if (isWin7 && ver.Major < 6)
         {
             if (is64)
             {
@@ -401,17 +403,17 @@ public class NetRuntime
             switch (kind)
             {
                 case "aspnet":
-                    Install("dotnet-runtime-7.0.5-win-x64.exe");
-                    Install("aspnetcore-runtime-7.0.5-win-x64.exe");
+                    Install($"dotnet-runtime-{target}-win-x64.exe");
+                    Install($"aspnetcore-runtime-{target}-win-x64.exe");
                     break;
                 case "desktop":
-                    Install("windowsdesktop-runtime-7.0.5-win-x64.exe");
+                    Install($"windowsdesktop-runtime-{target}-win-x64.exe");
                     break;
                 case "host":
-                    Install("dotnet-hosting-7.0.5-win.exe");
+                    Install($"dotnet-hosting-{target}-win.exe");
                     break;
                 default:
-                    Install("dotnet-runtime-7.0.5-win-x64.exe");
+                    Install($"dotnet-runtime-{target}-win-x64.exe");
                     break;
             }
         }
@@ -420,17 +422,17 @@ public class NetRuntime
             switch (kind)
             {
                 case "aspnet":
-                    Install("dotnet-runtime-7.0.5-win-x86.exe");
-                    Install("aspnetcore-runtime-7.0.5-win-x86.exe");
+                    Install($"dotnet-runtime-{target}-win-x86.exe");
+                    Install($"aspnetcore-runtime-{target}-win-x86.exe");
                     break;
                 case "desktop":
-                    Install("windowsdesktop-runtime-7.0.5-win-x86.exe");
+                    Install($"windowsdesktop-runtime-{target}-win-x86.exe");
                     break;
                 case "host":
-                    Install("dotnet-hosting-7.0.5-win.exe");
+                    Install($"dotnet-hosting-{target}-win.exe");
                     break;
                 default:
-                    Install("dotnet-runtime-7.0.5-win-x86.exe");
+                    Install($"dotnet-runtime-{target}-win-x86.exe");
                     break;
             }
         }
