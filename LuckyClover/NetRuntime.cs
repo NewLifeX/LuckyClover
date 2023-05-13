@@ -13,23 +13,25 @@ using System.Net.Http;
 
 namespace LuckyClover;
 
+/// <summary>dotNet运行时</summary>
 public class NetRuntime
 {
     #region 属性
-    public String BaseUrl { get; set; }
+    /// <summary>基准路径</summary>
+    public String BaseUrl { get; set; } = "http://x.newlifex.com/dotnet";
 
+    /// <summary>静默安装</summary>
     public Boolean Silent { get; set; }
-
-    /// <summary>应用安装目录</summary>
-    public String InstallPath { get; set; }
 
     /// <summary>缓存目录</summary>
     public String CachePath { get; set; }
 
+    /// <summary>文件哈希。用于校验下载文件的完整性</summary>
     public IDictionary<String, String> Hashs { get; set; }
     #endregion
 
     #region 核心方法
+    /// <summary>自动安装.NET</summary>
     public void AutoInstallNet()
     {
         var osVer = Environment.OSVersion.Version;
@@ -64,6 +66,11 @@ public class NetRuntime
         }
     }
 
+    /// <summary>安装</summary>
+    /// <param name="fileName"></param>
+    /// <param name="baseUrl"></param>
+    /// <param name="arg"></param>
+    /// <returns></returns>
     public Boolean Install(String fileName, String baseUrl = null, String arg = null)
     {
         Console.WriteLine("下载 {0}", fileName);
@@ -156,6 +163,7 @@ public class NetRuntime
         return ver;
     }
 
+    /// <summary>安装.NET4.0</summary>
     public void InstallNet40()
     {
         var vers = new List<VerInfo>();
@@ -194,6 +202,7 @@ public class NetRuntime
         }
     }
 
+    /// <summary>安装.NET4.5</summary>
     public void InstallNet45()
     {
         var vers = new List<VerInfo>();
@@ -214,6 +223,7 @@ public class NetRuntime
         Install("NDP452-KB2901907-x86-x64-AllOS-CHS.exe");
     }
 
+    /// <summary>安装.NET4.8</summary>
     public void InstallNet48()
     {
         var vers = new List<VerInfo>();
@@ -264,6 +274,8 @@ public class NetRuntime
         }
     }
 
+    /// <summary>安装.NET6.0</summary>
+    /// <param name="kind"></param>
     public void InstallNet6(String kind = null)
     {
         var vers = GetNetCore();
@@ -308,17 +320,17 @@ public class NetRuntime
             switch (kind)
             {
                 case "aspnet":
-                    Install("dotnet-runtime-6.0.15-win-x64.exe");
-                    Install("aspnetcore-runtime-6.0.15-win-x64.exe");
+                    Install("dotnet-runtime-6.0.16-win-x64.exe");
+                    Install("aspnetcore-runtime-6.0.16-win-x64.exe");
                     break;
                 case "desktop":
-                    Install("windowsdesktop-runtime-6.0.15-win-x64.exe");
+                    Install("windowsdesktop-runtime-6.0.16-win-x64.exe");
                     break;
                 case "host":
-                    Install("dotnet-hosting-6.0.15-win.exe");
+                    Install("dotnet-hosting-6.0.16-win.exe");
                     break;
                 default:
-                    Install("dotnet-runtime-6.0.15-win-x64.exe");
+                    Install("dotnet-runtime-6.0.16-win-x64.exe");
                     break;
             }
         }
@@ -327,22 +339,24 @@ public class NetRuntime
             switch (kind)
             {
                 case "aspnet":
-                    Install("dotnet-runtime-6.0.15-win-x86.exe");
-                    Install("aspnetcore-runtime-6.0.15-win-x86.exe");
+                    Install("dotnet-runtime-6.0.16-win-x86.exe");
+                    Install("aspnetcore-runtime-6.0.16-win-x86.exe");
                     break;
                 case "desktop":
-                    Install("windowsdesktop-runtime-6.0.15-win-x86.exe");
+                    Install("windowsdesktop-runtime-6.0.16-win-x86.exe");
                     break;
                 case "host":
-                    Install("dotnet-hosting-6.0.15-win.exe");
+                    Install("dotnet-hosting-6.0.16-win.exe");
                     break;
                 default:
-                    Install("dotnet-runtime-6.0.15-win-x86.exe");
+                    Install("dotnet-runtime-6.0.16-win-x86.exe");
                     break;
             }
         }
     }
 
+    /// <summary>安装.NET7.0</summary>
+    /// <param name="kind"></param>
     public void InstallNet7(String kind = null)
     {
         var vers = GetNetCore();
@@ -387,17 +401,17 @@ public class NetRuntime
             switch (kind)
             {
                 case "aspnet":
-                    Install("dotnet-runtime-7.0.4-win-x64.exe");
-                    Install("aspnetcore-runtime-7.0.4-win-x64.exe");
+                    Install("dotnet-runtime-7.0.5-win-x64.exe");
+                    Install("aspnetcore-runtime-7.0.5-win-x64.exe");
                     break;
                 case "desktop":
-                    Install("windowsdesktop-runtime-7.0.4-win-x64.exe");
+                    Install("windowsdesktop-runtime-7.0.5-win-x64.exe");
                     break;
                 case "host":
-                    Install("dotnet-hosting-7.0.4-win.exe");
+                    Install("dotnet-hosting-7.0.5-win.exe");
                     break;
                 default:
-                    Install("dotnet-runtime-7.0.4-win-x64.exe");
+                    Install("dotnet-runtime-7.0.5-win-x64.exe");
                     break;
             }
         }
@@ -406,17 +420,17 @@ public class NetRuntime
             switch (kind)
             {
                 case "aspnet":
-                    Install("dotnet-runtime-7.0.4-win-x86.exe");
-                    Install("aspnetcore-runtime-7.0.4-win-x86.exe");
+                    Install("dotnet-runtime-7.0.5-win-x86.exe");
+                    Install("aspnetcore-runtime-7.0.5-win-x86.exe");
                     break;
                 case "desktop":
-                    Install("windowsdesktop-runtime-7.0.4-win-x86.exe");
+                    Install("windowsdesktop-runtime-7.0.5-win-x86.exe");
                     break;
                 case "host":
-                    Install("dotnet-hosting-7.0.4-win.exe");
+                    Install("dotnet-hosting-7.0.5-win.exe");
                     break;
                 default:
-                    Install("dotnet-runtime-7.0.4-win-x86.exe");
+                    Install("dotnet-runtime-7.0.5-win-x86.exe");
                     break;
             }
         }
@@ -434,6 +448,8 @@ public class NetRuntime
         return vers;
     }
 
+    /// <summary>获取Net45以下版本</summary>
+    /// <returns></returns>
     public static IList<VerInfo> Get1To45VersionFromRegistry()
     {
         var list = new List<VerInfo>();
@@ -492,6 +508,8 @@ public class NetRuntime
         return list;
     }
 
+    /// <summary>获取Net45版本</summary>
+    /// <returns></returns>
     public static IList<VerInfo> Get45PlusFromRegistry()
     {
         var list = new List<VerInfo>();
@@ -536,6 +554,8 @@ public class NetRuntime
         return list;
     }
 
+    /// <summary>获取NetCore版本</summary>
+    /// <returns></returns>
     public static IList<VerInfo> GetNetCore()
     {
         var list = new List<VerInfo>();
@@ -645,6 +665,9 @@ public class NetRuntime
     #endregion
 
     #region 辅助
+    /// <summary>获取文件MD5</summary>
+    /// <param name="fileName"></param>
+    /// <returns></returns>
     public static String GetMD5(String fileName)
     {
         var fi = new FileInfo(fileName);
@@ -680,6 +703,8 @@ public class NetRuntime
         return dic;
     }
 
+    /// <summary>安装微软根证书</summary>
+    /// <returns></returns>
     public static Boolean InstallCert()
     {
         Console.WriteLine("准备安装微软根证书");
@@ -690,10 +715,13 @@ public class NetRuntime
         foreach (var name in names)
         {
             var ms = asm.GetManifestResourceStream(typeof(NetRuntime).Namespace + ".res." + name);
-            var buf = new Byte[ms.Length];
-            ms.Read(buf, 0, buf.Length);
+            if (ms != null)
+            {
+                var buf = new Byte[ms.Length];
+                ms.Read(buf, 0, buf.Length);
 
-            File.WriteAllBytes(name, buf);
+                File.WriteAllBytes(name, buf);
+            }
         }
 
         var exe = names[0];
