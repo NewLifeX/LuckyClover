@@ -4,9 +4,9 @@ using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Reflection;
-using System.Security.Cryptography;
-using System.Runtime.Versioning;
 using System.Runtime.InteropServices;
+using System.Runtime.Versioning;
+using System.Security.Cryptography;
 
 namespace LuckyClover;
 
@@ -27,7 +27,7 @@ public class NetRuntime
     public IDictionary<String, String> Hashs { get; set; }
     #endregion
 
-    #region 核心方法
+    #region 方法
     /// <summary>自动安装.NET</summary>
     public void AutoInstallNet()
     {
@@ -48,21 +48,23 @@ public class NetRuntime
             // Win7Sp1
             {
                 InstallNet48();
-                InstallNet6("6.0.16");
+                InstallNet6("6.0.19");
             }
         }
         // Win10/Win11
         else if (osVer.Major >= 10)
         {
-            InstallNet7("7.0.5");
+            InstallNet7("7.0.8");
         }
         else
         {
             InstallNet48();
-            InstallNet7("7.0.5");
+            InstallNet7("7.0.8");
         }
     }
+    #endregion
 
+    #region 核心方法
     /// <summary>安装</summary>
     /// <param name="fileName"></param>
     /// <param name="baseUrl"></param>

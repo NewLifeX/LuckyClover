@@ -85,8 +85,8 @@ internal class Program
         _menus["net48"] = net.InstallNet48;
         _menus["net40"] = net.InstallNet40;
 
-        var v6 = "6.0.16";
-        var v7 = "7.0.5";
+        var v6 = "6.0.19";
+        var v7 = "7.0.8";
         _menus["net6"] = () => net.InstallNet6(v6, null);
         _menus["net6-desktop"] = () => net.InstallNet6(v6, "desktop");
         _menus["net6-aspnet"] = () => net.InstallNet6(v6, "aspnet");
