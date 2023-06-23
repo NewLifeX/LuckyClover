@@ -115,7 +115,7 @@ internal class Program
     private static String ShowMenu()
     {
         var vers = new List<VerInfo>();
-        if (Environment.OSVersion.Platform <= PlatformID.WinCE)
+        if (NetRuntime.IsWindows)
         {
             vers.AddRange(NetRuntime.Get1To45VersionFromRegistry());
             vers.AddRange(NetRuntime.Get45PlusFromRegistry());

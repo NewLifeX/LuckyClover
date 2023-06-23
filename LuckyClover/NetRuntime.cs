@@ -5,11 +5,8 @@ using System.IO;
 using System.Net;
 using System.Reflection;
 using System.Security.Cryptography;
-using Microsoft.Win32;
-
-#if NET6_0_OR_GREATER
-using System.Net.Http;
-#endif
+using System.Runtime.Versioning;
+using System.Runtime.InteropServices;
 
 namespace LuckyClover;
 
@@ -73,7 +70,7 @@ public class NetRuntime
     /// <returns></returns>
     public Boolean Install(String fileName, String baseUrl = null, String arg = null)
     {
-        Console.WriteLine("下载 {0}", fileName);
+        WriteLog("下载 {0}", fileName);
 
         var fullFile = fileName;
         if (!String.IsNullOrEmpty(CachePath)) fullFile = Path.Combine(CachePath, fileName);
@@ -91,49 +88,82 @@ public class NetRuntime
         if (fi == null || !fi.Exists)
         {
             if (String.IsNullOrEmpty(baseUrl))
-                baseUrl = BaseUrl;
+                baseUrl = BaseUrl?.TrimEnd('/');
             else
-                baseUrl = BaseUrl + baseUrl;
+                baseUrl = BaseUrl?.TrimEnd('/') + '/' + baseUrl.TrimStart('/').TrimEnd('/');
 
             var url = $"{baseUrl}/{fileName}";
-            Console.WriteLine("正在下载：{0}", url);
+            WriteLog("正在下载：{0}", url);
 
             var dir = Path.GetDirectoryName(fullFile);
             if (!String.IsNullOrEmpty(dir) && !Directory.Exists(dir)) Directory.CreateDirectory(dir);
 
+            // 独立区域，下载完成后释放连接和文件句柄
+            {
 #if NET6_0_OR_GREATER
-            var http = new HttpClient();
-            var hs = http.GetStreamAsync(url).Result;
+                using var http = new System.Net.Http.HttpClient();
+                var hs = http.GetStreamAsync(url).Result;
 
-            using var fs = new FileStream(fullFile, FileMode.CreateNew, FileAccess.Write);
-            hs.CopyTo(fs);
+                using var fs = new FileStream(fullFile, FileMode.CreateNew, FileAccess.Write);
+                hs.CopyTo(fs);
 #else
-            var http = new WebClient();
-            http.DownloadFile(url, fullFile);
+                using var http = new WebClient();
+                http.DownloadFile(url, fullFile);
 #endif
-            Console.WriteLine("MD5: {0}", GetMD5(fullFile));
+            }
+            WriteLog("MD5: {0}", GetMD5(fullFile));
+
+            //// 在windows系统上，下载完成以后，等待一会再安装，避免文件被占用（可能是安全扫描），提高安装成功率
+            //if (Runtime.Windows) Thread.Sleep(15_000);
         }
 
         if (String.IsNullOrEmpty(arg)) arg = "/passive /promptrestart";
         if (!Silent) arg = null;
 
-        Console.WriteLine("正在安装：{0} {1}", fullFile, arg);
+        WriteLog("正在安装：{0} {1}", fullFile, arg);
+
+        if (IsWindows)
+            return InstallOnWindows(fullFile, arg);
+        else
+            return InstallOnLinux(fullFile, arg);
+    }
+
+    Boolean InstallOnWindows(String fullFile, String arg)
+    {
         var p = Process.Start(fullFile, arg);
         if (p.WaitForExit(600_000))
         {
             if (p.ExitCode == 0)
-                Console.WriteLine("安装完成！");
+                WriteLog("安装完成！");
             else
-                Console.WriteLine("安装失败！ExitCode={0}", p.ExitCode);
+                WriteLog("安装失败！ExitCode={0}", p.ExitCode);
             Environment.ExitCode = p.ExitCode;
             return p.ExitCode == 0;
         }
         else
         {
-            Console.WriteLine("安装超时！");
+            WriteLog("安装超时！");
             Environment.ExitCode = 400;
             return false;
         }
+    }
+
+    Boolean InstallOnLinux(String fullFile, String arg)
+    {
+        // 建立目录
+        var target = "/usr/share/dotnet";
+        //target.EnsureDirectory(false);
+        if (!Directory.Exists(target)) Directory.CreateDirectory(target);
+
+        // 解压缩
+        Process.Start(new ProcessStartInfo("tar", $"-xzf {fullFile} -C {target}") { UseShellExecute = true });
+
+        // 建立链接
+        Process.Start(new ProcessStartInfo("ln", $"{fullFile}/dotnet /usr/bin/dotnet -s") { UseShellExecute = true });
+
+        WriteLog("安装完成！");
+
+        return true;
     }
 
     static Version GetLast(IList<VerInfo> vers, String prefix = null, String suffix = null)
@@ -141,7 +171,7 @@ public class NetRuntime
         var ver = new Version();
         if (vers.Count > 0)
         {
-            //Console.WriteLine("已安装版本：");
+            //WriteLog("已安装版本：");
             foreach (var item in vers)
             {
                 if ((String.IsNullOrEmpty(prefix) || item.Name.StartsWith(prefix)) &&
@@ -155,28 +185,30 @@ public class NetRuntime
                     if (v > ver) ver = v;
                 }
 
-                //Console.WriteLine(item.Name);
+                //WriteLog(item.Name);
             }
-            //Console.WriteLine("");
+            //WriteLog("");
         }
 
         return ver;
     }
 
     /// <summary>安装.NET4.0</summary>
+#if NET5_0_OR_GREATER
+    [SupportedOSPlatform("windows")]
+#endif
     public void InstallNet40()
     {
         var vers = new List<VerInfo>();
         vers.AddRange(Get1To45VersionFromRegistry());
-        vers.AddRange(Get45PlusFromRegistry());
 
-        var ver = GetLast(vers, null);
+        var ver = GetLast(vers, "v4.0");
 
         // 目标版本
         var target = new Version("4.0");
         if (ver >= target)
         {
-            Console.WriteLine("已安装最新版 v{0}", ver);
+            WriteLog("已安装最新版 v{0}", ver);
             return;
         }
 
@@ -190,8 +222,8 @@ public class NetRuntime
             Process.Start("regsvr32", "/s Initpki.dll");
             Process.Start("regsvr32", "/s Mssip32.dll");
 
-#if !NETCOREAPP3_1
-            using var reg = Registry.CurrentUser.OpenSubKey(@"\Software\Microsoft\Windows\CurrentVersion\WinTrust\Trust Providers\Software Publishing", true);
+#if NET45_OR_GREATER || NET6_0_OR_GREATER
+            using var reg = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(@"\Software\Microsoft\Windows\CurrentVersion\WinTrust\Trust Providers\Software Publishing", true);
             if (reg != null)
             {
                 var v = (Int32)reg.GetValue("State");
@@ -203,19 +235,21 @@ public class NetRuntime
     }
 
     /// <summary>安装.NET4.5</summary>
+#if NET5_0_OR_GREATER
+    [SupportedOSPlatform("windows")]
+#endif
     public void InstallNet45()
     {
         var vers = new List<VerInfo>();
         vers.AddRange(Get1To45VersionFromRegistry());
-        vers.AddRange(Get45PlusFromRegistry());
 
-        var ver = GetLast(vers, null);
+        var ver = GetLast(vers, "v4.5");
 
         // 目标版本
         var target = new Version("4.5");
         if (ver >= target)
         {
-            Console.WriteLine("已安装最新版 v{0}", ver);
+            WriteLog("已安装最新版 v{0}", ver);
             return;
         }
 
@@ -224,6 +258,9 @@ public class NetRuntime
     }
 
     /// <summary>安装.NET4.8</summary>
+#if NET5_0_OR_GREATER
+    [SupportedOSPlatform("windows")]
+#endif
     public void InstallNet48()
     {
         var vers = new List<VerInfo>();
@@ -237,7 +274,7 @@ public class NetRuntime
         var target = osVer.Major >= 10 ? new Version("4.8.1") : new Version("4.8");
         if (ver >= target)
         {
-            Console.WriteLine("已安装最新版 v{0}", ver);
+            WriteLog("已安装最新版 v{0}", ver);
             return;
         }
 
@@ -275,7 +312,7 @@ public class NetRuntime
     }
 
     /// <summary>安装.NET6.0</summary>
-    /// <param name="target">目标版本。包括子版本，如{target}</param>
+    /// <param name="target">目标版本。包括子版本，如6.0.15</param>
     /// <param name="kind">安装类型。如aspnet/desktop/host</param>
     public void InstallNet6(String target, String kind = null)
     {
@@ -289,7 +326,7 @@ public class NetRuntime
         var targetVer = new Version(target);
         if (ver >= targetVer)
         {
-            Console.WriteLine("已安装最新版 v{0}", ver);
+            WriteLog("已安装最新版 v{0}", ver);
             return;
         }
 
@@ -357,7 +394,7 @@ public class NetRuntime
     }
 
     /// <summary>安装.NET7.0</summary>
-    /// <param name="target">目标版本。包括子版本，如{target}</param>
+    /// <param name="target">目标版本。包括子版本，如6.0.15</param>
     /// <param name="kind">安装类型。如aspnet/desktop/host</param>
     public void InstallNet7(String target, String kind = null)
     {
@@ -371,7 +408,7 @@ public class NetRuntime
         var targetVer = new Version(target);
         if (ver >= targetVer)
         {
-            Console.WriteLine("已安装最新版 v{0}", ver);
+            WriteLog("已安装最新版 v{0}", ver);
             return;
         }
 
@@ -438,13 +475,55 @@ public class NetRuntime
         }
     }
 
+    /// <summary>在Linux上安装.NET运行时</summary>
+    /// <param name="target">目标版本。包括子版本，如6.0.15</param>
+    /// <param name="kind">安装类型。如aspnet</param>
+    public void InstallNetOnLinux(String target, String kind = null)
+    {
+        var vers = GetNetCore();
+
+        var suffix = "";
+        if (!String.IsNullOrEmpty(kind)) suffix = "-" + kind;
+        var ver = GetLast(vers, "v" + target.Substring(0, 3), suffix);
+
+        // 目标版本
+        var targetVer = new Version(target);
+        if (ver >= targetVer)
+        {
+            WriteLog("已安装最新版 v{0}", ver);
+            return;
+        }
+
+#if NETSTANDARD ||NETCOREAPP
+        var arch = RuntimeInformation.ProcessArchitecture.ToString().ToLower();
+
+        switch (kind)
+        {
+            case "aspnet":
+                Install($"aspnetcore-runtime-{target}-linux-{arch}.tar.gz");
+                break;
+            default:
+                Install($"dotnet-runtime-{target}-linux-{arch}.tar.gz");
+                break;
+        }
+#endif
+    }
+
     /// <summary>获取所有已安装版本</summary>
     /// <returns></returns>
     public IList<VerInfo> GetVers()
     {
         var vers = new List<VerInfo>();
+#if NET5_0_OR_GREATER
+        if (OperatingSystem.IsWindows())
+        {
+            vers.AddRange(Get1To45VersionFromRegistry());
+            vers.AddRange(Get45PlusFromRegistry());
+        }
+#else
         vers.AddRange(Get1To45VersionFromRegistry());
         vers.AddRange(Get45PlusFromRegistry());
+#endif
         vers.AddRange(GetNetCore());
 
         return vers;
@@ -452,12 +531,17 @@ public class NetRuntime
 
     /// <summary>获取Net45以下版本</summary>
     /// <returns></returns>
+#if NET5_0_OR_GREATER
+    [SupportedOSPlatform("windows")]
+#endif
     public static IList<VerInfo> Get1To45VersionFromRegistry()
     {
         var list = new List<VerInfo>();
-#if !NETCOREAPP3_1
+        if (!IsWindows) return list;
+
+#if NET45_OR_GREATER || NET6_0_OR_GREATER
         // 注册表查找 .NET Framework
-        using var ndpKey = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\NET Framework Setup\NDP\");
+        using var ndpKey = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\NET Framework Setup\NDP\");
 
         foreach (var versionKeyName in ndpKey.GetSubKeyNames())
         {
@@ -512,13 +596,18 @@ public class NetRuntime
 
     /// <summary>获取Net45版本</summary>
     /// <returns></returns>
+#if NET5_0_OR_GREATER
+    [SupportedOSPlatform("windows")]
+#endif
     public static IList<VerInfo> Get45PlusFromRegistry()
     {
         var list = new List<VerInfo>();
-#if !NETCOREAPP3_1
+        if (!IsWindows) return list;
+
+#if NET45_OR_GREATER || NET6_0_OR_GREATER
         const String subkey = @"SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full\";
 
-        using var ndpKey = Registry.LocalMachine.OpenSubKey(subkey);
+        using var ndpKey = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(subkey);
 
         if (ndpKey == null) return list;
 
@@ -558,18 +647,18 @@ public class NetRuntime
 
     /// <summary>获取NetCore版本</summary>
     /// <returns></returns>
-    public static IList<VerInfo> GetNetCore()
+    public static IList<VerInfo> GetNetCore(Boolean exact = true)
     {
         var list = new List<VerInfo>();
 
         var dir = "";
-        if (Environment.OSVersion.Platform <= PlatformID.WinCE)
+        if (IsWindows)
         {
             dir = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
             if (String.IsNullOrEmpty(dir)) return null;
             dir += "\\dotnet\\shared";
         }
-        else if (Environment.OSVersion.Platform == PlatformID.Unix)
+        else
             dir = "/usr/share/dotnet/shared";
 
         var dic = new SortedDictionary<String, VerInfo>();
@@ -581,10 +670,16 @@ public class NetRuntime
                 foreach (var elm in item.GetDirectories())
                 {
                     var name = "v" + elm.Name;
-                    if (item.Name.Contains("AspNet"))
-                        name += "-aspnet";
-                    else if (item.Name.Contains("Desktop"))
-                        name += "-desktop";
+                    if (exact)
+                    {
+                        if (item.Name.Contains("AspNet"))
+                            name += "-aspnet";
+                        else if (item.Name.Contains("Desktop"))
+                            name += "-desktop";
+                    }
+                    else if (name.Contains("-"))
+                        continue;
+
                     if (!dic.ContainsKey(name))
                     {
                         dic.Add(name, new VerInfo { Name = name, Version = item.Name + " " + elm.Name });
@@ -599,6 +694,7 @@ public class NetRuntime
         }
 
         // 通用处理
+        if (list.Count == 0)
         {
             var infs = Execute("dotnet", "--list-runtimes")?.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
             if (infs != null)
@@ -610,10 +706,15 @@ public class NetRuntime
                     {
                         var name = "v" + ss[1];
                         var ver = $"{ss[0]} {ss[1]}";
-                        if (ver.Contains("AspNet"))
-                            name += "-aspnet";
-                        else if (ver.Contains("Desktop"))
-                            name += "-desktop";
+                        if (exact)
+                        {
+                            if (ver.Contains("AspNet"))
+                                name += "-aspnet";
+                            else if (ver.Contains("Desktop"))
+                                name += "-desktop";
+                        }
+                        else if (name.Contains("-"))
+                            continue;
 
                         VerInfo vi = null;
                         foreach (var item in list)
@@ -663,10 +764,12 @@ public class NetRuntime
         }
         catch { return null; }
     }
-
     #endregion
 
     #region 辅助
+    /// <summary>是否Windows</summary>
+    public static Boolean IsWindows => Environment.OSVersion.Platform <= PlatformID.WinCE;
+
     /// <summary>获取文件MD5</summary>
     /// <param name="fileName"></param>
     /// <returns></returns>
@@ -748,5 +851,10 @@ public class NetRuntime
             if (File.Exists(exe)) File.Delete(exe);
         }
     }
+
+    /// <summary>写日志</summary>
+    /// <param name="format"></param>
+    /// <param name="args"></param>
+    public void WriteLog(String format, params Object[] args) => Console.WriteLine(format, args);
     #endregion
 }
