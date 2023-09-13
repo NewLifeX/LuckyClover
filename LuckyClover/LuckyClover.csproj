@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFrameworks>net20;net40;net45;netcoreapp3.1;net6.0;net7.0</TargetFrameworks>
+    <TargetFrameworks>net20;net40;net45;netcoreapp3.1;net6.0;net7.0;net8.0</TargetFrameworks>
     <AssemblyName>clover</AssemblyName>
     <AssemblyTitle>幸运草</AssemblyTitle>
     <Description>检测并安装主流.NET运行时。</Description>
@@ -20,17 +20,15 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(TargetFramework)'=='net8.0'">
+    <PublishAot>true</PublishAot>
+    <OptimizationPreference>Size</OptimizationPreference>
+    <InvariantGlobalization>true</InvariantGlobalization>
+    <StackTraceSupport>false</StackTraceSupport>
+  </PropertyGroup>
+  
   <ItemGroup>
     <None Remove="md5.txt" />
-    <None Remove="res\CertMgr.Exe" />
-    <None Remove="res\md5.txt" />
-    <None Remove="res\MicrosoftRootCertificateAuthority2011.cer" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="res\CertMgr.Exe" />
-    <EmbeddedResource Include="res\md5.txt" />
-    <EmbeddedResource Include="res\MicrosoftRootCertificateAuthority2011.cer" />
   </ItemGroup>
 
   <ItemGroup>
