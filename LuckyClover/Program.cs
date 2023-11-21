@@ -81,12 +81,17 @@ internal class Program
         // 根据操作系统，自动选择安装NET版本
         _menus["net"] = net.AutoInstallNet;
 
+        _menus["net40"] = net.InstallNet40;
         _menus["net45"] = net.InstallNet45;
         _menus["net48"] = net.InstallNet48;
-        _menus["net40"] = net.InstallNet40;
 
-        var v6 = "6.0.19";
-        var v7 = "7.0.8";
+        var v6 = "6.0.25";
+        var v7 = "7.0.14";
+        var v8 = "8.0.0";
+        _menus["net8"] = () => net.InstallNet8(v8, null);
+        _menus["net8-desktop"] = () => net.InstallNet8(v8, "desktop");
+        _menus["net8-aspnet"] = () => net.InstallNet8(v8, "aspnet");
+        _menus["net8-host"] = () => net.InstallNet8(v8, "host");
         _menus["net6"] = () => net.InstallNet6(v6, null);
         _menus["net6-desktop"] = () => net.InstallNet6(v6, "desktop");
         _menus["net6-aspnet"] = () => net.InstallNet6(v6, "aspnet");

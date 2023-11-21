@@ -48,18 +48,18 @@ public class NetRuntime
             // Win7Sp1
             {
                 InstallNet48();
-                InstallNet6("6.0.22");
+                InstallNet6("6.0.25");
             }
         }
         // Win10/Win11
         else if (osVer.Major >= 10)
         {
-            InstallNet7("7.0.11");
+            InstallNet7("8.0.0");
         }
         else
         {
             InstallNet48();
-            InstallNet7("7.0.11");
+            InstallNet7("8.0.0");
         }
     }
     #endregion
