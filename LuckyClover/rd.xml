@@ -1,6 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<Directives>
-	<Application>
-		<Assembly Name="clover"  Dynamic="Required All"/>
-	</Application>
-</Directives>

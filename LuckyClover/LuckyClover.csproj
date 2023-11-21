@@ -20,24 +20,36 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
 
-
-  <PropertyGroup Condition="'$(TargetFramework)'=='net8.0'">
+  <PropertyGroup Condition="'$(TargetFramework)'=='net7.0' or '$(TargetFramework)'=='net8.0'">
     <PublishAot>true</PublishAot>
-    <OptimizationPreference>Size</OptimizationPreference>
-    <InvariantGlobalization>true</InvariantGlobalization>
-    <StackTraceSupport>false</StackTraceSupport>
     <PublishTrimmed>true</PublishTrimmed>
+    <OptimizationPreference>Size</OptimizationPreference>
+    <IlcOptimizationPreference>Speed</IlcOptimizationPreference>
+    <DebugType Condition="$(Configuration)=='Release'">None</DebugType>
+    <StripSymbols Condition="'$(StripSymbols)' == '' and $([MSBuild]::IsOSPlatform('Linux'))">true</StripSymbols>
+    <!--NaiveAOT deployment 模式下，禁用以下选项
+        https://learn.microsoft.com/en-us/dotnet/core/deploying/trimming/trimming-options?pivots=dotnet-7-0#trimming-framework-library-features-->
+    <EnableUnsafeBinaryFormatterSerialization Condition="'$(PublishAot)' == 'true'">false</EnableUnsafeBinaryFormatterSerialization>
+    <EnableUnsafeUTF7Encoding Condition="'$(PublishAot)' == 'true'">false</EnableUnsafeUTF7Encoding>
+    <DebuggerSupport Condition="'$(PublishAot)' == 'true'">false</DebuggerSupport>
+    <StackTraceSupport>false</StackTraceSupport>
+    <EventSourceSupport Condition="'$(PublishAot)' == 'true'">false</EventSourceSupport>
+    <HttpActivityPropagationSupport Condition="'$(PublishAot)' == 'true'">false</HttpActivityPropagationSupport>
+    <MetadataUpdaterSupport Condition="'$(PublishAot)' == 'true'">false</MetadataUpdaterSupport>
+    <!--启用全球化固定模式。
+        程序不需要国际化支持，可以删除掉没有用的多语言支持及其资源文件
+        https://github.com/dotnet/runtime/blob/main/docs/design/features/globalization-invariant-mode.md-->
+    <InvariantGlobalization Condition="'$(PublishAot)' == 'true' or '$(RuntimeIdentifier)' == 'linux-musl-x64'">true</InvariantGlobalization>
+    <UseSystemResourceKeys Condition="'$(PublishAot)' == 'true' or '$(RuntimeIdentifier)' == 'linux-musl-x64'">true</UseSystemResourceKeys>
+    <!--以下是PublishAotCompressed组件支持的属性项，启用LZMA算法进行压缩-->
+    <PublishLzmaCompressed>true</PublishLzmaCompressed>
   </PropertyGroup>
-  
-  <ItemGroup Condition="'$(TargetFramework)'=='net8.0'">
-    <RdXmlFile Include="rd.xml" />
+
+  <ItemGroup>
+    <PackageReference Include="PublishAotCompressed" Version="1.0.1" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="res\md5.txt" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <RuntimeHostConfigurationOption Include="System.Globalization.Invariant" Value="true" />
   </ItemGroup>
 </Project>
