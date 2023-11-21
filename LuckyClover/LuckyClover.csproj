@@ -20,19 +20,24 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
 
+
   <PropertyGroup Condition="'$(TargetFramework)'=='net8.0'">
     <PublishAot>true</PublishAot>
     <OptimizationPreference>Size</OptimizationPreference>
     <InvariantGlobalization>true</InvariantGlobalization>
     <StackTraceSupport>false</StackTraceSupport>
+    <PublishTrimmed>true</PublishTrimmed>
   </PropertyGroup>
   
+  <ItemGroup Condition="'$(TargetFramework)'=='net8.0'">
+    <RdXmlFile Include="rd.xml" />
+  </ItemGroup>
+
   <ItemGroup>
-    <None Remove="md5.txt" />
+    <EmbeddedResource Include="res\md5.txt" />
   </ItemGroup>
 
   <ItemGroup>
     <RuntimeHostConfigurationOption Include="System.Globalization.Invariant" Value="true" />
   </ItemGroup>
-
 </Project>
