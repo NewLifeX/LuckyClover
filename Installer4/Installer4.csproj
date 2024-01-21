@@ -1,0 +1,61 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net4.0</TargetFramework>
+    <AssemblyName>Installer</AssemblyName>
+    <RootNamespace>Installer</RootNamespace>
+    <AssemblyTitle>安装助手</AssemblyTitle>
+    <Description>辅助客户端打包，指定下载需要的文件</Description>
+    <Company>新生命开发团队</Company>
+    <Copyright>©2002-2023 NewLife</Copyright>
+    <VersionPrefix>1.7</VersionPrefix>
+    <VersionSuffix>$([System.DateTime]::Now.ToString(`yyyy.MMdd`))</VersionSuffix>
+    <Version>$(VersionPrefix).$(VersionSuffix)</Version>
+    <FileVersion>$(Version)</FileVersion>
+    <AssemblyVersion>$(VersionPrefix).*</AssemblyVersion>
+    <Deterministic>false</Deterministic>
+    <OutputPath>..\Bin\Installer4</OutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
+    <UseWindowsForms>true</UseWindowsForms>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\Installer\Advapi32.cs" Link="Advapi32.cs" />
+    <Compile Include="..\Installer\DownloadHelper.cs" Link="DownloadHelper.cs" />
+    <Compile Include="..\Installer\FrmMain.cs" Link="FrmMain.cs" />
+    <Compile Include="..\Installer\FrmMain.Designer.cs" Link="FrmMain.Designer.cs" />
+    <Compile Include="..\Installer\Helper.cs" Link="Helper.cs" />
+    <Compile Include="..\Installer\NetRuntime.cs" Link="NetRuntime.cs" />
+    <Compile Include="..\Installer\VerInfo.cs" Link="VerInfo.cs" />
+    <Compile Include="..\Installer\WindowsService.cs" Link="WindowsService.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="..\LuckyClover\res\md5.txt" Link="res\md5.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="..\Installer\FrmMain.resx" Link="FrmMain.resx" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="NewLife.Core" Version="10.6.2024.101-net40" />
+    <PackageReference Include="NewLife.Stardust" Version="2.9.2024.101" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="res\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="..\LuckyClover\res\CertMgr.Exe" Link="res\CertMgr.Exe" />
+    <EmbeddedResource Include="..\LuckyClover\res\MicrosoftRootCertificateAuthority2011.cer" Link="res\MicrosoftRootCertificateAuthority2011.cer" />
+  </ItemGroup>
+
+</Project>

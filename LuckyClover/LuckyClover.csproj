@@ -46,10 +46,17 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="PublishAotCompressed" Version="1.0.1" />
+    <None Remove="res\CertMgr.Exe" />
+    <None Remove="res\MicrosoftRootCertificateAuthority2011.cer" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="PublishAotCompressed" Version="1.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="res\CertMgr.Exe" />
     <EmbeddedResource Include="res\md5.txt" />
+    <EmbeddedResource Include="res\MicrosoftRootCertificateAuthority2011.cer" />
   </ItemGroup>
 </Project>
