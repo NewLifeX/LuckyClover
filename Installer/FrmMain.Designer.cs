@@ -48,11 +48,11 @@
             this.lbNET48 = new System.Windows.Forms.Label();
             this.btnNET48 = new System.Windows.Forms.Button();
             this.label9 = new System.Windows.Forms.Label();
-            this.btnNET7 = new System.Windows.Forms.Button();
+            this.btnNET8 = new System.Windows.Forms.Button();
             this.btnNET6 = new System.Windows.Forms.Button();
             this.btnNET4 = new System.Windows.Forms.Button();
-            this.cbNET7 = new System.Windows.Forms.CheckBox();
-            this.lbNET7 = new System.Windows.Forms.Label();
+            this.cbNET8 = new System.Windows.Forms.CheckBox();
+            this.lbNET8 = new System.Windows.Forms.Label();
             this.cbNET6 = new System.Windows.Forms.CheckBox();
             this.lbNET6 = new System.Windows.Forms.Label();
             this.cbNET4 = new System.Windows.Forms.CheckBox();
@@ -222,11 +222,11 @@
             this.groupBox2.Controls.Add(this.lbNET48);
             this.groupBox2.Controls.Add(this.btnNET48);
             this.groupBox2.Controls.Add(this.label9);
-            this.groupBox2.Controls.Add(this.btnNET7);
+            this.groupBox2.Controls.Add(this.btnNET8);
             this.groupBox2.Controls.Add(this.btnNET6);
             this.groupBox2.Controls.Add(this.btnNET4);
-            this.groupBox2.Controls.Add(this.cbNET7);
-            this.groupBox2.Controls.Add(this.lbNET7);
+            this.groupBox2.Controls.Add(this.cbNET8);
+            this.groupBox2.Controls.Add(this.lbNET8);
             this.groupBox2.Controls.Add(this.cbNET6);
             this.groupBox2.Controls.Add(this.lbNET6);
             this.groupBox2.Controls.Add(this.cbNET4);
@@ -296,18 +296,18 @@
             this.label9.TabIndex = 15;
             this.label9.Text = "打勾表示已安装！";
             // 
-            // btnNET7
+            // btnNET8
             // 
-            this.btnNET7.Enabled = false;
-            this.btnNET7.Location = new System.Drawing.Point(162, 222);
-            this.btnNET7.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.btnNET7.Name = "btnNET7";
-            this.btnNET7.Size = new System.Drawing.Size(82, 36);
-            this.btnNET7.TabIndex = 14;
-            this.btnNET7.Text = "安装";
-            this.toolTip1.SetToolTip(this.btnNET7, "安装.NET7.0");
-            this.btnNET7.UseVisualStyleBackColor = true;
-            this.btnNET7.Click += new System.EventHandler(this.btnNET7_Click);
+            this.btnNET8.Enabled = false;
+            this.btnNET8.Location = new System.Drawing.Point(162, 222);
+            this.btnNET8.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.btnNET8.Name = "btnNET8";
+            this.btnNET8.Size = new System.Drawing.Size(82, 36);
+            this.btnNET8.TabIndex = 14;
+            this.btnNET8.Text = "安装";
+            this.toolTip1.SetToolTip(this.btnNET8, "安装.NET7.0");
+            this.btnNET8.UseVisualStyleBackColor = true;
+            this.btnNET8.Click += new System.EventHandler(this.btnNET8_Click);
             // 
             // btnNET6
             // 
@@ -335,25 +335,25 @@
             this.btnNET4.UseVisualStyleBackColor = true;
             this.btnNET4.Click += new System.EventHandler(this.btnNET4_Click);
             // 
-            // cbNET7
+            // cbNET8
             // 
-            this.cbNET7.AutoSize = true;
-            this.cbNET7.Enabled = false;
-            this.cbNET7.Location = new System.Drawing.Point(114, 230);
-            this.cbNET7.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.cbNET7.Name = "cbNET7";
-            this.cbNET7.Size = new System.Drawing.Size(22, 21);
-            this.cbNET7.TabIndex = 7;
-            this.cbNET7.UseVisualStyleBackColor = true;
+            this.cbNET8.AutoSize = true;
+            this.cbNET8.Enabled = false;
+            this.cbNET8.Location = new System.Drawing.Point(114, 230);
+            this.cbNET8.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.cbNET8.Name = "cbNET8";
+            this.cbNET8.Size = new System.Drawing.Size(22, 21);
+            this.cbNET8.TabIndex = 7;
+            this.cbNET8.UseVisualStyleBackColor = true;
             // 
-            // lbNET7
+            // lbNET8
             // 
-            this.lbNET7.AutoSize = true;
-            this.lbNET7.Location = new System.Drawing.Point(18, 232);
-            this.lbNET7.Name = "lbNET7";
-            this.lbNET7.Size = new System.Drawing.Size(71, 18);
-            this.lbNET7.TabIndex = 6;
-            this.lbNET7.Text = ".NET7.0";
+            this.lbNET8.AutoSize = true;
+            this.lbNET8.Location = new System.Drawing.Point(18, 232);
+            this.lbNET8.Name = "lbNET8";
+            this.lbNET8.Size = new System.Drawing.Size(71, 18);
+            this.lbNET8.TabIndex = 6;
+            this.lbNET8.Text = ".NET8.0";
             // 
             // cbNET6
             // 
@@ -461,7 +461,7 @@
             this.btnInstallD.Name = "btnInstallD";
             this.btnInstallD.Size = new System.Drawing.Size(146, 68);
             this.btnInstallD.TabIndex = 22;
-            this.btnInstallD.Text = "安装精简版\r\n（WinXP/Win7）";
+            this.btnInstallD.Text = "安装NET45版\r\n（最低版）";
             this.btnInstallD.UseVisualStyleBackColor = true;
             this.btnInstallD.Click += new System.EventHandler(this.btnInstallD_Click);
             // 
@@ -507,7 +507,7 @@
             this.btnInstallC.Name = "btnInstallC";
             this.btnInstallC.Size = new System.Drawing.Size(135, 68);
             this.btnInstallC.TabIndex = 19;
-            this.btnInstallC.Text = "安装WinXP版\r\n（兼容Win7）";
+            this.btnInstallC.Text = "安装NET8版\r\n（最高版）";
             this.btnInstallC.UseVisualStyleBackColor = true;
             this.btnInstallC.Click += new System.EventHandler(this.btnInstallC_Click);
             // 
@@ -572,7 +572,7 @@
             this.txtServer.Name = "txtServer";
             this.txtServer.Size = new System.Drawing.Size(427, 28);
             this.txtServer.TabIndex = 1;
-            this.txtServer.Text = "http://s.newlifex.com:6600";
+            this.txtServer.Text = "http://x.newlifex.com";
             // 
             // label7
             // 
@@ -651,15 +651,15 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.CheckBox cbNET2;
         private System.Windows.Forms.Label lbNET2;
-        private System.Windows.Forms.CheckBox cbNET7;
-        private System.Windows.Forms.Label lbNET7;
+        private System.Windows.Forms.CheckBox cbNET8;
+        private System.Windows.Forms.Label lbNET8;
         private System.Windows.Forms.CheckBox cbNET6;
         private System.Windows.Forms.Label lbNET6;
         private System.Windows.Forms.CheckBox cbNET4;
         private System.Windows.Forms.Label lbNET4;
         private System.Windows.Forms.Button btnNET4;
         private System.Windows.Forms.Button btnNET6;
-        private System.Windows.Forms.Button btnNET7;
+        private System.Windows.Forms.Button btnNET8;
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.TextBox txtServer;
         private System.Windows.Forms.Label label7;

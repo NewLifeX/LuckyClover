@@ -5,7 +5,6 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Reflection;
-using System.Web;
 using System.Windows.Forms;
 using BuildTool;
 using NewLife;
@@ -127,10 +126,10 @@ public partial class FrmMain : Form
             else
                 btnNET6.Enabled = true;
 
-            if (vers.Any(e => e.Name.StartsWith("v7.")))
-                cbNET7.Checked = true;
+            if (vers.Any(e => e.Name.StartsWith("v8.")))
+                cbNET8.Checked = true;
             else
-                btnNET7.Enabled = true;
+                btnNET8.Enabled = true;
         }));
 
         var svc = new WindowsService();
@@ -159,7 +158,7 @@ public partial class FrmMain : Form
             InstallPath = _installPath,
             Hashs = NetRuntime.LoadMD5s(),
         };
-#if NET45
+#if NET40
         net.Tracer = DefaultTracer.Instance;
 #endif
 
@@ -213,7 +212,7 @@ public partial class FrmMain : Form
         });
     }
 
-    private void btnNET7_Click(Object sender, EventArgs e)
+    private void btnNET8_Click(Object sender, EventArgs e)
     {
         var net = GetNetRuntime();
         ThreadPoolX.QueueUserWorkItem(() =>
@@ -306,10 +305,10 @@ public partial class FrmMain : Form
         var osVer = Environment.OSVersion.Version;
         var str = "";
 
-        //A方案，NET7
+        //A方案，NET8
         //B方案，NET6
-        //C方案，NET4
-        //D方案，NET2
+        //C方案，NET8
+        //D方案，NET45
 
         Invoke(new Action(() =>
         {
@@ -322,14 +321,14 @@ public partial class FrmMain : Form
             // WinXP
             if (osVer.Major <= 5)
             {
-                btnInstallC.Enabled = true;
+                //btnInstallC.Enabled = true;
                 btnInstallD.Enabled = true;
                 str = "WinXP";
             }
             // Vista
             else if (osVer.Major == 6 && osVer.Minor == 0)
             {
-                btnInstallC.Enabled = true;
+                //btnInstallC.Enabled = true;
                 btnInstallD.Enabled = true;
                 str = "Vista";
             }
@@ -338,7 +337,7 @@ public partial class FrmMain : Form
                 // Win7
                 if (osVer.Revision <= 7600)
                 {
-                    btnInstallC.Enabled = true;
+                    //btnInstallC.Enabled = true;
                     btnInstallD.Enabled = true;
                     str = "Win7";
                 }
@@ -346,7 +345,7 @@ public partial class FrmMain : Form
                 // Win7Sp1
                 {
                     btnInstallB.Enabled = true;
-                    btnInstallC.Enabled = true;
+                    //btnInstallC.Enabled = true;
                     btnInstallD.Enabled = true;
                     str = "Win7Sp1";
                 }
@@ -356,20 +355,21 @@ public partial class FrmMain : Form
             {
                 btnInstallA.Enabled = true;
                 btnInstallB.Enabled = true;
-                //btnInstallC.Enabled = true;
+                btnInstallC.Enabled = true;
                 str = "Win10/Win11";
             }
             else
             {
                 btnInstallA.Enabled = true;
                 btnInstallB.Enabled = true;
-                //btnInstallC.Enabled = true;
+                btnInstallC.Enabled = true;
+                btnInstallD.Enabled = true;
                 str = txtOS.Text;
             }
 
             // 在.NET4.0中，禁止安装D方案（.NET2.0）
 #if NET40
-            btnInstallD.Enabled = false;
+            //btnInstallD.Enabled = false;
 #endif
 
             if (_x64)
@@ -398,7 +398,7 @@ public partial class FrmMain : Form
     /// <returns></returns>
     Boolean InstallService(WindowsService svc, String url)
     {
-        var file = @"C:\agent\StarAgent.exe";
+        var file = _installPath.CombinePath("StarAgent.exe");
         if (!File.Exists(file))
         {
             XTrace.WriteLine("找不到客户端文件");
@@ -457,7 +457,6 @@ public partial class FrmMain : Form
         {
             net.InstallNet7();
             _timer.Change(1000, 30_000);
-            //net.InstallApp("gbt-agent7.zip");
 
             try
             {
@@ -468,7 +467,7 @@ public partial class FrmMain : Form
                 XTrace.WriteException(ex);
             }
 
-            var rs = net.Install("gbt-win10-mini.exe", null);
+            var rs = net.Install("staragent80.zip", null);
             if (rs) rs = InstallService(svc, url);
             _timer.Change(1000, 30_000);
 
@@ -504,7 +503,6 @@ public partial class FrmMain : Form
         {
             net.InstallNet6();
             _timer.Change(1000, 30_000);
-            //net.InstallApp("gbt-agent6.zip");
 
             try
             {
@@ -515,11 +513,7 @@ public partial class FrmMain : Form
                 XTrace.WriteException(ex);
             }
 
-            var rs = false;
-            if (_x64)
-                rs = net.Install("gbt-win7-mini.exe", null);
-            else
-                rs = net.Install("gbt-win7x86-mini.exe", null);
+            var rs = net.Install("staragent60.zip", null);
 
             if (rs) rs = InstallService(svc, url);
             _timer.Change(1000, 30_000);
@@ -556,7 +550,6 @@ public partial class FrmMain : Form
         {
             net.InstallNet40();
             _timer.Change(1000, 30_000);
-            //net.InstallApp("gbt-agent4.zip");
 
             try
             {
@@ -567,7 +560,7 @@ public partial class FrmMain : Form
                 XTrace.WriteException(ex);
             }
 
-            var rs = net.Install("gbt-winxp-mini.exe", null);
+            var rs = net.Install("staragent45.zip", null);
             if (rs) rs = InstallService(svc, url);
             _timer.Change(1000, 30_000);
 
@@ -601,9 +594,6 @@ public partial class FrmMain : Form
         var net = GetNetRuntime(true);
         ThreadPoolX.QueueUserWorkItem(() =>
         {
-            //net.InstallNet40();
-            //_timer.Change(1000, 30_000);
-
             try
             {
                 if (svc.IsRunning(_serviceName)) svc.Stop(_serviceName);
@@ -613,7 +603,7 @@ public partial class FrmMain : Form
                 XTrace.WriteException(ex);
             }
 
-            var rs = net.Install("gbt-agent20-mini.exe", null);
+            var rs = net.Install("staragent45.zip", null);
             if (rs) rs = InstallService(svc, url);
             _timer.Change(1000, 30_000);
 
@@ -668,7 +658,6 @@ public partial class FrmMain : Form
         catch (Exception ex)
         {
             span?.SetError(ex, null);
-            //XTrace.WriteException(ex);
             throw;
         }
     }
@@ -683,7 +672,7 @@ public partial class FrmMain : Form
     void PostLog(String server, String action)
     {
         // 上传客户端日志
-        var di = @"C:\agent\Log".AsDirectory();
+        var di = _installPath.CombinePath("Log").AsDirectory();
         if (di.Exists)
         {
             var fi = di.GetFiles("*.log").OrderByDescending(e => e.LastWriteTime).FirstOrDefault();

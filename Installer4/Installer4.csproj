@@ -5,11 +5,11 @@
     <TargetFramework>net4.0</TargetFramework>
     <AssemblyName>Installer</AssemblyName>
     <RootNamespace>Installer</RootNamespace>
-    <AssemblyTitle>安装助手</AssemblyTitle>
-    <Description>辅助客户端打包，指定下载需要的文件</Description>
+    <AssemblyTitle>dotNet安装助手（新生命团队）</AssemblyTitle>
+    <Description>检测并安装主流dotNet运行时，作为应用系统安装前置检测工具</Description>
     <Company>新生命开发团队</Company>
-    <Copyright>©2002-2023 NewLife</Copyright>
-    <VersionPrefix>1.7</VersionPrefix>
+    <Copyright>©2002-2024 NewLife</Copyright>
+    <VersionPrefix>1.2</VersionPrefix>
     <VersionSuffix>$([System.DateTime]::Now.ToString(`yyyy.MMdd`))</VersionSuffix>
     <Version>$(VersionPrefix).$(VersionSuffix)</Version>
     <FileVersion>$(Version)</FileVersion>
