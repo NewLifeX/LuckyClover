@@ -671,21 +671,21 @@ public partial class FrmMain : Form
 
     void PostLog(String server, String action)
     {
-        // 上传客户端日志
-        var di = _installPath.CombinePath("Log").AsDirectory();
-        if (di.Exists)
-        {
-            var fi = di.GetFiles("*.log").OrderByDescending(e => e.LastWriteTime).FirstOrDefault();
-            if (fi != null) PostLog(server, fi, action);
-        }
+        //// 上传客户端日志
+        //var di = _installPath.CombinePath("Log").AsDirectory();
+        //if (di.Exists)
+        //{
+        //    var fi = di.GetFiles("*.log").OrderByDescending(e => e.LastWriteTime).FirstOrDefault();
+        //    if (fi != null) PostLog(server, fi, action);
+        //}
 
-        // 上传自己的日志
-        di = @".\Log".AsDirectory();
-        if (di.Exists)
-        {
-            var fi = di.GetFiles("*.log").OrderByDescending(e => e.LastWriteTime).FirstOrDefault();
-            if (fi != null) PostLog(server, fi, action);
-        }
+        //// 上传自己的日志
+        //di = @".\Log".AsDirectory();
+        //if (di.Exists)
+        //{
+        //    var fi = di.GetFiles("*.log").OrderByDescending(e => e.LastWriteTime).FirstOrDefault();
+        //    if (fi != null) PostLog(server, fi, action);
+        //}
     }
 
     void PostLog(String server, FileInfo fi, String action)

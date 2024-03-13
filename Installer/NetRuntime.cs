@@ -70,6 +70,17 @@ public class NetRuntime
             XTrace.WriteLine("MD5: {0}", GetMD5(fullFile));
         }
 
+        // 解压缩
+        if (fileName.EndsWithIgnoreCase(".zip"))
+        {
+            XTrace.WriteLine("正在解压缩到：{0}", InstallPath);
+
+            fullFile.AsFile().Extract(InstallPath.EnsureDirectory(false), true);
+
+            return true;
+        }
+
+        // 执行安装包
         if (String.IsNullOrEmpty(arg)) arg = "/passive /promptrestart";
         if (!Silent) arg = null;
 
