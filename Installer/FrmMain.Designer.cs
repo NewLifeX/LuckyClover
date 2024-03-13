@@ -98,120 +98,112 @@
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.txtMachince);
             this.groupBox1.Controls.Add(this.label1);
-            this.groupBox1.Location = new System.Drawing.Point(14, 14);
-            this.groupBox1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.groupBox1.Size = new System.Drawing.Size(1005, 157);
+            this.groupBox1.Size = new System.Drawing.Size(893, 131);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "系统信息";
             // 
             // txtSerial
             // 
-            this.txtSerial.Location = new System.Drawing.Point(623, 103);
-            this.txtSerial.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.txtSerial.Location = new System.Drawing.Point(554, 86);
             this.txtSerial.Name = "txtSerial";
             this.txtSerial.ReadOnly = true;
-            this.txtSerial.Size = new System.Drawing.Size(360, 28);
+            this.txtSerial.Size = new System.Drawing.Size(320, 25);
             this.txtSerial.TabIndex = 11;
             // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(541, 109);
+            this.label5.Location = new System.Drawing.Point(481, 91);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(80, 18);
+            this.label5.Size = new System.Drawing.Size(67, 15);
             this.label5.TabIndex = 10;
             this.label5.Text = "序列号：";
             // 
             // txtProduct
             // 
-            this.txtProduct.Location = new System.Drawing.Point(127, 103);
-            this.txtProduct.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.txtProduct.Location = new System.Drawing.Point(113, 86);
             this.txtProduct.Name = "txtProduct";
             this.txtProduct.ReadOnly = true;
-            this.txtProduct.Size = new System.Drawing.Size(360, 28);
+            this.txtProduct.Size = new System.Drawing.Size(320, 25);
             this.txtProduct.TabIndex = 9;
             // 
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(62, 109);
+            this.label6.Location = new System.Drawing.Point(55, 91);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(62, 18);
+            this.label6.Size = new System.Drawing.Size(52, 15);
             this.label6.TabIndex = 8;
             this.label6.Text = "产品：";
             // 
             // txtVersion
             // 
-            this.txtVersion.Location = new System.Drawing.Point(623, 66);
-            this.txtVersion.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.txtVersion.Location = new System.Drawing.Point(554, 55);
             this.txtVersion.Name = "txtVersion";
             this.txtVersion.ReadOnly = true;
-            this.txtVersion.Size = new System.Drawing.Size(360, 28);
+            this.txtVersion.Size = new System.Drawing.Size(320, 25);
             this.txtVersion.TabIndex = 7;
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(558, 72);
+            this.label3.Location = new System.Drawing.Point(496, 60);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(62, 18);
+            this.label3.Size = new System.Drawing.Size(52, 15);
             this.label3.TabIndex = 6;
             this.label3.Text = "版本：";
             // 
             // txtOS
             // 
-            this.txtOS.Location = new System.Drawing.Point(127, 66);
-            this.txtOS.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.txtOS.Location = new System.Drawing.Point(113, 55);
             this.txtOS.Name = "txtOS";
             this.txtOS.ReadOnly = true;
-            this.txtOS.Size = new System.Drawing.Size(360, 28);
+            this.txtOS.Size = new System.Drawing.Size(320, 25);
             this.txtOS.TabIndex = 5;
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(28, 72);
+            this.label4.Location = new System.Drawing.Point(25, 60);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(98, 18);
+            this.label4.Size = new System.Drawing.Size(82, 15);
             this.label4.TabIndex = 4;
             this.label4.Text = "操作系统：";
             // 
             // txtUser
             // 
-            this.txtUser.Location = new System.Drawing.Point(623, 29);
-            this.txtUser.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.txtUser.Location = new System.Drawing.Point(554, 24);
             this.txtUser.Name = "txtUser";
             this.txtUser.ReadOnly = true;
-            this.txtUser.Size = new System.Drawing.Size(360, 28);
+            this.txtUser.Size = new System.Drawing.Size(320, 25);
             this.txtUser.TabIndex = 3;
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(558, 35);
+            this.label2.Location = new System.Drawing.Point(496, 29);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(62, 18);
+            this.label2.Size = new System.Drawing.Size(52, 15);
             this.label2.TabIndex = 2;
             this.label2.Text = "用户：";
             // 
             // txtMachince
             // 
-            this.txtMachince.Location = new System.Drawing.Point(127, 29);
-            this.txtMachince.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.txtMachince.Location = new System.Drawing.Point(113, 24);
             this.txtMachince.Name = "txtMachince";
             this.txtMachince.ReadOnly = true;
-            this.txtMachince.Size = new System.Drawing.Size(360, 28);
+            this.txtMachince.Size = new System.Drawing.Size(320, 25);
             this.txtMachince.TabIndex = 1;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(45, 35);
+            this.label1.Location = new System.Drawing.Point(40, 29);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(80, 18);
+            this.label1.Size = new System.Drawing.Size(67, 15);
             this.label1.TabIndex = 0;
             this.label1.Text = "机器名：";
             // 
@@ -233,21 +225,18 @@
             this.groupBox2.Controls.Add(this.lbNET4);
             this.groupBox2.Controls.Add(this.cbNET2);
             this.groupBox2.Controls.Add(this.lbNET2);
-            this.groupBox2.Location = new System.Drawing.Point(755, 179);
-            this.groupBox2.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.groupBox2.Location = new System.Drawing.Point(671, 149);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.groupBox2.Size = new System.Drawing.Size(263, 274);
+            this.groupBox2.Size = new System.Drawing.Size(234, 228);
             this.groupBox2.TabIndex = 1;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "运行时环境（专家级）";
             // 
             // btnFinal
             // 
-            this.btnFinal.Location = new System.Drawing.Point(162, 49);
-            this.btnFinal.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.btnFinal.Location = new System.Drawing.Point(144, 41);
             this.btnFinal.Name = "btnFinal";
-            this.btnFinal.Size = new System.Drawing.Size(82, 36);
+            this.btnFinal.Size = new System.Drawing.Size(73, 30);
             this.btnFinal.TabIndex = 19;
             this.btnFinal.Text = "补天";
             this.toolTip1.SetToolTip(this.btnFinal, "实在安装不上NET4时的终极大招，可能对系统文件有损坏！");
@@ -258,29 +247,27 @@
             // 
             this.cbNET48.AutoSize = true;
             this.cbNET48.Enabled = false;
-            this.cbNET48.Location = new System.Drawing.Point(114, 144);
-            this.cbNET48.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.cbNET48.Location = new System.Drawing.Point(101, 120);
             this.cbNET48.Name = "cbNET48";
-            this.cbNET48.Size = new System.Drawing.Size(22, 21);
+            this.cbNET48.Size = new System.Drawing.Size(18, 17);
             this.cbNET48.TabIndex = 18;
             this.cbNET48.UseVisualStyleBackColor = true;
             // 
             // lbNET48
             // 
             this.lbNET48.AutoSize = true;
-            this.lbNET48.Location = new System.Drawing.Point(18, 145);
+            this.lbNET48.Location = new System.Drawing.Point(16, 121);
             this.lbNET48.Name = "lbNET48";
-            this.lbNET48.Size = new System.Drawing.Size(71, 18);
+            this.lbNET48.Size = new System.Drawing.Size(63, 15);
             this.lbNET48.TabIndex = 17;
             this.lbNET48.Text = ".NET4.8";
             // 
             // btnNET48
             // 
             this.btnNET48.Enabled = false;
-            this.btnNET48.Location = new System.Drawing.Point(162, 136);
-            this.btnNET48.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.btnNET48.Location = new System.Drawing.Point(144, 113);
             this.btnNET48.Name = "btnNET48";
-            this.btnNET48.Size = new System.Drawing.Size(82, 36);
+            this.btnNET48.Size = new System.Drawing.Size(73, 30);
             this.btnNET48.TabIndex = 16;
             this.btnNET48.Text = "安装";
             this.toolTip1.SetToolTip(this.btnNET48, "安装.NET4.8");
@@ -290,32 +277,30 @@
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(18, 25);
+            this.label9.Location = new System.Drawing.Point(16, 21);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(152, 18);
+            this.label9.Size = new System.Drawing.Size(127, 15);
             this.label9.TabIndex = 15;
             this.label9.Text = "打勾表示已安装！";
             // 
             // btnNET8
             // 
             this.btnNET8.Enabled = false;
-            this.btnNET8.Location = new System.Drawing.Point(162, 222);
-            this.btnNET8.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.btnNET8.Location = new System.Drawing.Point(144, 185);
             this.btnNET8.Name = "btnNET8";
-            this.btnNET8.Size = new System.Drawing.Size(82, 36);
+            this.btnNET8.Size = new System.Drawing.Size(73, 30);
             this.btnNET8.TabIndex = 14;
             this.btnNET8.Text = "安装";
-            this.toolTip1.SetToolTip(this.btnNET8, "安装.NET7.0");
+            this.toolTip1.SetToolTip(this.btnNET8, "安装.NET8.0");
             this.btnNET8.UseVisualStyleBackColor = true;
             this.btnNET8.Click += new System.EventHandler(this.btnNET8_Click);
             // 
             // btnNET6
             // 
             this.btnNET6.Enabled = false;
-            this.btnNET6.Location = new System.Drawing.Point(162, 179);
-            this.btnNET6.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.btnNET6.Location = new System.Drawing.Point(144, 149);
             this.btnNET6.Name = "btnNET6";
-            this.btnNET6.Size = new System.Drawing.Size(82, 36);
+            this.btnNET6.Size = new System.Drawing.Size(73, 30);
             this.btnNET6.TabIndex = 13;
             this.btnNET6.Text = "安装";
             this.toolTip1.SetToolTip(this.btnNET6, "安装.NET6.0");
@@ -325,10 +310,9 @@
             // btnNET4
             // 
             this.btnNET4.Enabled = false;
-            this.btnNET4.Location = new System.Drawing.Point(162, 92);
-            this.btnNET4.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.btnNET4.Location = new System.Drawing.Point(144, 77);
             this.btnNET4.Name = "btnNET4";
-            this.btnNET4.Size = new System.Drawing.Size(82, 36);
+            this.btnNET4.Size = new System.Drawing.Size(73, 30);
             this.btnNET4.TabIndex = 12;
             this.btnNET4.Text = "安装";
             this.toolTip1.SetToolTip(this.btnNET4, "安装.NET4.0");
@@ -339,19 +323,18 @@
             // 
             this.cbNET8.AutoSize = true;
             this.cbNET8.Enabled = false;
-            this.cbNET8.Location = new System.Drawing.Point(114, 230);
-            this.cbNET8.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.cbNET8.Location = new System.Drawing.Point(101, 192);
             this.cbNET8.Name = "cbNET8";
-            this.cbNET8.Size = new System.Drawing.Size(22, 21);
+            this.cbNET8.Size = new System.Drawing.Size(18, 17);
             this.cbNET8.TabIndex = 7;
             this.cbNET8.UseVisualStyleBackColor = true;
             // 
             // lbNET8
             // 
             this.lbNET8.AutoSize = true;
-            this.lbNET8.Location = new System.Drawing.Point(18, 232);
+            this.lbNET8.Location = new System.Drawing.Point(16, 193);
             this.lbNET8.Name = "lbNET8";
-            this.lbNET8.Size = new System.Drawing.Size(71, 18);
+            this.lbNET8.Size = new System.Drawing.Size(63, 15);
             this.lbNET8.TabIndex = 6;
             this.lbNET8.Text = ".NET8.0";
             // 
@@ -359,19 +342,18 @@
             // 
             this.cbNET6.AutoSize = true;
             this.cbNET6.Enabled = false;
-            this.cbNET6.Location = new System.Drawing.Point(114, 187);
-            this.cbNET6.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.cbNET6.Location = new System.Drawing.Point(101, 156);
             this.cbNET6.Name = "cbNET6";
-            this.cbNET6.Size = new System.Drawing.Size(22, 21);
+            this.cbNET6.Size = new System.Drawing.Size(18, 17);
             this.cbNET6.TabIndex = 5;
             this.cbNET6.UseVisualStyleBackColor = true;
             // 
             // lbNET6
             // 
             this.lbNET6.AutoSize = true;
-            this.lbNET6.Location = new System.Drawing.Point(18, 188);
+            this.lbNET6.Location = new System.Drawing.Point(16, 157);
             this.lbNET6.Name = "lbNET6";
-            this.lbNET6.Size = new System.Drawing.Size(71, 18);
+            this.lbNET6.Size = new System.Drawing.Size(63, 15);
             this.lbNET6.TabIndex = 4;
             this.lbNET6.Text = ".NET6.0";
             // 
@@ -379,19 +361,18 @@
             // 
             this.cbNET4.AutoSize = true;
             this.cbNET4.Enabled = false;
-            this.cbNET4.Location = new System.Drawing.Point(114, 101);
-            this.cbNET4.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.cbNET4.Location = new System.Drawing.Point(101, 84);
             this.cbNET4.Name = "cbNET4";
-            this.cbNET4.Size = new System.Drawing.Size(22, 21);
+            this.cbNET4.Size = new System.Drawing.Size(18, 17);
             this.cbNET4.TabIndex = 3;
             this.cbNET4.UseVisualStyleBackColor = true;
             // 
             // lbNET4
             // 
             this.lbNET4.AutoSize = true;
-            this.lbNET4.Location = new System.Drawing.Point(18, 102);
+            this.lbNET4.Location = new System.Drawing.Point(16, 85);
             this.lbNET4.Name = "lbNET4";
-            this.lbNET4.Size = new System.Drawing.Size(71, 18);
+            this.lbNET4.Size = new System.Drawing.Size(63, 15);
             this.lbNET4.TabIndex = 2;
             this.lbNET4.Text = ".NET4.0";
             // 
@@ -399,19 +380,18 @@
             // 
             this.cbNET2.AutoSize = true;
             this.cbNET2.Enabled = false;
-            this.cbNET2.Location = new System.Drawing.Point(114, 58);
-            this.cbNET2.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.cbNET2.Location = new System.Drawing.Point(101, 48);
             this.cbNET2.Name = "cbNET2";
-            this.cbNET2.Size = new System.Drawing.Size(22, 21);
+            this.cbNET2.Size = new System.Drawing.Size(18, 17);
             this.cbNET2.TabIndex = 1;
             this.cbNET2.UseVisualStyleBackColor = true;
             // 
             // lbNET2
             // 
             this.lbNET2.AutoSize = true;
-            this.lbNET2.Location = new System.Drawing.Point(18, 59);
+            this.lbNET2.Location = new System.Drawing.Point(16, 49);
             this.lbNET2.Name = "lbNET2";
-            this.lbNET2.Size = new System.Drawing.Size(71, 18);
+            this.lbNET2.Size = new System.Drawing.Size(63, 15);
             this.lbNET2.TabIndex = 0;
             this.lbNET2.Text = ".NET2.0";
             // 
@@ -432,21 +412,18 @@
             this.groupBox3.Controls.Add(this.btnNetwork);
             this.groupBox3.Controls.Add(this.txtServer);
             this.groupBox3.Controls.Add(this.label7);
-            this.groupBox3.Location = new System.Drawing.Point(14, 179);
-            this.groupBox3.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.groupBox3.Location = new System.Drawing.Point(12, 149);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.groupBox3.Size = new System.Drawing.Size(735, 272);
+            this.groupBox3.Size = new System.Drawing.Size(653, 227);
             this.groupBox3.TabIndex = 2;
             this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "软件安装（普通用户）";
+            this.groupBox3.Text = "安装星尘代理（普通用户）";
             // 
             // btnDownloadAll
             // 
-            this.btnDownloadAll.Location = new System.Drawing.Point(369, 85);
-            this.btnDownloadAll.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.btnDownloadAll.Location = new System.Drawing.Point(328, 71);
             this.btnDownloadAll.Name = "btnDownloadAll";
-            this.btnDownloadAll.Size = new System.Drawing.Size(102, 52);
+            this.btnDownloadAll.Size = new System.Drawing.Size(91, 43);
             this.btnDownloadAll.TabIndex = 23;
             this.btnDownloadAll.Text = "下载缓存";
             this.toolTip1.SetToolTip(this.btnDownloadAll, "在网络较好的电脑上把所需要使用的所有组件下载下来");
@@ -456,10 +433,9 @@
             // btnInstallD
             // 
             this.btnInstallD.Enabled = false;
-            this.btnInstallD.Location = new System.Drawing.Point(454, 191);
-            this.btnInstallD.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.btnInstallD.Location = new System.Drawing.Point(394, 159);
             this.btnInstallD.Name = "btnInstallD";
-            this.btnInstallD.Size = new System.Drawing.Size(146, 68);
+            this.btnInstallD.Size = new System.Drawing.Size(124, 57);
             this.btnInstallD.TabIndex = 22;
             this.btnInstallD.Text = "安装NET45版\r\n（最低版）";
             this.btnInstallD.UseVisualStyleBackColor = true;
@@ -467,10 +443,9 @@
             // 
             // btnReport
             // 
-            this.btnReport.Location = new System.Drawing.Point(587, 85);
-            this.btnReport.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.btnReport.Location = new System.Drawing.Point(522, 71);
             this.btnReport.Name = "btnReport";
-            this.btnReport.Size = new System.Drawing.Size(102, 52);
+            this.btnReport.Size = new System.Drawing.Size(91, 43);
             this.btnReport.TabIndex = 21;
             this.btnReport.Text = "上传日志";
             this.toolTip1.SetToolTip(this.btnReport, "直接向平台注册登记本计算机，仅用于无法安装客户端时使用");
@@ -481,19 +456,18 @@
             // 
             this.label10.AutoSize = true;
             this.label10.ForeColor = System.Drawing.Color.Blue;
-            this.label10.Location = new System.Drawing.Point(6, 154);
+            this.label10.Location = new System.Drawing.Point(5, 128);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(710, 18);
+            this.label10.Size = new System.Drawing.Size(592, 15);
             this.label10.TabIndex = 16;
             this.label10.Text = "以下按钮亮起即表示可以安装，优先左边，某个版本安装失败时可以尝试安装其它版本。";
             // 
             // btnUninstall
             // 
             this.btnUninstall.Enabled = false;
-            this.btnUninstall.Location = new System.Drawing.Point(615, 191);
-            this.btnUninstall.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.btnUninstall.Location = new System.Drawing.Point(523, 159);
             this.btnUninstall.Name = "btnUninstall";
-            this.btnUninstall.Size = new System.Drawing.Size(111, 68);
+            this.btnUninstall.Size = new System.Drawing.Size(124, 57);
             this.btnUninstall.TabIndex = 20;
             this.btnUninstall.Text = "卸载软件";
             this.btnUninstall.UseVisualStyleBackColor = true;
@@ -502,10 +476,9 @@
             // btnInstallC
             // 
             this.btnInstallC.Enabled = false;
-            this.btnInstallC.Location = new System.Drawing.Point(306, 191);
-            this.btnInstallC.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.btnInstallC.Location = new System.Drawing.Point(265, 159);
             this.btnInstallC.Name = "btnInstallC";
-            this.btnInstallC.Size = new System.Drawing.Size(135, 68);
+            this.btnInstallC.Size = new System.Drawing.Size(124, 57);
             this.btnInstallC.TabIndex = 19;
             this.btnInstallC.Text = "安装NET8版\r\n（最高版）";
             this.btnInstallC.UseVisualStyleBackColor = true;
@@ -514,10 +487,9 @@
             // btnInstallB
             // 
             this.btnInstallB.Enabled = false;
-            this.btnInstallB.Location = new System.Drawing.Point(158, 191);
-            this.btnInstallB.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.btnInstallB.Location = new System.Drawing.Point(136, 159);
             this.btnInstallB.Name = "btnInstallB";
-            this.btnInstallB.Size = new System.Drawing.Size(135, 68);
+            this.btnInstallB.Size = new System.Drawing.Size(124, 57);
             this.btnInstallB.TabIndex = 18;
             this.btnInstallB.Text = "安装Win7版\r\n（兼容Win10）";
             this.btnInstallB.UseVisualStyleBackColor = true;
@@ -526,10 +498,9 @@
             // btnInstallA
             // 
             this.btnInstallA.Enabled = false;
-            this.btnInstallA.Location = new System.Drawing.Point(8, 191);
-            this.btnInstallA.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.btnInstallA.Location = new System.Drawing.Point(7, 159);
             this.btnInstallA.Name = "btnInstallA";
-            this.btnInstallA.Size = new System.Drawing.Size(135, 68);
+            this.btnInstallA.Size = new System.Drawing.Size(124, 57);
             this.btnInstallA.TabIndex = 13;
             this.btnInstallA.Text = "安装Win10版\r\n（兼容Win11）";
             this.btnInstallA.UseVisualStyleBackColor = true;
@@ -537,28 +508,26 @@
             // 
             // txtTarget
             // 
-            this.txtTarget.Location = new System.Drawing.Point(124, 92);
-            this.txtTarget.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.txtTarget.Location = new System.Drawing.Point(110, 77);
             this.txtTarget.Name = "txtTarget";
             this.txtTarget.ReadOnly = true;
-            this.txtTarget.Size = new System.Drawing.Size(222, 28);
+            this.txtTarget.Size = new System.Drawing.Size(198, 25);
             this.txtTarget.TabIndex = 12;
             // 
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(21, 98);
+            this.label8.Location = new System.Drawing.Point(19, 82);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(98, 18);
+            this.label8.Size = new System.Drawing.Size(82, 15);
             this.label8.TabIndex = 17;
             this.label8.Text = "当前系统：";
             // 
             // btnNetwork
             // 
-            this.btnNetwork.Location = new System.Drawing.Point(587, 25);
-            this.btnNetwork.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.btnNetwork.Location = new System.Drawing.Point(522, 21);
             this.btnNetwork.Name = "btnNetwork";
-            this.btnNetwork.Size = new System.Drawing.Size(102, 52);
+            this.btnNetwork.Size = new System.Drawing.Size(91, 43);
             this.btnNetwork.TabIndex = 16;
             this.btnNetwork.Text = "网络检测";
             this.toolTip1.SetToolTip(this.btnNetwork, "检测本机到平台的网络畅通情况");
@@ -567,19 +536,18 @@
             // 
             // txtServer
             // 
-            this.txtServer.Location = new System.Drawing.Point(117, 36);
-            this.txtServer.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.txtServer.Location = new System.Drawing.Point(104, 30);
             this.txtServer.Name = "txtServer";
-            this.txtServer.Size = new System.Drawing.Size(427, 28);
+            this.txtServer.Size = new System.Drawing.Size(380, 25);
             this.txtServer.TabIndex = 1;
             this.txtServer.Text = "http://x.newlifex.com";
             // 
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(21, 42);
+            this.label7.Location = new System.Drawing.Point(19, 35);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(80, 18);
+            this.label7.Size = new System.Drawing.Size(67, 15);
             this.label7.TabIndex = 0;
             this.label7.Text = "服务器：";
             // 
@@ -589,11 +557,9 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox4.Controls.Add(this.rtbLog);
-            this.groupBox4.Location = new System.Drawing.Point(14, 460);
-            this.groupBox4.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.groupBox4.Location = new System.Drawing.Point(12, 383);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.groupBox4.Size = new System.Drawing.Size(1005, 409);
+            this.groupBox4.Size = new System.Drawing.Size(893, 341);
             this.groupBox4.TabIndex = 3;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "日志";
@@ -601,23 +567,21 @@
             // rtbLog
             // 
             this.rtbLog.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.rtbLog.Location = new System.Drawing.Point(3, 25);
-            this.rtbLog.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.rtbLog.Location = new System.Drawing.Point(3, 21);
             this.rtbLog.Name = "rtbLog";
-            this.rtbLog.Size = new System.Drawing.Size(999, 380);
+            this.rtbLog.Size = new System.Drawing.Size(887, 317);
             this.rtbLog.TabIndex = 0;
             this.rtbLog.Text = "";
             // 
             // FrmMain
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1032, 883);
+            this.ClientSize = new System.Drawing.Size(917, 736);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
-            this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.Name = "FrmMain";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "dotNet安装助手（新生命团队）";

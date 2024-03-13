@@ -5,6 +5,7 @@ using System.IO;
 using System.Net;
 using System.Reflection;
 using System.Security.Cryptography;
+using System.ServiceProcess;
 using Microsoft.Win32;
 using NewLife;
 using NewLife.Log;
@@ -24,46 +25,15 @@ public class NetRuntime
     /// <summary>缓存目录</summary>
     public String CachePath { get; set; } = "../Cache";
 
+    /// <summary>是否强制。如果true，则已安装版本存在也强制安装。默认false</summary>
+    public Boolean Force { get; set; }
+
     public IDictionary<String, String> Hashs { get; set; }
 
     public ITracer Tracer { get; set; }
     #endregion
 
     #region 核心方法
-    public void AutoInstallNet()
-    {
-        var osVer = Environment.OSVersion.Version;
-
-        // WinXP
-        if (osVer.Major <= 5)
-            InstallNet40();
-        // Vista
-        else if (osVer.Major == 6 && osVer.Minor == 0)
-            InstallNet45();
-        else if (osVer.Major == 6 && osVer.Minor == 1)
-        {
-            // Win7
-            if (osVer.Revision <= 7600)
-                InstallNet45();
-            else
-            // Win7Sp1
-            {
-                InstallNet48();
-                InstallNet6();
-            }
-        }
-        // Win10/Win11
-        else if (osVer.Major >= 10)
-        {
-            InstallNet7();
-        }
-        else
-        {
-            InstallNet48();
-            InstallNet7();
-        }
-    }
-
     public Boolean Install(String fileName, String baseUrl = null, String arg = null)
     {
         using var span = Tracer?.NewSpan($"Install-{Path.GetFileNameWithoutExtension(fileName)}", new { fileName, baseUrl });
@@ -266,7 +236,10 @@ public class NetRuntime
         return rs;
     }
 
-    public Boolean InstallNet6(String kind = null)
+    /// <summary>安装.NET6.0</summary>
+    /// <param name="target">目标版本。包括子版本，如6.0.15</param>
+    /// <param name="kind">安装类型。如aspnet/desktop/host</param>
+    public Boolean InstallNet6(String target, String? kind = null)
     {
         using var span = Tracer?.NewSpan(nameof(InstallNet6), null);
 
@@ -277,19 +250,23 @@ public class NetRuntime
         var ver = GetLast(vers, "v6.0", suffix);
 
         // 目标版本
-        var target = new Version("6.0");
-        if (ver >= target)
+        var targetVer = new Version(target);
+        if (!Force && ver >= targetVer)
         {
-            XTrace.WriteLine("已安装最新版 v{0}", ver);
+            WriteLog("已安装最新版 v{0}", ver);
             return false;
         }
 
+#if NET20
         var is64 = IntPtr.Size == 8;
+#else
+        var is64 = Environment.Is64BitOperatingSystem;
+#endif
 
         // win7需要vc2019运行时
         var osVer = Environment.OSVersion.Version;
         var isWin7 = osVer.Major == 6 && osVer.Minor == 1;
-        if (isWin7)
+        if (isWin7 && ver.Major < 6)
         {
             if (is64)
             {
@@ -309,17 +286,17 @@ public class NetRuntime
             switch (kind)
             {
                 case "aspnet":
-                    rs = Install("dotnet-runtime-6.0.16-win-x64.exe");
-                    Install("aspnetcore-runtime-6.0.16-win-x64.exe");
+                    rs = Install($"dotnet-runtime-{target}-win-x64.exe");
+                    rs = Install($"aspnetcore-runtime-{target}-win-x64.exe");
                     break;
                 case "desktop":
-                    rs = Install("windowsdesktop-runtime-6.0.16-win-x64.exe");
+                    rs = Install($"windowsdesktop-runtime-{target}-win-x64.exe");
                     break;
                 case "host":
-                    rs = Install("dotnet-hosting-6.0.16-win.exe");
+                    rs = Install($"dotnet-hosting-{target}-win.exe");
                     break;
                 default:
-                    rs = Install("dotnet-runtime-6.0.16-win-x64.exe");
+                    rs = Install($"dotnet-runtime-{target}-win-x64.exe");
                     break;
             }
         }
@@ -328,17 +305,17 @@ public class NetRuntime
             switch (kind)
             {
                 case "aspnet":
-                    rs = Install("dotnet-runtime-6.0.16-win-x86.exe");
-                    rs = Install("aspnetcore-runtime-6.0.16-win-x86.exe");
+                    rs = Install($"dotnet-runtime-{target}-win-x86.exe");
+                    rs = Install($"aspnetcore-runtime-{target}-win-x86.exe");
                     break;
                 case "desktop":
-                    rs = Install("windowsdesktop-runtime-6.0.16-win-x86.exe");
+                    rs = Install($"windowsdesktop-runtime-{target}-win-x86.exe");
                     break;
                 case "host":
-                    rs = Install("dotnet-hosting-6.0.16-win.exe");
+                    rs = Install($"dotnet-hosting-{target}-win.exe");
                     break;
                 default:
-                    rs = Install("dotnet-runtime-6.0.16-win-x86.exe");
+                    rs = Install($"dotnet-runtime-{target}-win-x86.exe");
                     break;
             }
         }
@@ -424,6 +401,92 @@ public class NetRuntime
         }
 
         return rs;
+    }
+
+    /// <summary>安装.NET8.0</summary>
+    /// <param name="target">目标版本。包括子版本，如6.0.15</param>
+    /// <param name="kind">安装类型。如aspnet/desktop/host</param>
+    public Boolean InstallNet8(String target, String? kind = null)
+    {
+        using var span = Tracer?.NewSpan(nameof(InstallNet7), null);
+
+        var vers = GetNetCore();
+
+        var suffix = "";
+        if (!String.IsNullOrEmpty(kind)) suffix = "-" + kind;
+        var ver = GetLast(vers, "v8.0", suffix);
+
+        // 目标版本
+        var targetVer = new Version(target);
+        if (!Force && ver >= targetVer)
+        {
+            WriteLog("已安装最新版 v{0}", ver);
+            return false;
+        }
+
+#if NET20
+        var is64 = IntPtr.Size == 8;
+#else
+        var is64 = Environment.Is64BitOperatingSystem;
+#endif
+
+        // win7需要vc2019运行时
+        var osVer = Environment.OSVersion.Version;
+        var isWin7 = osVer.Major == 6 && osVer.Minor == 1;
+        if (isWin7 && ver.Major < 6)
+        {
+            if (is64)
+            {
+                Install("Windows6.1-KB3063858-x64.msu", "/win7", "/quiet /norestart");
+                Install("VC_redist.x64.exe", "/vc2019", "/passive");
+            }
+            else
+            {
+                Install("Windows6.1-KB3063858-x86.msu", "/win7", "/quiet /norestart");
+                Install("VC_redist.x86.exe", "/vc2019", "/passive");
+            }
+        }
+
+        if (is64)
+        {
+            switch (kind)
+            {
+                case "aspnet":
+                    Install($"dotnet-runtime-{target}-win-x64.exe");
+                    Install($"aspnetcore-runtime-{target}-win-x64.exe");
+                    break;
+                case "desktop":
+                    Install($"windowsdesktop-runtime-{target}-win-x64.exe");
+                    break;
+                case "host":
+                    Install($"dotnet-hosting-{target}-win.exe");
+                    break;
+                default:
+                    Install($"dotnet-runtime-{target}-win-x64.exe");
+                    break;
+            }
+        }
+        else
+        {
+            switch (kind)
+            {
+                case "aspnet":
+                    Install($"dotnet-runtime-{target}-win-x86.exe");
+                    Install($"aspnetcore-runtime-{target}-win-x86.exe");
+                    break;
+                case "desktop":
+                    Install($"windowsdesktop-runtime-{target}-win-x86.exe");
+                    break;
+                case "host":
+                    Install($"dotnet-hosting-{target}-win.exe");
+                    break;
+                default:
+                    Install($"dotnet-runtime-{target}-win-x86.exe");
+                    break;
+            }
+        }
+
+        return true;
     }
 
     /// <summary>获取所有已安装版本</summary>
@@ -801,5 +864,15 @@ public class NetRuntime
             if (File.Exists(exe)) File.Delete(exe);
         }
     }
+    #endregion
+
+    #region 日志
+    /// <summary>日志</summary>
+    public ILog Log { get; set; } = Logger.Null;
+
+    /// <summary>写日志</summary>
+    /// <param name="format"></param>
+    /// <param name="args"></param>
+    public void WriteLog(String format, params Object?[] args) => Log?.Info($"[NetRuntime]{format}", args);
     #endregion
 }

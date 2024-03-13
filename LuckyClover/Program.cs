@@ -81,9 +81,9 @@ internal class Program
         // 根据操作系统，自动选择安装NET版本
         _menus["net"] = net.AutoInstallNet;
 
-        _menus["net40"] = net.InstallNet40;
-        _menus["net45"] = net.InstallNet45;
-        _menus["net48"] = net.InstallNet48;
+        _menus["net40"] = () => net.InstallNet40();
+        _menus["net45"] = () => net.InstallNet45();
+        _menus["net48"] = () => net.InstallNet48();
 
         var v6 = "6.0.25";
         var v7 = "7.0.14";

@@ -149,11 +149,11 @@ public partial class FrmMain : Form
         }
     }
 
-    NetRuntime GetNetRuntime(Boolean silent = false)
+    NetRuntime GetNetRuntime(Boolean isApp, Boolean silent)
     {
         var net = new NetRuntime
         {
-            BaseUrl = txtServer.Text.EnsureEnd("/") + "dotnet",
+            BaseUrl = txtServer.Text.EnsureEnd("/") + (isApp ? "star" : "dotnet"),
             Silent = silent,
             InstallPath = _installPath,
             Hashs = NetRuntime.LoadMD5s(),
@@ -175,7 +175,7 @@ public partial class FrmMain : Form
 
     private void btnNET4_Click(Object sender, EventArgs e)
     {
-        var net = GetNetRuntime();
+        var net = GetNetRuntime(false, false);
         ThreadPoolX.QueueUserWorkItem(() =>
         {
             var rs = net.InstallNet40();
@@ -188,7 +188,7 @@ public partial class FrmMain : Form
 
     private void btnNET48_Click(Object sender, EventArgs e)
     {
-        var net = GetNetRuntime();
+        var net = GetNetRuntime(false, false);
         ThreadPoolX.QueueUserWorkItem(() =>
         {
             var rs = net.InstallNet48();
@@ -201,10 +201,10 @@ public partial class FrmMain : Form
 
     private void btnNET6_Click(Object sender, EventArgs e)
     {
-        var net = GetNetRuntime();
+        var net = GetNetRuntime(false, false);
         ThreadPoolX.QueueUserWorkItem(() =>
         {
-            var rs = net.InstallNet6();
+            var rs = net.InstallNet6("6.0.28", (txtOS.Text + "").Contains("Server") ? "host" : "desktop");
 
             _timer.Change(0, 30_000);
 
@@ -214,10 +214,10 @@ public partial class FrmMain : Form
 
     private void btnNET8_Click(Object sender, EventArgs e)
     {
-        var net = GetNetRuntime();
+        var net = GetNetRuntime(false, false);
         ThreadPoolX.QueueUserWorkItem(() =>
         {
-            var rs = net.InstallNet7();
+            var rs = net.InstallNet8("8.0.3", (txtOS.Text + "").Contains("Server") ? "host" : "desktop");
 
             _timer.Change(0, 30_000);
 
@@ -230,7 +230,7 @@ public partial class FrmMain : Form
         var rs = MessageBox.Show("实在安装不上NET4时的终极大招，可能对系统文件有损坏！\r\n修复过程中可能自动重启系统，是否确定继续？", "危险提示", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
         if (rs == DialogResult.Cancel) return;
 
-        var net = GetNetRuntime();
+        var net = GetNetRuntime(false, false);
         ThreadPoolX.QueueUserWorkItem(() =>
         {
             net.Install("netfxrepairtool.exe", null, "/repair /passive");
@@ -251,7 +251,8 @@ public partial class FrmMain : Form
         using var span = _tracer?.NewSpan(nameof(btnNetwork_Click));
         try
         {
-            url = url.EnsureEnd("/") + "api";
+            //url = url.EnsureEnd("/") + "api";
+            url = url.EnsureEnd("/");
             var client = new WebClientX();
             var html = client.GetHtml(url);
             if (html.IsNullOrEmpty()) return;
@@ -269,7 +270,7 @@ public partial class FrmMain : Form
 
     private void btnDownloadAll_Click(Object sender, EventArgs e)
     {
-        var net = GetNetRuntime();
+        var net = GetNetRuntime(false, false);
         XTrace.WriteLine("目标目录：{0}", net.CachePath);
 
         // 检测缓存目录所有文件，如果哈希不对，直接删除
@@ -356,6 +357,7 @@ public partial class FrmMain : Form
                 btnInstallA.Enabled = true;
                 btnInstallB.Enabled = true;
                 btnInstallC.Enabled = true;
+                btnInstallD.Enabled = true;
                 str = "Win10/Win11";
             }
             else
@@ -452,10 +454,10 @@ public partial class FrmMain : Form
         var url = txtServer.Text;
 
         var server = txtServer.Text;
-        var net = GetNetRuntime(true);
+        var net = GetNetRuntime(false, true);
         ThreadPoolX.QueueUserWorkItem(() =>
         {
-            net.InstallNet7();
+            net.InstallNet8("8.0.3", (txtOS.Text + "").Contains("Server") ? "host" : "desktop");
             _timer.Change(1000, 30_000);
 
             try
@@ -467,6 +469,7 @@ public partial class FrmMain : Form
                 XTrace.WriteException(ex);
             }
 
+            net = GetNetRuntime(true, true);
             var rs = net.Install("staragent80.zip", null);
             if (rs) rs = InstallService(svc, url);
             _timer.Change(1000, 30_000);
@@ -498,10 +501,10 @@ public partial class FrmMain : Form
         var url = txtServer.Text;
 
         var server = txtServer.Text;
-        var net = GetNetRuntime(true);
+        var net = GetNetRuntime(false, true);
         ThreadPoolX.QueueUserWorkItem(() =>
         {
-            net.InstallNet6();
+            net.InstallNet6("6.0.28", (txtOS.Text + "").Contains("Server") ? "host" : "desktop");
             _timer.Change(1000, 30_000);
 
             try
@@ -513,8 +516,8 @@ public partial class FrmMain : Form
                 XTrace.WriteException(ex);
             }
 
+            net = GetNetRuntime(true, true);
             var rs = net.Install("staragent60.zip", null);
-
             if (rs) rs = InstallService(svc, url);
             _timer.Change(1000, 30_000);
 
@@ -545,12 +548,9 @@ public partial class FrmMain : Form
         var url = txtServer.Text;
 
         var server = txtServer.Text;
-        var net = GetNetRuntime(true);
+        var net = GetNetRuntime(true, true);
         ThreadPoolX.QueueUserWorkItem(() =>
         {
-            net.InstallNet40();
-            _timer.Change(1000, 30_000);
-
             try
             {
                 if (svc.IsRunning(_serviceName)) svc.Stop(_serviceName);
@@ -560,7 +560,7 @@ public partial class FrmMain : Form
                 XTrace.WriteException(ex);
             }
 
-            var rs = net.Install("staragent45.zip", null);
+            var rs = net.Install("staragent80.zip", null);
             if (rs) rs = InstallService(svc, url);
             _timer.Change(1000, 30_000);
 
@@ -591,7 +591,7 @@ public partial class FrmMain : Form
         var url = txtServer.Text;
 
         var server = txtServer.Text;
-        var net = GetNetRuntime(true);
+        var net = GetNetRuntime(true, true);
         ThreadPoolX.QueueUserWorkItem(() =>
         {
             try
