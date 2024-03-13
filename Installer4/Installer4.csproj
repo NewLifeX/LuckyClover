@@ -3,7 +3,7 @@
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net4.0</TargetFramework>
-    <AssemblyName>Installer</AssemblyName>
+    <AssemblyName>LuckyClover</AssemblyName>
     <RootNamespace>Installer</RootNamespace>
     <AssemblyTitle>dotNet安装助手（新生命团队）</AssemblyTitle>
     <Description>检测并安装主流dotNet运行时，作为应用系统安装前置检测工具</Description>

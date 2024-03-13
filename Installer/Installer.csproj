@@ -7,7 +7,7 @@
     <ProjectGuid>{12503268-DD9B-4A68-B53C-EDCD71F2D485}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>Installer</RootNamespace>
-    <AssemblyName>Installer</AssemblyName>
+    <AssemblyName>LuckyClover</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>false</Deterministic>
