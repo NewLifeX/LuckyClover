@@ -1,0 +1,63 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net45</TargetFramework>
+    <AssemblyName>LuckyClover</AssemblyName>
+    <RootNamespace>Installer</RootNamespace>
+    <AssemblyTitle>dotNet安装助手（新生命团队）</AssemblyTitle>
+    <Description>检测并安装主流dotNet运行时，作为应用系统安装前置检测工具</Description>
+    <Company>新生命开发团队</Company>
+    <Copyright>©2002-2024 NewLife</Copyright>
+    <VersionPrefix>1.2</VersionPrefix>
+    <VersionSuffix>$([System.DateTime]::Now.ToString(`yyyy.MMdd`))</VersionSuffix>
+    <Version>$(VersionPrefix).$(VersionSuffix)</Version>
+    <FileVersion>$(Version)</FileVersion>
+    <AssemblyVersion>$(VersionPrefix).*</AssemblyVersion>
+    <Deterministic>false</Deterministic>
+    <OutputPath>..\Bin\Installer45</OutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
+    <UseWindowsForms>true</UseWindowsForms>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\Installer4\Program.cs" Link="Program.cs" />
+    <Compile Include="..\Installer4\Setting.cs" Link="Setting.cs" />
+    <Compile Include="..\Installer\Advapi32.cs" Link="Advapi32.cs" />
+    <Compile Include="..\Installer\DownloadHelper.cs" Link="DownloadHelper.cs" />
+    <Compile Include="..\Installer\FrmMain.cs" Link="FrmMain.cs" />
+    <Compile Include="..\Installer\FrmMain.Designer.cs" Link="FrmMain.Designer.cs" />
+    <Compile Include="..\Installer\Helper.cs" Link="Helper.cs" />
+    <Compile Include="..\Installer\NetRuntime.cs" Link="NetRuntime.cs" />
+    <Compile Include="..\Installer\VerInfo.cs" Link="VerInfo.cs" />
+    <Compile Include="..\Installer\WindowsService.cs" Link="WindowsService.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="..\LuckyClover\res\md5.txt" Link="res\md5.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="..\Installer\FrmMain.resx" Link="FrmMain.resx" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="NewLife.Core" Version="10.8.2024.303" />
+    <PackageReference Include="NewLife.Stardust" Version="2.9.2024.218" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="res\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="..\LuckyClover\res\CertMgr.Exe" Link="res\CertMgr.Exe" />
+    <EmbeddedResource Include="..\LuckyClover\res\MicrosoftRootCertificateAuthority2011.cer" Link="res\MicrosoftRootCertificateAuthority2011.cer" />
+  </ItemGroup>
+
+</Project>

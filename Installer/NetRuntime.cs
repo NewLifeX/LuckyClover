@@ -5,7 +5,6 @@ using System.IO;
 using System.Net;
 using System.Reflection;
 using System.Security.Cryptography;
-using System.ServiceProcess;
 using Microsoft.Win32;
 using NewLife;
 using NewLife.Log;
