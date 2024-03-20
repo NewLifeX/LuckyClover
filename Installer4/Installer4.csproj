@@ -32,6 +32,7 @@
     <Compile Include="..\Installer\FrmMain.Designer.cs" Link="FrmMain.Designer.cs" />
     <Compile Include="..\Installer\Helper.cs" Link="Helper.cs" />
     <Compile Include="..\Installer\NetRuntime.cs" Link="NetRuntime.cs" />
+    <Compile Include="..\Installer\Setting.cs" Link="Setting.cs" />
     <Compile Include="..\Installer\VerInfo.cs" Link="VerInfo.cs" />
     <Compile Include="..\Installer\WindowsService.cs" Link="WindowsService.cs" />
   </ItemGroup>

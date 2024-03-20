@@ -188,6 +188,7 @@ internal class Program
 
             Console.WriteLine("Zip压缩多个文件到 {0}", dst);
 
+            // 外部脚本决定是否删除
             //if (File.Exists(dst)) File.Delete(dst);
 
             var compressionLevel = CompressionLevel.SmallestSize;

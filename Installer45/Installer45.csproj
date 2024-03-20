@@ -27,13 +27,13 @@
 
   <ItemGroup>
     <Compile Include="..\Installer4\Program.cs" Link="Program.cs" />
-    <Compile Include="..\Installer4\Setting.cs" Link="Setting.cs" />
     <Compile Include="..\Installer\Advapi32.cs" Link="Advapi32.cs" />
     <Compile Include="..\Installer\DownloadHelper.cs" Link="DownloadHelper.cs" />
     <Compile Include="..\Installer\FrmMain.cs" Link="FrmMain.cs" />
     <Compile Include="..\Installer\FrmMain.Designer.cs" Link="FrmMain.Designer.cs" />
     <Compile Include="..\Installer\Helper.cs" Link="Helper.cs" />
     <Compile Include="..\Installer\NetRuntime.cs" Link="NetRuntime.cs" />
+    <Compile Include="..\Installer\Setting.cs" Link="Setting.cs" />
     <Compile Include="..\Installer\VerInfo.cs" Link="VerInfo.cs" />
     <Compile Include="..\Installer\WindowsService.cs" Link="WindowsService.cs" />
   </ItemGroup>

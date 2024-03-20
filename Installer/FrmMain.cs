@@ -415,10 +415,14 @@ public partial class FrmMain : Form
             File.WriteAllText(txt, url);
         }
 
+        var args = "-install";
+        var set = Setting.Current;
+        if (!set.Server.IsNullOrEmpty()) args += " -server " + set.Server;
+
         var si = new ProcessStartInfo
         {
             FileName = file,
-            Arguments = "-install",
+            Arguments = args,
 
             WindowStyle = ProcessWindowStyle.Hidden,
             CreateNoWindow = true,
