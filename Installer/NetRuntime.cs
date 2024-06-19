@@ -49,7 +49,7 @@ public class NetRuntime
         if (!String.IsNullOrEmpty(CachePath)) fullFile = Path.Combine(CachePath, fileName);
 
         var hash = "";
-        if (Hashs != null && !Hashs.TryGetValue(fileName, out hash)) hash = null;
+        if (Hashs == null || !Hashs.TryGetValue(fileName, out hash)) hash = null;
 
         // 检查已存在文件的MD5哈希，不正确则重新下载
         var fi = new FileInfo(fullFile);
@@ -61,9 +61,9 @@ public class NetRuntime
         if (fi == null || !fi.Exists)
         {
             if (String.IsNullOrEmpty(baseUrl))
-                baseUrl = BaseUrl;
+                baseUrl = BaseUrl?.TrimEnd('/');
             else
-                baseUrl = BaseUrl + baseUrl;
+                baseUrl = BaseUrl?.TrimEnd('/') + '/' + baseUrl.TrimStart('/').TrimEnd('/');
 
             var url = $"{baseUrl}/{fileName}";
             XTrace.WriteLine("正在下载：{0}", url);

@@ -1,4 +1,4 @@
-## 幸运四叶草 LuckClover
+## 幸运四叶草 LuckyClover
 基于低版本运行时，自动安装主流.NET运行时。
 
 ## .NET版本识别

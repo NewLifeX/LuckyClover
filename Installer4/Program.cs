@@ -31,7 +31,7 @@ internal static class Program
         Application.Run(new FrmMain());
     }
 
-    const String APP_NAME = "LuckClover";
+    const String APP_NAME = "LuckyClover";
     static TimerX _timer;
     static StarClient _Client;
     private static void StartClient()
@@ -93,7 +93,7 @@ internal static class Program
             //_timer.Period = 30_000;
             if (_timer.Period < 30_000) _timer.Period += 5_000;
 
-            XTrace.Log?.Error(ex.Message);
+            XTrace.Log?.Error(ex.ToString());
 
             return;
         }
