@@ -3,6 +3,7 @@ using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Installer;
 using NewLife;
 using NewLife.Http;
 using NewLife.Log;
@@ -19,10 +20,10 @@ public class DownloadHelper
     {
         XTrace.WriteLine("开始检测下载所有组件");
 
-        await Check("dotnet-runtime-7.0.9-win-x64.exe");
-        await Check("dotnet-runtime-7.0.9-win-x86.exe");
-        await Check("dotnet-runtime-6.0.19-win-x64.exe");
-        await Check("dotnet-runtime-6.0.19-win-x86.exe");
+        await Check($"dotnet-runtime-{NetRuntime.Version8}-win-x64.exe");
+        await Check($"dotnet-runtime-{NetRuntime.Version8}-win-x86.exe");
+        await Check($"dotnet-runtime-{NetRuntime.Version6}-win-x64.exe");
+        await Check($"dotnet-runtime-{NetRuntime.Version6}-win-x86.exe");
 
         await Check("ndp481-x86-x64-allos-enu.exe");
         await Check("ndp481-x86-x64-allos-chs.exe");
@@ -38,9 +39,9 @@ public class DownloadHelper
         await Check("win7/Windows6.1-KB3063858-x86.msu");
         await Check("win7/MsRootCert.zip");
 
-        await Check("aspnetcore-runtime-6.0.20-1-loongarch64.deb");
-        await Check("aspnetcore-runtime-7.0.9-linux-arm64.tar.gz");
-        await Check("aspnetcore-runtime-7.0.9-linux-x64.tar.gz");
+        await Check("aspnetcore-runtime-8.0.5-linux-loongarch64.tar.gz");
+        await Check($"aspnetcore-runtime-{NetRuntime.Version8}-linux-arm64.tar.gz");
+        await Check($"aspnetcore-runtime-{NetRuntime.Version8}-linux-x64.tar.gz");
         await Check("dotnet-sdk-3.1.7-rc1-mips64el.deb");
 
         XTrace.WriteLine("所有组件下载完成！");

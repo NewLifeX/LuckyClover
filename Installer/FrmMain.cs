@@ -204,7 +204,7 @@ public partial class FrmMain : Form
         var net = GetNetRuntime(false, false);
         ThreadPoolX.QueueUserWorkItem(() =>
         {
-            var rs = net.InstallNet6("6.0.28", (txtOS.Text + "").Contains("Server") ? "host" : "desktop");
+            var rs = net.InstallNet6(NetRuntime.Version6, (txtOS.Text + "").Contains("Server") ? "host" : "desktop");
 
             _timer.Change(0, 30_000);
 
@@ -217,7 +217,7 @@ public partial class FrmMain : Form
         var net = GetNetRuntime(false, false);
         ThreadPoolX.QueueUserWorkItem(() =>
         {
-            var rs = net.InstallNet8("8.0.3", (txtOS.Text + "").Contains("Server") ? "host" : "desktop");
+            var rs = net.InstallNet8(NetRuntime.Version8, (txtOS.Text + "").Contains("Server") ? "host" : "desktop");
 
             _timer.Change(0, 30_000);
 
@@ -461,7 +461,7 @@ public partial class FrmMain : Form
         var net = GetNetRuntime(false, true);
         ThreadPoolX.QueueUserWorkItem(() =>
         {
-            net.InstallNet8("8.0.3", (txtOS.Text + "").Contains("Server") ? "host" : "desktop");
+            net.InstallNet8(NetRuntime.Version8, (txtOS.Text + "").Contains("Server") ? "host" : "desktop");
             _timer.Change(1000, 30_000);
 
             try
@@ -508,7 +508,7 @@ public partial class FrmMain : Form
         var net = GetNetRuntime(false, true);
         ThreadPoolX.QueueUserWorkItem(() =>
         {
-            net.InstallNet6("6.0.28", (txtOS.Text + "").Contains("Server") ? "host" : "desktop");
+            net.InstallNet6(NetRuntime.Version6, (txtOS.Text + "").Contains("Server") ? "host" : "desktop");
             _timer.Change(1000, 30_000);
 
             try

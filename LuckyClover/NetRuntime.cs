@@ -13,6 +13,12 @@ namespace LuckyClover;
 /// <summary>dotNet运行时</summary>
 public class NetRuntime
 {
+    #region 静态定义
+    public const String Version6 = "6.0.31";
+    public const String Version7 = "7.0.20";
+    public const String Version8 = "8.0.6";
+    #endregion
+
     #region 属性
     /// <summary>基准路径</summary>
     public String BaseUrl { get; set; } = "http://x.newlifex.com/dotnet";
@@ -51,18 +57,18 @@ public class NetRuntime
             // Win7Sp1
             {
                 InstallNet48();
-                InstallNet6("6.0.28");
+                InstallNet6(Version6);
             }
         }
         // Win10/Win11
         else if (osVer.Major >= 10)
         {
-            InstallNet8("8.0.3");
+            InstallNet8(Version8);
         }
         else
         {
             InstallNet48();
-            InstallNet8("8.0.3");
+            InstallNet8(Version8);
         }
     }
     #endregion

@@ -13,6 +13,12 @@ namespace Installer;
 
 public class NetRuntime
 {
+    #region 静态定义
+    public const String Version6 = "6.0.31";
+    public const String Version7 = "7.0.20";
+    public const String Version8 = "8.0.6";
+    #endregion
+
     #region 属性
     public String BaseUrl { get; set; }
 
@@ -333,7 +339,7 @@ public class NetRuntime
         return rs;
     }
 
-    public Boolean InstallNet7(String kind = null)
+    public Boolean InstallNet7(String target, String? kind = null)
     {
         using var span = Tracer?.NewSpan(nameof(InstallNet7), null);
 
@@ -344,8 +350,8 @@ public class NetRuntime
         var ver = GetLast(vers, "v7.0", suffix);
 
         // 目标版本
-        var target = new Version("7.0");
-        if (ver >= target)
+        var targetVer = new Version(target);
+        if (!Force && ver >= targetVer)
         {
             XTrace.WriteLine("已安装最新版 v{0}", ver);
             return false;
@@ -376,17 +382,17 @@ public class NetRuntime
             switch (kind)
             {
                 case "aspnet":
-                    rs = Install("dotnet-runtime-7.0.9-win-x64.exe");
-                    rs = Install("aspnetcore-runtime-7.0.9-win-x64.exe");
+                    rs = Install($"dotnet-runtime-{target}-win-x64.exe");
+                    rs = Install($"aspnetcore-runtime-{target}-win-x64.exe");
                     break;
                 case "desktop":
-                    rs = Install("windowsdesktop-runtime-7.0.9-win-x64.exe");
+                    rs = Install($"windowsdesktop-runtime-{target}-win-x64.exe");
                     break;
                 case "host":
-                    rs = Install("dotnet-hosting-7.0.9-win.exe");
+                    rs = Install($"dotnet-hosting-{target}-win.exe");
                     break;
                 default:
-                    rs = Install("dotnet-runtime-7.0.9-win-x64.exe");
+                    rs = Install($"dotnet-runtime-{target}-win-x64.exe");
                     break;
             }
         }
@@ -395,17 +401,17 @@ public class NetRuntime
             switch (kind)
             {
                 case "aspnet":
-                    rs = Install("dotnet-runtime-7.0.9-win-x86.exe");
-                    rs = Install("aspnetcore-runtime-7.0.9-win-x86.exe");
+                    rs = Install($"dotnet-runtime-{target}-win-x86.exe");
+                    rs = Install($"aspnetcore-runtime-{target}-win-x86.exe");
                     break;
                 case "desktop":
-                    rs = Install("windowsdesktop-runtime-7.0.9-win-x86.exe");
+                    rs = Install($"windowsdesktop-runtime-{target}-win-x86.exe");
                     break;
                 case "host":
-                    rs = Install("dotnet-hosting-7.0.9-win.exe");
+                    rs = Install($"dotnet-hosting-{target}-win.exe");
                     break;
                 default:
-                    rs = Install("dotnet-runtime-7.0.9-win-x86.exe");
+                    rs = Install($"dotnet-runtime-{target}-win-x86.exe");
                     break;
             }
         }
