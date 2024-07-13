@@ -32,7 +32,6 @@
     <Compile Include="..\Installer\FrmMain.Designer.cs" Link="FrmMain.Designer.cs" />
     <Compile Include="..\Installer\Helper.cs" Link="Helper.cs" />
     <Compile Include="..\Installer\NetRuntime.cs" Link="NetRuntime.cs" />
-    <Compile Include="..\Installer\Setting.cs" Link="Setting.cs" />
     <Compile Include="..\Installer\VerInfo.cs" Link="VerInfo.cs" />
     <Compile Include="..\Installer\WindowsService.cs" Link="WindowsService.cs" />
   </ItemGroup>
@@ -46,8 +45,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="NewLife.Core" Version="10.10.2024.501-net40" />
-    <PackageReference Include="NewLife.Stardust" Version="2.9.2024.613-beta1015" />
+    <PackageReference Include="NewLife.Stardust" Version="3.0.2024.711-beta0023" />
   </ItemGroup>
 
   <ItemGroup>
