@@ -480,7 +480,7 @@
             this.btnInstallC.Name = "btnInstallC";
             this.btnInstallC.Size = new System.Drawing.Size(124, 57);
             this.btnInstallC.TabIndex = 19;
-            this.btnInstallC.Text = "安装NET8版\r\n（最高版）";
+            this.btnInstallC.Text = "安装NET9版\r\n（最高版）";
             this.btnInstallC.UseVisualStyleBackColor = true;
             this.btnInstallC.Click += new System.EventHandler(this.btnInstallC_Click);
             // 

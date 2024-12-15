@@ -552,9 +552,12 @@ public partial class FrmMain : Form
         var url = txtServer.Text;
 
         var server = txtServer.Text;
-        var net = GetNetRuntime(true, true);
+        var net = GetNetRuntime(false, true);
         ThreadPoolX.QueueUserWorkItem(() =>
         {
+            net.InstallNet8(NetRuntime.Version8, (txtOS.Text + "").Contains("Server") ? "host" : "desktop");
+            _timer.Change(1000, 30_000);
+
             try
             {
                 if (svc.IsRunning(_serviceName)) svc.Stop(_serviceName);
@@ -564,7 +567,8 @@ public partial class FrmMain : Form
                 XTrace.WriteException(ex);
             }
 
-            var rs = net.Install("staragent80.zip", null);
+            net = GetNetRuntime(true, true);
+            var rs = net.Install("staragent90.zip", null);
             if (rs) rs = InstallService(svc, url);
             _timer.Change(1000, 30_000);
 

@@ -64,7 +64,7 @@ public class NetRuntime
         // Win10/Win11
         else if (osVer.Major >= 10)
         {
-            InstallNet("v8.0", Version8, "desktop");
+            InstallNet("v9.0", Version9, "desktop");
         }
         else
         {
@@ -98,7 +98,9 @@ public class NetRuntime
         }
         if (fi == null || !fi.Exists)
         {
-            if (String.IsNullOrEmpty(baseUrl))
+            // 版本相对地址为空，或者主地址已经包含版本相对地址，则直接使用主地址，否则拼接基地址
+            if (String.IsNullOrEmpty(baseUrl) ||
+                !String.IsNullOrEmpty(BaseUrl) && (BaseUrl.EndsWith(baseUrl) || BaseUrl.EndsWith(baseUrl + "/")))
                 baseUrl = BaseUrl?.TrimEnd('/');
             else
                 baseUrl = BaseUrl?.TrimEnd('/') + '/' + baseUrl.TrimStart('/').TrimEnd('/');
@@ -401,17 +403,17 @@ public class NetRuntime
             switch (kind)
             {
                 case "aspnet":
-                    rs = Install($"dotnet-runtime-{target}-win-x64.exe");
-                    rs = Install($"aspnetcore-runtime-{target}-win-x64.exe");
+                    rs = Install($"dotnet-runtime-{target}-win-x64.exe", target);
+                    rs = Install($"aspnetcore-runtime-{target}-win-x64.exe", target);
                     break;
                 case "desktop":
-                    rs = Install($"windowsdesktop-runtime-{target}-win-x64.exe");
+                    rs = Install($"windowsdesktop-runtime-{target}-win-x64.exe", target);
                     break;
                 case "host":
-                    rs = Install($"dotnet-hosting-{target}-win.exe");
+                    rs = Install($"dotnet-hosting-{target}-win.exe", target);
                     break;
                 default:
-                    rs = Install($"dotnet-runtime-{target}-win-x64.exe");
+                    rs = Install($"dotnet-runtime-{target}-win-x64.exe", target);
                     break;
             }
         }
@@ -420,17 +422,17 @@ public class NetRuntime
             switch (kind)
             {
                 case "aspnet":
-                    rs = Install($"dotnet-runtime-{target}-win-x86.exe");
-                    rs = Install($"aspnetcore-runtime-{target}-win-x86.exe");
+                    rs = Install($"dotnet-runtime-{target}-win-x86.exe", target);
+                    rs = Install($"aspnetcore-runtime-{target}-win-x86.exe", target);
                     break;
                 case "desktop":
-                    rs = Install($"windowsdesktop-runtime-{target}-win-x86.exe");
+                    rs = Install($"windowsdesktop-runtime-{target}-win-x86.exe", target);
                     break;
                 case "host":
-                    rs = Install($"dotnet-hosting-{target}-win.exe");
+                    rs = Install($"dotnet-hosting-{target}-win.exe", target);
                     break;
                 default:
-                    rs = Install($"dotnet-runtime-{target}-win-x86.exe");
+                    rs = Install($"dotnet-runtime-{target}-win-x86.exe", target);
                     break;
             }
         }
