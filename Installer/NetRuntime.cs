@@ -14,14 +14,17 @@ namespace Installer;
 public class NetRuntime
 {
     #region 静态定义
-    public const String Version6 = "6.0.33";
+    public const String Version6 = "6.0.36";
     public const String Version7 = "7.0.20";
-    public const String Version8 = "8.0.8";
+    public const String Version8 = "8.0.11";
+    public const String Version9 = "9.0.0";
     #endregion
 
     #region 属性
-    public String BaseUrl { get; set; }
+    /// <summary>基准路径</summary>
+    public String BaseUrl { get; set; } = "http://x.newlifex.com/dotnet";
 
+    /// <summary>静默安装</summary>
     public Boolean Silent { get; set; }
 
     /// <summary>应用安装目录</summary>
@@ -33,6 +36,7 @@ public class NetRuntime
     /// <summary>是否强制。如果true，则已安装版本存在也强制安装。默认false</summary>
     public Boolean Force { get; set; }
 
+    /// <summary>文件哈希。用于校验下载文件的完整性</summary>
     public IDictionary<String, String> Hashs { get; set; }
 
     public ITracer Tracer { get; set; }
@@ -43,7 +47,7 @@ public class NetRuntime
     {
         using var span = Tracer?.NewSpan($"Install-{Path.GetFileNameWithoutExtension(fileName)}", new { fileName, baseUrl });
 
-        XTrace.WriteLine("下载 {0}", fileName);
+        WriteLog("下载 {0}", fileName);
 
         var fullFile = fileName;
         if (!String.IsNullOrEmpty(CachePath)) fullFile = Path.Combine(CachePath, fileName);
@@ -66,19 +70,19 @@ public class NetRuntime
                 baseUrl = BaseUrl?.TrimEnd('/') + '/' + baseUrl.TrimStart('/').TrimEnd('/');
 
             var url = $"{baseUrl}/{fileName}";
-            XTrace.WriteLine("正在下载：{0}", url);
+            WriteLog("正在下载：{0}", url);
 
             fullFile.EnsureDirectory(true);
 
             var http = new WebClient();
             http.DownloadFile(url, fullFile);
-            XTrace.WriteLine("MD5: {0}", GetMD5(fullFile));
+            WriteLog("MD5: {0}", GetMD5(fullFile));
         }
 
         // 解压缩
         if (fileName.EndsWithIgnoreCase(".zip"))
         {
-            XTrace.WriteLine("正在解压缩到：{0}", InstallPath);
+            WriteLog("正在解压缩到：{0}", InstallPath);
 
             fullFile.AsFile().Extract(InstallPath.EnsureDirectory(false), true);
 
@@ -89,20 +93,20 @@ public class NetRuntime
         if (String.IsNullOrEmpty(arg)) arg = "/passive /promptrestart";
         if (!Silent) arg = null;
 
-        XTrace.WriteLine("正在安装：{0} {1}", fullFile, arg);
+        WriteLog("正在安装：{0} {1}", fullFile, arg);
         var p = Process.Start(fullFile, arg);
         if (p.WaitForExit(600_000))
         {
             if (p.ExitCode == 0)
-                XTrace.WriteLine("安装完成！");
+                WriteLog("安装完成！");
             else
-                XTrace.WriteLine("安装失败！ExitCode={0}", p.ExitCode);
+                WriteLog("安装失败！ExitCode={0}", p.ExitCode);
             Environment.ExitCode = p.ExitCode;
             return p.ExitCode == 0;
         }
         else
         {
-            XTrace.WriteLine("安装超时！");
+            WriteLog("安装超时！");
             Environment.ExitCode = 400;
             return false;
         }
@@ -113,7 +117,7 @@ public class NetRuntime
         var ver = new Version();
         if (vers.Count > 0)
         {
-            //XTrace.WriteLine("已安装版本：");
+            //WriteLog("已安装版本：");
             foreach (var item in vers)
             {
                 if ((String.IsNullOrEmpty(prefix) || item.Name.StartsWith(prefix)) &&
@@ -127,9 +131,9 @@ public class NetRuntime
                     if (v > ver) ver = v;
                 }
 
-                //XTrace.WriteLine(item.Name);
+                //WriteLog(item.Name);
             }
-            //XTrace.WriteLine("");
+            //WriteLog("");
         }
 
         return ver;
@@ -141,7 +145,6 @@ public class NetRuntime
 
         var vers = new List<VerInfo>();
         vers.AddRange(Get1To45VersionFromRegistry());
-        vers.AddRange(Get45PlusFromRegistry());
 
         var ver = GetLast(vers, null);
 
@@ -149,15 +152,14 @@ public class NetRuntime
         var target = new Version("4.0");
         if (ver >= target)
         {
-            XTrace.WriteLine("已安装最新版 v{0}", ver);
+            WriteLog("已安装最新版 v{0}", ver);
             return true;
         }
-
 
         var rs = Install("dotNetFx40_Full_x86_x64.exe", null);
         if (!rs)
         {
-            XTrace.WriteLine("安装NET4失败，准备清理环境后重新安装！");
+            WriteLog("安装NET4失败，准备清理环境后重新安装！");
 
             CleanForNet();
 
@@ -181,7 +183,7 @@ public class NetRuntime
         var target = new Version("4.5");
         if (ver >= target)
         {
-            XTrace.WriteLine("已安装最新版 v{0}", ver);
+            WriteLog("已安装最新版 v{0}", ver);
             return false;
         }
 
@@ -190,7 +192,7 @@ public class NetRuntime
 
         if (!rs)
         {
-            XTrace.WriteLine("安装NET45失败，准备清理环境后重新安装！");
+            WriteLog("安装NET45失败，准备清理环境后重新安装！");
 
             CleanForNet();
 
@@ -216,7 +218,7 @@ public class NetRuntime
         var target = osVer.Major >= 10 ? new Version("4.8.1") : new Version("4.8");
         if (ver >= target)
         {
-            XTrace.WriteLine("已安装最新版 v{0}", ver);
+            WriteLog("已安装最新版 v{0}", ver);
             return true;
         }
 
@@ -353,7 +355,7 @@ public class NetRuntime
         var targetVer = new Version(target);
         if (!Force && ver >= targetVer)
         {
-            XTrace.WriteLine("已安装最新版 v{0}", ver);
+            WriteLog("已安装最新版 v{0}", ver);
             return false;
         }
 
@@ -829,12 +831,12 @@ public class NetRuntime
             //    {
             //        try
             //        {
-            //            XTrace.WriteLine("清理：{0}", file);
+            //            WriteLog("清理：{0}", file);
             //            File.Move(file, file + ".bak");
             //        }
             //        catch
             //        {
-            //            XTrace.WriteLine("重命名文件失败，请手工重命名：{0}", file);
+            //            WriteLog("重命名文件失败，请手工重命名：{0}", file);
             //        }
             //    }
             //}

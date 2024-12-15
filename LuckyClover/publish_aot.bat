@@ -1,1 +1,1 @@
-dotnet publish -f net8.0 -c Release --runtime win-x64
+dotnet publish -f net9.0 -c Release --runtime win-x64

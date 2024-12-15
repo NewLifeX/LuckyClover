@@ -88,18 +88,23 @@ internal class Program
         var v6 = NetRuntime.Version6;
         var v7 = NetRuntime.Version7;
         var v8 = NetRuntime.Version8;
-        _menus["net8"] = () => net.InstallNet8(v8, null);
-        _menus["net8-desktop"] = () => net.InstallNet8(v8, "desktop");
-        _menus["net8-aspnet"] = () => net.InstallNet8(v8, "aspnet");
-        _menus["net8-host"] = () => net.InstallNet8(v8, "host");
-        _menus["net6"] = () => net.InstallNet6(v6, null);
-        _menus["net6-desktop"] = () => net.InstallNet6(v6, "desktop");
-        _menus["net6-aspnet"] = () => net.InstallNet6(v6, "aspnet");
-        _menus["net6-host"] = () => net.InstallNet6(v6, "host");
-        _menus["net7"] = () => net.InstallNet7(v7, null);
-        _menus["net7-desktop"] = () => net.InstallNet7(v7, "desktop");
-        _menus["net7-aspnet"] = () => net.InstallNet7(v7, "aspnet");
-        _menus["net7-host"] = () => net.InstallNet7(v7, "host");
+        var v9 = NetRuntime.Version9;
+        _menus["net9"] = () => net.InstallNet("v9.0", v9, null);
+        _menus["net9-desktop"] = () => net.InstallNet("v9.0", v9, "desktop");
+        _menus["net9-aspnet"] = () => net.InstallNet("v9.0", v9, "aspnet");
+        _menus["net9-host"] = () => net.InstallNet("v9.0", v9, "host");
+        _menus["net8"] = () => net.InstallNet("v8.0", v8, null);
+        _menus["net8-desktop"] = () => net.InstallNet("v8.0", v8, "desktop");
+        _menus["net8-aspnet"] = () => net.InstallNet("v8.0", v8, "aspnet");
+        _menus["net8-host"] = () => net.InstallNet("v8.0", v8, "host");
+        _menus["net6"] = () => net.InstallNet("v6.0", v6, null);
+        _menus["net6-desktop"] = () => net.InstallNet("v6.0", v6, "desktop");
+        _menus["net6-aspnet"] = () => net.InstallNet("v6.0", v6, "aspnet");
+        _menus["net6-host"] = () => net.InstallNet("v6.0", v6, "host");
+        _menus["net7"] = () => net.InstallNet("v7.0", v7, null);
+        _menus["net7-desktop"] = () => net.InstallNet("v7.0", v7, "desktop");
+        _menus["net7-aspnet"] = () => net.InstallNet("v7.0", v7, "aspnet");
+        _menus["net7-host"] = () => net.InstallNet("v7.0", v7, "host");
 
         _menus["md5"] = () => ShowMd5(args);
 #if NET45_OR_GREATER || NETCOREAPP
