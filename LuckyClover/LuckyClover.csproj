@@ -20,7 +20,7 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(TargetFramework)'=='net9.0' or '$(TargetFramework)'=='net8.0'">
+  <PropertyGroup Condition="'$(TargetFramework)'=='net9.0'">
     <PublishAot>true</PublishAot>
     <PublishTrimmed>true</PublishTrimmed>
     <OptimizationPreference>Size</OptimizationPreference>

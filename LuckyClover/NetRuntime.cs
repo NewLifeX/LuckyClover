@@ -459,7 +459,7 @@ public class NetRuntime
             return;
         }
 
-#if NETSTANDARD ||NETCOREAPP
+#if NETSTANDARD || NETCOREAPP
         var arch = RuntimeInformation.ProcessArchitecture.ToString().ToLower();
 
         // 在x64架构的centos系统中，需要检查更新libstdc++库
