@@ -8,7 +8,7 @@
     <AssemblyTitle>dotNet安装助手（新生命团队）</AssemblyTitle>
     <Description>检测并安装主流dotNet运行时，作为应用系统安装前置检测工具</Description>
     <Company>新生命开发团队</Company>
-    <Copyright>©2002-2024 NewLife</Copyright>
+    <Copyright>©2002-2025 NewLife</Copyright>
     <VersionPrefix>1.2</VersionPrefix>
     <VersionSuffix>$([System.DateTime]::Now.ToString(`yyyy.MMdd`))</VersionSuffix>
     <Version>$(VersionPrefix).$(VersionSuffix)</Version>
