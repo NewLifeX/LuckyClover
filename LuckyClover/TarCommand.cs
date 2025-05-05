@@ -1,11 +1,12 @@
-﻿using System;
+﻿#if NET7_0_OR_GREATER
+using System;
+using System.Formats.Tar;
 using System.IO;
 using System.IO.Compression;
 
 namespace LuckyClover;
 
-#if NET45_OR_GREATER || NETCOREAPP
-internal class ZipCommand
+internal class TarCommand
 {
     public void Compress(String[] args)
     {
@@ -16,26 +17,33 @@ internal class ZipCommand
             var dst = args[1];
             var src = args[2];
 
-            Console.WriteLine("Zip压缩 {0} 到 {1}", src, dst);
+            Console.WriteLine("Tar打包 {0} 到 {1}", src, dst);
 
-#if NET7_0_OR_GREATER
-            ZipFile.CreateFromDirectory(src, dst, CompressionLevel.SmallestSize, false);
-#else
-            ZipFile.CreateFromDirectory(src, dst, CompressionLevel.Optimal, false);
-#endif
+            if (dst.EndsWith(".tar.gz", StringComparison.OrdinalIgnoreCase))
+            {
+                using var fs = new FileStream(dst, FileMode.OpenOrCreate, FileAccess.Write);
+                using var gs = new GZipStream(fs, CompressionMode.Compress, true);
+                TarFile.CreateFromDirectory(src, gs, false);
+                gs.Flush();
+                fs.SetLength(fs.Position);
+            }
+            else
+                TarFile.CreateFromDirectory(src, dst, false);
         }
         else
         {
-#if NET7_0_OR_GREATER
             var dst = args[1];
 
-            Console.WriteLine("Zip压缩多个文件到 {0}", dst);
+            Console.WriteLine("Tar打包多个文件到 {0}", dst);
 
             // 外部脚本决定是否删除
             //if (File.Exists(dst)) File.Delete(dst);
 
-            var compressionLevel = CompressionLevel.SmallestSize;
-            using var zip = ZipFile.Open(dst, ZipArchiveMode.Create);
+            using var fs = new FileStream(dst, FileMode.OpenOrCreate, FileAccess.Write);
+            Stream ms = fs;
+            if (dst.EndsWith(".tar.gz", StringComparison.OrdinalIgnoreCase))
+                ms = new GZipStream(fs, CompressionMode.Compress, true);
+            using var tarWriter = new TarWriter(ms, TarEntryFormat.Pax, false);
 
             // 遍历多个目录或文件
             for (var i = 2; i < args.Length; i++)
@@ -43,7 +51,7 @@ internal class ZipCommand
                 // 分离路径中的目录和文件掩码
                 var src = args[i];
                 var pt = "*";
-                var p = src.LastIndexOfAny(new[] { '/', '\\' });
+                var p = src.LastIndexOfAny(['/', '\\']);
                 if (p > 0)
                 {
                     pt = src.Substring(p + 1);
@@ -61,7 +69,7 @@ internal class ZipCommand
 
                     var length = di.FullName.Length - fullName.Length;
                     var entryName2 = EntryFromPath(di.FullName, fullName.Length, length, true);
-                    zip.CreateEntry(entryName2);
+                    tarWriter.WriteEntry(di.FullName, entryName2);
                     Console.WriteLine("\t添加目录：{0}", entryName2);
                 }
 
@@ -72,19 +80,21 @@ internal class ZipCommand
                     if (fi is FileInfo)
                     {
                         var entryName = EntryFromPath(fi.FullName, fullName.Length, length, false);
-                        zip.CreateEntryFromFile(fi.FullName, entryName, compressionLevel);
+                        tarWriter.WriteEntry(di.FullName, entryName);
                         Console.WriteLine("\t添加文件：{0}", entryName);
                         continue;
                     }
                     if (fi is DirectoryInfo di2 && IsDirEmpty(di2))
                     {
                         var entryName2 = EntryFromPath(fi.FullName, fullName.Length, length, true);
-                        zip.CreateEntry(entryName2);
+                        tarWriter.WriteEntry(di.FullName, entryName2);
                         Console.WriteLine("\t添加目录：{0}", entryName2);
                     }
                 }
             }
-#endif
+
+            ms.Flush();
+            fs.SetLength(fs.Position);
         }
     }
 
@@ -128,13 +138,17 @@ internal class ZipCommand
         var src = args[1];
         var dst = args[2];
 
-        Console.WriteLine("UnZip解压缩 {0} 到 {1}", src, dst);
+        Console.WriteLine("UnTar解压缩 {0} 到 {1}", src, dst);
 
-#if NET45_OR_GREATER
-        ZipFile.ExtractToDirectory(src, dst);
-#else
-        ZipFile.ExtractToDirectory(src, dst, true);
-#endif
+        if (src.EndsWith(".tar.gz", StringComparison.OrdinalIgnoreCase))
+        {
+            using var fs = new FileStream(src, FileMode.Open, FileAccess.Read);
+            using var gs = new GZipStream(fs, CompressionMode.Decompress, true);
+            using var bs = new BufferedStream(gs);
+            TarFile.ExtractToDirectory(bs, dst, true);
+        }
+        else
+            TarFile.ExtractToDirectory(src, dst, true);
     }
 }
 #endif

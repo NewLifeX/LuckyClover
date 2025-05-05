@@ -19,7 +19,7 @@ internal class Program
         //XTrace.UseConsole();
 
         var asm = Assembly.GetEntryAssembly();
-        Console.WriteLine("幸运草 LuckyClover v{0}", asm.GetName().Version);
+        Console.WriteLine("幸运草 \u001b[31;1mLuckyClover\e[0m v{0}", asm.GetName().Version);
         //Console.WriteLine("无依赖编译为linux-arm/linux-x86/windows，用于自动安装主流.NET运行时");
 #if NETFRAMEWORK
         var atts = asm.GetCustomAttributes(typeof(AssemblyDescriptionAttribute), false);
@@ -107,8 +107,12 @@ internal class Program
 
         _menus["md5"] = () => ShowMd5(args);
 #if NET45_OR_GREATER || NETCOREAPP
-        _menus["zip"] = () => new ZipCommand().Zip(args);
-        _menus["unzip"] = () => new ZipCommand().Unzip(args);
+        _menus["zip"] = () => new ZipCommand().Compress(args);
+        _menus["unzip"] = () => new ZipCommand().Extract(args);
+#endif
+#if NET7_0_OR_GREATER
+        _menus["tar"] = () => new TarCommand().Compress(args);
+        _menus["untar"] = () => new TarCommand().Extract(args);
 #endif
 
         var cmd = "";
@@ -135,19 +139,19 @@ internal class Program
         foreach (var item in vers)
         {
             if (String.IsNullOrEmpty(item.Sp))
-                Console.WriteLine("{0,-10} {1}", item.Name, item.Version);
+                Console.WriteLine("{0,-10}\t{1}", item.Name, item.Version);
             else
-                Console.WriteLine("{0,-10} {1} Sp{2}", item.Name, item.Version, item.Sp);
+                Console.WriteLine("{0,-10}\t{1} Sp{2}", item.Name, item.Version, item.Sp);
         }
         Console.WriteLine("");
 
-        Console.WriteLine("命令：clover");
-        Console.WriteLine("运行时：{0}", Environment.Version);
+        Console.WriteLine("命令：\e[31;1mclover\e[0m");
+        Console.WriteLine("运行时：\e[31;1m{0}\e[0m", Environment.Version);
         Console.WriteLine("");
 
         var ms = new String[_menus.Count];
         _menus.Keys.CopyTo(ms, 0);
-        Console.WriteLine("可用命令：{0}", String.Join(", ", ms));
+        Console.WriteLine("可用命令：\e[34;1m{0}\e[0m", String.Join(", ", ms));
 
         var line = Console.ReadLine()?.Trim();
 
@@ -166,5 +170,4 @@ internal class Program
             Console.WriteLine("{0}\t{1}", fi.Name, NetRuntime.GetMD5(fi.FullName));
         }
     }
-
 }

@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "LuckyClover": {
+      "commandName": "Project",
+      "commandLineArgs": "zip D:\\X\\Stardust\\Bin\\Agent\\aa.zip net8\\StarAgent.exe"
+    }
+  }
+}
