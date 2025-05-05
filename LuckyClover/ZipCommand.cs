@@ -16,7 +16,9 @@ internal class ZipCommand
             var dst = args[1];
             var src = args[2];
 
-            Console.WriteLine("Zip压缩 {0} 到 {1}", src, dst);
+            Console.WriteLine("Zip压缩 \e[31;1m{0}\e[0m 到 \e[31;1m{1}\e[0m", src, dst);
+
+            if (File.Exists(dst)) File.Delete(dst);
 
 #if NET7_0_OR_GREATER
             ZipFile.CreateFromDirectory(src, dst, CompressionLevel.SmallestSize, false);
@@ -29,10 +31,9 @@ internal class ZipCommand
 #if NET7_0_OR_GREATER
             var dst = args[1];
 
-            Console.WriteLine("Zip压缩多个文件到 {0}", dst);
+            Console.WriteLine("Zip压缩多个文件到 \e[31;1m{0}\e[0m", dst);
 
-            // 外部脚本决定是否删除
-            //if (File.Exists(dst)) File.Delete(dst);
+            if (File.Exists(dst)) File.Delete(dst);
 
             var compressionLevel = CompressionLevel.SmallestSize;
             using var zip = ZipFile.Open(dst, ZipArchiveMode.Create);
@@ -43,16 +44,21 @@ internal class ZipCommand
                 // 分离路径中的目录和文件掩码
                 var src = args[i];
                 var pt = "*";
-                var p = src.LastIndexOfAny(new[] { '/', '\\' });
+                var p = src.LastIndexOfAny(['/', '\\']);
                 if (p > 0)
                 {
                     pt = src.Substring(p + 1);
                     src = src.Substring(0, p);
                 }
+                else if (src.Contains('*') || !Directory.Exists(src))
+                {
+                    pt = src;
+                    src = ".";
+                }
 
                 var di = new DirectoryInfo(src);
                 var fullName = di.FullName;
-                Console.WriteLine("压缩目录：{0} 匹配：{1}", fullName, pt);
+                Console.WriteLine("压缩目录：\e[32;1m{0}\e[0m 匹配：\e[32;1m{1}\e[0m", fullName, pt);
 
                 // 没有匹配项时，该路径作为一个子目录
                 if (String.IsNullOrEmpty(pt))

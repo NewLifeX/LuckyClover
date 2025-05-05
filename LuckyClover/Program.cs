@@ -18,17 +18,23 @@ internal class Program
     {
         //XTrace.UseConsole();
 
-        var asm = Assembly.GetEntryAssembly();
-        Console.WriteLine("幸运草 \u001b[31;1mLuckyClover\e[0m v{0}", asm.GetName().Version);
-        //Console.WriteLine("无依赖编译为linux-arm/linux-x86/windows，用于自动安装主流.NET运行时");
+        var cmd = "";
+        if (args.Length >= 1) cmd = args[0];
+
+        if (cmd != "zip" && cmd != "unzip" && cmd != "tar" && cmd != "untar")
+        {
+            var asm = Assembly.GetEntryAssembly();
+            Console.WriteLine("幸运草 \u001b[31;1mLuckyClover\e[0m v{0}", asm.GetName().Version);
+            //Console.WriteLine("无依赖编译为linux-arm/linux-x86/windows，用于自动安装主流.NET运行时");
 #if NETFRAMEWORK
         var atts = asm.GetCustomAttributes(typeof(AssemblyDescriptionAttribute), false);
         Console.WriteLine((atts[0] as AssemblyDescriptionAttribute).Description);
 #else
-        Console.WriteLine(asm.GetCustomAttribute<AssemblyDescriptionAttribute>()?.Description);
+            Console.WriteLine(asm.GetCustomAttribute<AssemblyDescriptionAttribute>()?.Description);
 #endif
-        Console.WriteLine("{0}", Environment.OSVersion);
-        Console.WriteLine();
+            Console.WriteLine("{0}", Environment.OSVersion);
+            Console.WriteLine();
+        }
 
         var net = new NetRuntime
         {
@@ -115,8 +121,6 @@ internal class Program
         _menus["untar"] = () => new TarCommand().Extract(args);
 #endif
 
-        var cmd = "";
-        if (args.Length >= 1) cmd = args[0];
         if (String.IsNullOrEmpty(cmd)) cmd = ShowMenu();
 
         if (_menus.TryGetValue(cmd, out var func))

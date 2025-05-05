@@ -2,7 +2,7 @@
   "profiles": {
     "LuckyClover": {
       "commandName": "Project",
-      "commandLineArgs": "zip D:\\X\\Stardust\\Bin\\Agent\\aa.zip net8\\StarAgent.exe"
+      "commandLineArgs": "tar D:\\X\\Stardust\\Bin\\Agent\\aa.tar.gz D:\\X\\Stardust\\Bin\\Agent\\net8.0\\*.exe D:\\X\\Stardust\\Bin\\Agent\\net8.0\\*.dll D:\\X\\Stardust\\Bin\\Agent\\net8.0\\staragent.runtimeconfig.json"
     }
   }
 }

@@ -17,7 +17,9 @@ internal class TarCommand
             var dst = args[1];
             var src = args[2];
 
-            Console.WriteLine("Tar打包 {0} 到 {1}", src, dst);
+            Console.WriteLine("Tar打包 \e[32;1m{0}\e[0m 到 \e[32;1m{1}\e[0m", src, dst);
+
+            if (File.Exists(dst)) File.Delete(dst);
 
             if (dst.EndsWith(".tar.gz", StringComparison.OrdinalIgnoreCase))
             {
@@ -34,10 +36,9 @@ internal class TarCommand
         {
             var dst = args[1];
 
-            Console.WriteLine("Tar打包多个文件到 {0}", dst);
+            Console.WriteLine("Tar打包多个文件到 \e[32;1m{0}\e[0m", dst);
 
-            // 外部脚本决定是否删除
-            //if (File.Exists(dst)) File.Delete(dst);
+            if (File.Exists(dst)) File.Delete(dst);
 
             using var fs = new FileStream(dst, FileMode.OpenOrCreate, FileAccess.Write);
             Stream ms = fs;
@@ -57,21 +58,26 @@ internal class TarCommand
                     pt = src.Substring(p + 1);
                     src = src.Substring(0, p);
                 }
+                else if (src.Contains('*') || !Directory.Exists(src))
+                {
+                    pt = src;
+                    src = ".";
+                }
 
                 var di = new DirectoryInfo(src);
                 var fullName = di.FullName;
-                Console.WriteLine("压缩目录：{0} 匹配：{1}", fullName, pt);
+                Console.WriteLine("压缩目录：\e[32;1m{0}\e[0m 匹配：\e[32;1m{1}\e[0m", fullName, pt);
 
-                // 没有匹配项时，该路径作为一个子目录
-                if (String.IsNullOrEmpty(pt))
-                {
-                    fullName = di.Parent.FullName;
+                //// 没有匹配项时，该路径作为一个子目录
+                //if (String.IsNullOrEmpty(pt))
+                //{
+                //    fullName = di.Parent.FullName;
 
-                    var length = di.FullName.Length - fullName.Length;
-                    var entryName2 = EntryFromPath(di.FullName, fullName.Length, length, true);
-                    tarWriter.WriteEntry(di.FullName, entryName2);
-                    Console.WriteLine("\t添加目录：{0}", entryName2);
-                }
+                //    var length = di.FullName.Length - fullName.Length;
+                //    var entryName2 = EntryFromPath(di.FullName, fullName.Length, length, true);
+                //    tarWriter.WriteEntry(new PaxTarEntry(TarEntryType.Directory, entryName2));
+                //    Console.WriteLine("\t添加目录：{0}", entryName2);
+                //}
 
                 // 遍历所有文件
                 foreach (var fi in di.EnumerateFileSystemInfos(pt, SearchOption.AllDirectories))
@@ -80,16 +86,16 @@ internal class TarCommand
                     if (fi is FileInfo)
                     {
                         var entryName = EntryFromPath(fi.FullName, fullName.Length, length, false);
-                        tarWriter.WriteEntry(di.FullName, entryName);
+                        tarWriter.WriteEntry(fi.FullName, entryName);
                         Console.WriteLine("\t添加文件：{0}", entryName);
                         continue;
                     }
-                    if (fi is DirectoryInfo di2 && IsDirEmpty(di2))
-                    {
-                        var entryName2 = EntryFromPath(fi.FullName, fullName.Length, length, true);
-                        tarWriter.WriteEntry(di.FullName, entryName2);
-                        Console.WriteLine("\t添加目录：{0}", entryName2);
-                    }
+                    //if (fi is DirectoryInfo di2 && IsDirEmpty(di2))
+                    //{
+                    //    var entryName2 = EntryFromPath(fi.FullName, fullName.Length, length, true);
+                    //    tarWriter.WriteEntry(new PaxTarEntry(TarEntryType.Directory, entryName2));
+                    //    Console.WriteLine("\t添加目录：{0}", entryName2);
+                    //}
                 }
             }
 
