@@ -592,7 +592,7 @@ public class NetRuntime
         var list = new List<VerInfo>();
         if (!IsWindows) return list;
 
-#if NET45_OR_GREATER || NET6_0_OR_GREATER
+#if NET20_OR_GREATER || NET6_0_OR_GREATER
         // 注册表查找 .NET Framework
         using var ndpKey = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\NET Framework Setup\NDP\");
         if (ndpKey == null) return list;
