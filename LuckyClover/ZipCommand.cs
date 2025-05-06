@@ -1,15 +1,20 @@
-﻿using System;
+﻿#if NET45_OR_GREATER || NETCOREAPP
+using System;
 using System.IO;
 using System.IO.Compression;
+using System.Linq;
 
 namespace LuckyClover;
 
-#if NET45_OR_GREATER || NETCOREAPP
 internal class ZipCommand
 {
     public void Compress(String[] args)
     {
         if (args == null || args.Length < 3) return;
+
+        // -r 递归压缩
+        var recurse = args.Any(e => e == "-r");
+        if (recurse) args = args.Where(e => e != "-r").ToArray();
 
         if (args.Length == 3 && !args[2].Contains("*"))
         {
@@ -72,7 +77,8 @@ internal class ZipCommand
                 }
 
                 // 遍历所有文件
-                foreach (var fi in di.EnumerateFileSystemInfos(pt, SearchOption.AllDirectories))
+                var searchOption = recurse ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly;
+                foreach (var fi in di.EnumerateFileSystemInfos(pt, searchOption))
                 {
                     var length = fi.FullName.Length - fullName.Length;
                     if (fi is FileInfo)
