@@ -13,10 +13,6 @@ internal class TarCommand
     {
         if (args == null || args.Length < 3) return;
 
-        // -r 递归压缩
-        var recurse = args.Any(e => e == "-r");
-        if (recurse) args = args.Where(e => e != "-r").ToArray();
-
         if (args.Length == 3 && !args[2].Contains("*"))
         {
             var dst = args[1];
@@ -45,6 +41,9 @@ internal class TarCommand
 
             if (File.Exists(dst)) File.Delete(dst);
 
+            // -r 递归压缩
+            var recurse = false;
+
             using var fs = new FileStream(dst, FileMode.OpenOrCreate, FileAccess.Write);
             Stream ms = fs;
             if (dst.EndsWith(".tar.gz", StringComparison.OrdinalIgnoreCase))
@@ -54,6 +53,13 @@ internal class TarCommand
             // 遍历多个目录或文件
             for (var i = 2; i < args.Length; i++)
             {
+                // 当前位置是 -r 参数，表示后续递归压缩
+                if (args[i] == "-r")
+                {
+                    recurse = true;
+                    continue;
+                }
+
                 // 分离路径中的目录和文件掩码
                 var src = args[i];
                 var pt = "*";
