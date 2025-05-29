@@ -36,8 +36,10 @@ internal class TarCommand
         else
         {
             var dst = args[1];
+            var root = Environment.CurrentDirectory;
 
             Console.WriteLine("Tar打包多个文件到 \e[32;1m{0}\e[0m", dst);
+            Console.WriteLine("当前工作目录 \e[31;1m{0}\e[0m", root);
 
             if (File.Exists(dst)) File.Delete(dst);
 
@@ -78,6 +80,12 @@ internal class TarCommand
                 var di = new DirectoryInfo(src);
                 var fullName = di.FullName;
                 Console.WriteLine("压缩目录：\e[32;1m{0}\e[0m 匹配：\e[32;1m{1}\e[0m", fullName, pt);
+
+                // 如果fullName是当前工作目录的子目录，则以当前工作目录为根目录
+                if (fullName.StartsWith(root + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase))
+                {
+                    fullName = root;
+                }
 
                 //// 没有匹配项时，该路径作为一个子目录
                 //if (String.IsNullOrEmpty(pt))
