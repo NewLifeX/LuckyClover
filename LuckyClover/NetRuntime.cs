@@ -362,8 +362,11 @@ public class NetRuntime
     {
         var vers = GetNetCore();
 
+        // 特殊处理host
+        var kind2 = kind == "host" ? "aspnet" : kind;
+
         var suffix = "";
-        if (!String.IsNullOrEmpty(kind)) suffix = "-" + kind;
+        if (!String.IsNullOrEmpty(kind2)) suffix = "-" + kind2;
         var ver = GetLast(vers, baseVersion + ".", suffix);
 
         // 目标版本

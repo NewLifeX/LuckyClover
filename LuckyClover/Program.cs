@@ -27,8 +27,8 @@ internal class Program
             Console.WriteLine("幸运草 \u001b[31;1mLuckyClover\e[0m v{0}", asm.GetName().Version);
             //Console.WriteLine("无依赖编译为linux-arm/linux-x86/windows，用于自动安装主流.NET运行时");
 #if NETFRAMEWORK
-        var atts = asm.GetCustomAttributes(typeof(AssemblyDescriptionAttribute), false);
-        Console.WriteLine((atts[0] as AssemblyDescriptionAttribute).Description);
+            var atts = asm.GetCustomAttributes(typeof(AssemblyDescriptionAttribute), false);
+            Console.WriteLine((atts[0] as AssemblyDescriptionAttribute).Description);
 #else
             Console.WriteLine(asm.GetCustomAttribute<AssemblyDescriptionAttribute>()?.Description);
 #endif
@@ -66,7 +66,7 @@ internal class Program
                 if (!String.IsNullOrEmpty(url))
                 {
                     if (url[url.Length - 1] == '/') url = url.Substring(0, url.Length - 1);
-                    if (!url.EndsWith("/dotnet", false, null)) url += "/dotnet";
+                    if (!url.EndsWith("/dotnet", true, null)) url += "/dotnet";
                     net.BaseUrl = url;
                     flag = true;
                 }
