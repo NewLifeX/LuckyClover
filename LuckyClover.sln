@@ -20,6 +20,16 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Installer4", "Installer4\In
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Installer45", "Installer45\Installer45.csproj", "{F069422D-992B-4979-922A-D29C19673570}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scripts", "Scripts", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+	ProjectSection(SolutionItems) = preProject
+		Scripts\net.sh = Scripts\net.sh
+		Scripts\net31.sh = Scripts\net31.sh
+		Scripts\net6.sh = Scripts\net6.sh
+		Scripts\net7.sh = Scripts\net7.sh
+		Scripts\net8.sh = Scripts\net8.sh
+		Scripts\net9.sh = Scripts\net9.sh
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
