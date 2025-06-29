@@ -16,8 +16,8 @@ public class NetRuntime
     #region 静态定义
     public const String Version6 = "6.0.36";
     public const String Version7 = "7.0.20";
-    public const String Version8 = "8.0.11";
-    public const String Version9 = "9.0.0";
+    public const String Version8 = "8.0.17";
+    public const String Version9 = "9.0.6";
     #endregion
 
     #region 属性
