@@ -22,6 +22,8 @@
 
   <PropertyGroup Condition="'$(TargetFramework)'=='net9.0'">
     <PublishAot>true</PublishAot>
+    <PublishSingleFile>true</PublishSingleFile>
+    <SelfContained>true</SelfContained>
     <PublishTrimmed>true</PublishTrimmed>
     <OptimizationPreference>Size</OptimizationPreference>
     <IlcOptimizationPreference>Speed</IlcOptimizationPreference>
