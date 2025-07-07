@@ -42,6 +42,7 @@ internal class Program
             Console.WriteLine(asm.GetCustomAttribute<AssemblyDescriptionAttribute>()?.Description);
 #endif
             Console.WriteLine("{0}", Environment.OSVersion);
+            Console.WriteLine("运行时：{0}", Environment.Version);
             Console.WriteLine("发布：{0:yyyy-MM-dd HH:mm:ss}", GetCompileTime(ver));
             Console.WriteLine();
         }
@@ -159,8 +160,7 @@ internal class Program
         }
         Console.WriteLine("");
 
-        Console.WriteLine("命令：clover");
-        Console.WriteLine("运行时：{0}", Environment.Version);
+        Console.WriteLine("命令：clover net20|net40|net45|net60|net80");
         Console.WriteLine("");
 
         var ms = new String[_menus.Count];

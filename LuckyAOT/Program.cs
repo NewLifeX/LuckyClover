@@ -33,6 +33,7 @@ internal class Program
         Console.WriteLine(asm.GetCustomAttribute<AssemblyDescriptionAttribute>()?.Description);
 #endif
         Console.WriteLine("{0}", Environment.OSVersion);
+        Console.WriteLine("运行时：{0}", Environment.Version);
         Console.WriteLine("发布：{0:yyyy-MM-dd HH:mm:ss}", GetCompileTime(ver));
         Console.WriteLine();
 
