@@ -1,4 +1,8 @@
-﻿#include "BaseInclude.h"
+﻿// 指定为 Windows XP
+#define _WIN32_WINNT 0x0501
+#define WINVER 0x0501
+
+#include "BaseInclude.h"
 #include "CDownloadFile.h"
 #include "CGetOSVersion.h"
 #include "CRegistryVisit.h"
@@ -21,7 +25,7 @@ int main(int argc, char* argv[])
     int iOSSubVerNum = 0;
     bool bIsServer = false;
 
-    cout << "幸运草 v1.0.2023.215 NewLife" << endl;
+    cout << "幸运草 v1.1.2025.707 NewLife" << endl;
     cout << "检测并安装主流.NET运行时。" << endl;
     cout << "操作系统: " << cOSVer.GetOSVersionDesc(iOSMainVerNum, iOSSubVerNum, bIsServer) << "\n";
     cout << "用法：clover.exe [net2|net4|net45|net48] -silent" << endl;
@@ -132,6 +136,7 @@ const string GetFile(const string& ver)
 bool Download(const string& localFile, const string& remoteFile)
 {
     string server = "http://x.newlifex.com";
+    string server_path = "/dotNet/";
 
     // 从配置文件读取服务器地址
     char szPath[MAX_PATH] = { 0 };
@@ -144,11 +149,33 @@ bool Download(const string& localFile, const string& remoteFile)
             ifstream infile;
             infile.open(strConfigFilePath);
             if (infile) {
-                char line[64];
+                char line[256];
                 if (infile.getline(line, sizeof(line))) {
                     string str(line);
                     if (!str.empty()) {
-                        server = str;
+                        // 解析URL，分离主机和路径
+                        size_t pos = str.find("://");
+                        if (pos != string::npos) {
+                            pos = str.find('/', pos + 3);
+                            // 找到路径开头的斜杠，并且不是最后一个字符
+                            if (pos != string::npos) {
+                                server = str.substr(0, pos);
+                                if (pos != str.length() - 1)
+                                {
+                                    // 如果路径不以斜杠结尾，添加斜杠
+                                    if (str.back() != '/')
+                                        server_path = str.substr(pos) + "/dotNet/";
+                                    else
+                                        server_path = str.substr(pos) + "dotNet/";
+                                }
+                            }
+                            else {
+                                server = str;
+                            }
+                        }
+                        else {
+                            server = str;
+                        }
                     }
                 }
             }
@@ -158,7 +185,7 @@ bool Download(const string& localFile, const string& remoteFile)
     }
 
     CDownloadFile cDownFile;
-    string remote = "/dotnet/" + remoteFile;
+    string remote = server_path + remoteFile;
 
     cout << "下载：" << server << remote << endl;
     cout << "保存：" << localFile << endl;
@@ -167,7 +194,7 @@ bool Download(const string& localFile, const string& remoteFile)
     int iTryCount = 0;
     while (++iTryCount < 15)
     {
-        if (cDownFile.Download(localFile.c_str(), server.c_str(), 80, remote.c_str())) return true;
+        if (cDownFile.Download(localFile.c_str(), server.c_str(), remote.c_str())) return true;
 
         //沉默1秒后重试
         Sleep(1 * 1000);

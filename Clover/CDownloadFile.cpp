@@ -12,7 +12,7 @@ CDownloadFile::~CDownloadFile()
 
 
 
-bool CDownloadFile::Download(CString strLocalFilePath, CString strNetIP, UINT nPort, CString strGetDataPath)
+bool CDownloadFile::Download(CString strLocalFilePath, CString strNetIP, CString strGetDataPath)
 {
 	bool bSuccess = false;
     std::string szError = "";
