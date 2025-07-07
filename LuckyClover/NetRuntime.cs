@@ -383,7 +383,7 @@ public class NetRuntime
         var is64 = Environment.Is64BitOperatingSystem;
 #endif
 
-        // win7需要vc2019运行时
+        // win7需要vc运行时
         var osVer = Environment.OSVersion.Version;
         var isWin7 = osVer.Major == 6 && osVer.Minor == 1;
         if (isWin7 && ver.Major < 6)
@@ -391,12 +391,12 @@ public class NetRuntime
             if (is64)
             {
                 Install("Windows6.1-KB3063858-x64.msu", "/win7", "/quiet /norestart");
-                Install("VC_redist.x64.exe", "/vc2019", "/passive");
+                Install("VC_redist.x64.exe", "/vc", "/passive");
             }
             else
             {
                 Install("Windows6.1-KB3063858-x86.msu", "/win7", "/quiet /norestart");
-                Install("VC_redist.x86.exe", "/vc2019", "/passive");
+                Install("VC_redist.x86.exe", "/vc", "/passive");
             }
         }
 

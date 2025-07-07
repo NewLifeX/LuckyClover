@@ -33,8 +33,8 @@ public class DownloadHelper
         await Check("dotNetFx40_Full_x86_x64.exe");
         await Check("NetFx20SP2_x86.exe");
 
-        await Check("vc2019/VC_redist.x64.exe");
-        await Check("vc2019/VC_redist.x86.exe");
+        await Check("vc/VC_redist.x64.exe");
+        await Check("vc/VC_redist.x86.exe");
         await Check("win7/Windows6.1-KB3063858-x64.msu");
         await Check("win7/Windows6.1-KB3063858-x86.msu");
         await Check("win7/MsRootCert.zip");
