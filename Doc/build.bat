@@ -8,6 +8,7 @@ copy %base%\clover\x64\clover.exe %dest%\clover64.exe /y
 copy %base%\net20\clover.exe %dest%\clover20.exe /y
 copy %base%\net40\clover.exe %dest%\clover40.exe /y
 copy %base%\net45\clover.exe %dest%\clover45.exe /y
+copy %base%\net48\clover.exe %dest%\clover48.exe /y
 rem copy %base%\publish-windows\clover.exe %dest%\clover80.exe /y
 
 pushd ..\LuckyClover
