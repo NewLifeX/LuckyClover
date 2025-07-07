@@ -11,6 +11,7 @@ using namespace std;
 
 bool CheckRuntime();
 void InstallNet20();
+void InstallNet35();
 void InstallNet40();
 void InstallNet45();
 void InstallNet48();
@@ -28,7 +29,7 @@ int main(int argc, char* argv[])
     cout << "幸运草 v1.1.2025.707 NewLife" << endl;
     cout << "检测并安装主流.NET运行时。" << endl;
     cout << "操作系统: " << cOSVer.GetOSVersionDesc(iOSMainVerNum, iOSSubVerNum, bIsServer) << "\n";
-    cout << "用法：clover.exe [net2|net4|net45|net48] -silent" << endl;
+    cout << "用法：clover.exe [net2|net35|net4|net45|net48] -silent" << endl;
     cout << "本地server.txt文件设置下载文件的服务器地址。" << endl;
 
     CheckRuntime();
@@ -50,6 +51,9 @@ int main(int argc, char* argv[])
 
     if (ver == "net2" || ver == "net20") {
         InstallNet20();
+    }
+    else if (ver == "net3" || ver == "net30" || ver == "net35") {
+        InstallNet35();
     }
     else if (ver == "net4" || ver == "net40") {
         InstallNet40();
@@ -114,7 +118,7 @@ bool CheckRuntime()
 const string GetFile(const string& ver)
 {
     if (ver == "net2" || ver == "net20") return "NetFx20SP2_x86.exe";
-    if (ver == "net3" || ver == "net30" || ver == "net35") return "NetFx20SP2_x86.exe";
+    if (ver == "net3" || ver == "net30" || ver == "net35") return "dotnetfx35.exe";
     if (ver == "net4" || ver == "net40") return "dotNetFx40_Full_x86_x64.exe";
     if (ver == "net45") return "NDP452-KB2901907-x86-x64-AllOS-ENU.exe";
     if (ver == "net48") return "ndp48-x86-x64-allos-enu.exe";
@@ -259,6 +263,19 @@ void InstallNet20()
     }
 
     Install("NetFx20SP2_x86.exe");
+}
+
+void InstallNet35()
+{
+    CRegistryVisit cRegVisit;
+
+    bool bNet = cRegVisit.CheckIsInstallNet(_T("3.5"));
+    if (bNet) {
+        cout << "已安装.NET3.5" << endl;
+        return;
+    }
+
+    Install("dotnetfx35.exe");
 }
 
 void InstallNet40()
