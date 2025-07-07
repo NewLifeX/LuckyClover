@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFrameworks>net20;net40;net45;net6.0;net8.0;net9.0</TargetFrameworks>
+    <TargetFrameworks>net20;net40;net45;net6.0;net8.0;net9.0-windows</TargetFrameworks>
     <AssemblyName>clover</AssemblyName>
     <AssemblyTitle>幸运草</AssemblyTitle>
     <Description>检测并安装主流.NET运行时，协助打包发布。</Description>
@@ -18,9 +18,10 @@
     <!--<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>-->
     <LangVersion>latest</LangVersion>
     <ApplicationManifest>app.manifest</ApplicationManifest>
+    <SupportedOSPlatformVersion>5.1</SupportedOSPlatformVersion>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(TargetFramework)'=='net9.0'">
+  <PropertyGroup Condition="'$(TargetFramework)'=='net9.0-windows'">
     <PublishAot>true</PublishAot>
     <PublishSingleFile>true</PublishSingleFile>
     <SelfContained>true</SelfContained>
@@ -54,6 +55,8 @@
 
   <ItemGroup>
     <PackageReference Include="PublishAotCompressed" Version="1.0.5" />
+    <PackageReference Include="VC-LTL" Version="5.2.1" />
+    <PackageReference Include="YY-Thunks" Version="1.1.7" />
   </ItemGroup>
 
   <ItemGroup>
