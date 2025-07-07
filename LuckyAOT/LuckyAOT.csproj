@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFrameworks>net20;net40;net45;net6.0;net8.0;net9.0-windows</TargetFrameworks>
-    <AssemblyName>clover</AssemblyName>
+    <TargetFrameworks>net8.0;net9.0-windows</TargetFrameworks>
+    <AssemblyName>cloverAot</AssemblyName>
     <AssemblyTitle>幸运草</AssemblyTitle>
     <Description>检测并安装主流.NET运行时，协助打包发布。</Description>
     <Company>新生命开发团队</Company>
@@ -49,19 +49,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="res\CertMgr.Exe" />
-    <None Remove="res\MicrosoftRootCertificateAuthority2011.cer" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="PublishAotCompressed" Version="1.0.5" />
     <PackageReference Include="VC-LTL" Version="5.2.1" />
     <PackageReference Include="YY-Thunks" Version="1.1.7" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="res\CertMgr.Exe" />
-    <EmbeddedResource Include="res\md5.txt" />
-    <EmbeddedResource Include="res\MicrosoftRootCertificateAuthority2011.cer" />
   </ItemGroup>
 </Project>
