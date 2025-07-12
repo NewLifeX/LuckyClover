@@ -63,6 +63,17 @@ internal class TarCommand
                     recurse = true;
                     continue;
                 }
+                if (args[i] == "-R")
+                {
+                    recurse = false;
+                    continue;
+                }
+                if (args[i] == "-d")
+                {
+                    root = Path.GetFullPath(args[++i]);
+                    Log.WriteLine("当前工作目录 \e[31;1m{0}\e[0m", root);
+                    continue;
+                }
 
                 // 分离路径中的目录和文件掩码
                 var src = args[i];
@@ -79,7 +90,7 @@ internal class TarCommand
                     src = ".";
                 }
 
-                var di = new DirectoryInfo(src);
+                var di = new DirectoryInfo(Path.Combine(root, src));
                 var fullName = di.FullName;
                 Log.WriteLine("压缩目录：\e[32;1m{0}\e[0m 匹配：\e[32;1m{1}\e[0m", fullName, pt);
 
