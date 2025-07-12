@@ -12,18 +12,12 @@ internal class ZipCommand
     {
         if (args == null || args.Length < 3) return;
 
-        // Windows10以上支持ANSI颜色代码，其它平台全部支持
-        var os = Environment.OSVersion;
-        var ansiColor = os.Platform != PlatformID.Win32NT || os.Version.Major >= 10;
         if (args.Length == 3 && !args[2].Contains("*"))
         {
             var dst = args[1];
             var src = args[2];
 
-            if (ansiColor)
-                Console.WriteLine("Zip压缩 \e[31;1m{0}\e[0m 到 \e[31;1m{1}\e[0m", src, dst);
-            else
-                Console.WriteLine("Zip压缩 {0} 到 {1}", src, dst);
+            Log.WriteLine("Zip压缩 \e[31;1m{0}\e[0m 到 \e[31;1m{1}\e[0m", src, dst);
 
             if (File.Exists(dst)) File.Delete(dst);
 
@@ -39,16 +33,8 @@ internal class ZipCommand
             var dst = args[1];
             var root = Environment.CurrentDirectory;
 
-            if (ansiColor)
-            {
-                Console.WriteLine("Zip压缩多个文件到 \e[31;1m{0}\e[0m", dst);
-                Console.WriteLine("当前工作目录 \e[31;1m{0}\e[0m", root);
-            }
-            else
-            {
-                Console.WriteLine("Zip压缩多个文件到 {0}", dst);
-                Console.WriteLine("当前工作目录 {0}", root);
-            }
+            Log.WriteLine("Zip压缩多个文件到 \e[31;1m{0}\e[0m", dst);
+            Log.WriteLine("当前工作目录 \e[31;1m{0}\e[0m", root);
 
             if (File.Exists(dst)) File.Delete(dst);
 
@@ -85,10 +71,7 @@ internal class ZipCommand
 
                 var di = new DirectoryInfo(src);
                 var fullName = di.FullName;
-                if (ansiColor)
-                    Console.WriteLine("压缩目录：\e[32;1m{0}\e[0m 匹配：\e[32;1m{1}\e[0m", fullName, pt);
-                else
-                    Console.WriteLine("压缩目录：{0} 匹配：{1}", fullName, pt);
+                Log.WriteLine("压缩目录：\e[32;1m{0}\e[0m 匹配：\e[32;1m{1}\e[0m", fullName, pt);
 
                 // 如果fullName是当前工作目录的子目录，则以当前工作目录为根目录
                 if (fullName.StartsWith(root + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase))
@@ -171,7 +154,7 @@ internal class ZipCommand
         var src = args[1];
         var dst = args[2];
 
-        Console.WriteLine("UnZip解压缩 {0} 到 {1}", src, dst);
+        Console.WriteLine("UnZip解压缩 \e[31;1m{0}\e[0m 到 \e[31;1m{1}\e[0m", src, dst);
 
 #if NET45_OR_GREATER
         ZipFile.ExtractToDirectory(src, dst);

@@ -33,7 +33,7 @@ internal class Program
                 if (!String.IsNullOrEmpty(vatt.Version)) fver = vatt.Version;
             }
 
-            Console.WriteLine("幸运草 LuckyClover v{0}", fver);
+            Log.WriteLine("幸运草 \e[31;1mLuckyClover\e[0m v{0}", fver);
             //Console.WriteLine("无依赖编译为linux-arm/linux-x86/windows，用于自动安装主流.NET运行时");
 #if NETFRAMEWORK
             var atts = asm.GetCustomAttributes(typeof(AssemblyDescriptionAttribute), false);
@@ -42,7 +42,7 @@ internal class Program
             Console.WriteLine(asm.GetCustomAttribute<AssemblyDescriptionAttribute>()?.Description);
 #endif
             Console.WriteLine("{0}", Environment.OSVersion);
-            Console.WriteLine("运行时：{0}", Environment.Version);
+            Console.WriteLine("运行时：\e[34;1m{0}\e[0m", Environment.Version);
             Console.WriteLine("发布：{0:yyyy-MM-dd HH:mm:ss}", GetCompileTime(ver));
             Console.WriteLine();
         }
@@ -160,12 +160,12 @@ internal class Program
         }
         Console.WriteLine("");
 
-        Console.WriteLine("命令：clover net20|net40|net45|net60|net80");
+        Console.WriteLine("命令：\e[31;1mclover net20|net40|net45|net60|net80\e[0m");
         Console.WriteLine("");
 
         var ms = new String[_menus.Count];
         _menus.Keys.CopyTo(ms, 0);
-        Console.WriteLine("可用命令：{0}", String.Join(", ", ms));
+        Console.WriteLine("可用命令：\e[34;1m{0}\e[0m", String.Join(", ", ms));
 
         var line = Console.ReadLine()?.Trim();
 
