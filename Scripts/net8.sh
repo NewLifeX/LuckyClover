@@ -44,26 +44,16 @@ if [ ! -f "/usr/bin/dotnet" ]; then
 	ln /usr/share/dotnet/dotnet /usr/bin/dotnet -s
 fi
 
-# centos需要替换libstdc++运行时库
+# centos/neokylin/alinux需要替换libstdc++运行时库
 if [ $arch == "x86_64" ] && [ -f /etc/os-release ]; then
   os_id=$(grep '^ID=' /etc/os-release | awk -F= '{print $2}' | tr -d '"')
+  id_like=$(grep '^ID_LIKE=' /etc/os-release | awk -F= '{print $2}' | tr -d '"')
 
-  if [ "$os_id" == "centos" ]; then
-    libstd=/usr/lib64/libstdc++.so.6
-    libsrc=/usr/lib64/libstdc++.so.6.0.26
-    if [ -f $libstd ] && [ ! -f $libsrc ]; then
-      if [ ! -f libstdcpp.6.0.26.so ]; then
-        wget $source"/dotnet/libstdcpp.6.0.26.so"
-      fi
+  echo os_id: $os_id
+  echo id_like: $id_like
 
-      cp libstdcpp.6.0.26.so $libsrc
-      chmod +x $libsrc
-      rm $libstd
-      ln -s $libsrc $libstd
-    fi
-
-	  yum install -y libicu
-  elif [ "$os_id" == "neokylin" ]; then
+  # 检查是否为 centos/neokylin/alinux 或者 ID_LIKE 包含 centos
+  if [ "$os_id" == "centos" ] || [ "$os_id" == "neokylin" ] || [ "$os_id" == "alinux" ] || [[ "$id_like" == *"centos"* ]]; then
     libstd=/usr/lib64/libstdc++.so.6
     libsrc=/usr/lib64/libstdc++.so.6.0.26
     if [ -f $libstd ] && [ ! -f $libsrc ]; then
