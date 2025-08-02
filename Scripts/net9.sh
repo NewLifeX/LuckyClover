@@ -1,4 +1,3 @@
-
 #!/bin/bash
 
 # 获取处理器架构
@@ -9,13 +8,17 @@ source="http://x.newlifex.com"
 
 echo arch: $arch
 
-# 识别Alpine
-if [ -f "/proc/version" ]; then
-  cat /proc/version | grep -q -E 'musl|Alpine'
-  if [ $? -eq 0 ]; then
-    prefix="$prefix-musl"
-    apk add libgcc libstdc++
-  fi
+# 识别Alpine和musl环境
+if [ -f "/proc/version" ] && cat /proc/version | grep -q -E 'musl|Alpine'; then
+  # Alpine系统
+  prefix="$prefix-musl"
+  apk add libgcc libstdc++
+elif ldd --version 2>&1 | grep -q 'musl'; then
+  # 常见musl环境
+  prefix="$prefix-musl"
+elif ls /lib/ld-musl-* >/dev/null 2>&1; then
+  # 其他musl环境
+  prefix="$prefix-musl"
 fi
 
 # 根据处理器架构选择下载的文件

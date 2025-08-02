@@ -55,7 +55,7 @@
 
   <ItemGroup>
     <PackageReference Include="PublishAotCompressed" Version="1.0.5" />
-    <PackageReference Include="VC-LTL" Version="5.2.1" />
+    <PackageReference Include="VC-LTL" Version="5.2.2" />
     <PackageReference Include="YY-Thunks" Version="1.1.7" />
   </ItemGroup>
 
